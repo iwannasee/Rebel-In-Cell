@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour {
-
-	[Tooltip("Assign sprites from healthy to weak, following the health")]
-	public Sprite[] sprites;
-	[Tooltip("needs to equal or greater than number of sprites. should be the product of sprites length")]
-	public int maxHealth;
-
 	public GameObject sodierShot;
 	public GameObject sentryShooter;
 	public float maxCoolDownTime;
@@ -20,18 +14,11 @@ public class Enemy : MonoBehaviour {
 	private GameObject[] Prisoners;
 	private Vector3 shotTarget;
 	private float actualRandomCoolDown;
-	private int health;
 
 	private int lostHeathToChangeSprite;
 
 	//---------------------------------------------------------------
 	void Start () {
-		health = maxHealth;
-
-		int numberOfSprites = sprites.Length;
-		if(numberOfSprites > 0 && maxHealth >= numberOfSprites){
-			lostHeathToChangeSprite = maxHealth / numberOfSprites;
-		}
 
 		actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
 		shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
@@ -85,40 +72,10 @@ public class Enemy : MonoBehaviour {
 			print("no prisoner found");
 		}
 	}
-	//---------------------------------------------------------------
-	void OnCollisionEnter2D(Collision2D collision){
-		if (collision.gameObject.GetComponent<RadiantDamage> ()) {
-			//TODO add quake effect 
-			RadiantDamage radiantDamage = collision.gameObject.GetComponent<RadiantDamage>();
-			int inflictedDamage = radiantDamage.GetDamage();
-			health = health - inflictedDamage;
 
-			if (health <= 0) {
-				EnemyDestroy ();
-			}
-		}
-	}
-
-	void OnTriggerEnter2D(Collider2D collider){
-		if(collider.GetComponent<RadiantDamage> ()){
-			print("collider.gameObject " + collider.name);
-			RadiantDamage radiantDamage = collider.GetComponent<RadiantDamage>();
-			int inflictedDamage = radiantDamage.GetDamage();
-			health = health - inflictedDamage;
-
-			if (health <= 0) {
-				EnemyDestroy ();
-				return;
-			}
-
-			if(lostHeathToChangeSprite != 0){
-				ChangeSpriteFollowHealth();
-			}
-		}
-	}
 
 	//---------------------------------------------------------------
-	void EnemyDestroy(){
+	public void EnemyDestroy(){
 		enemyCount = GameObject.FindGameObjectsWithTag ("Enemy").Length;
 		enemyCount--;
 		//EXTENDABLE if this wave have Enemy regen, check the isRegen bool of Enemy container 
@@ -132,11 +89,4 @@ public class Enemy : MonoBehaviour {
 	}
 	//---------------------------------------------------------------
 
-	private void ChangeSpriteFollowHealth() {
-		if((health % lostHeathToChangeSprite) == 0){
-			SpriteRenderer spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-			int spriteIndex = health/ lostHeathToChangeSprite;
-			spriteRenderer.sprite = sprites[spriteIndex];
-		}
-	}
 }

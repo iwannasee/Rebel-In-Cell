@@ -12,6 +12,8 @@ public class ShootingSkill : MonoBehaviour {
 	public float skillDelayRate; 
 	public string skillName;
 
+	//TODO implement skill casting sound using skill clip
+	//public AudioClip skillClip;
 	static private GameObject prisonerJustUsedSkill;
 	static private bool pausingForSkill = false;
 
@@ -22,9 +24,11 @@ public class ShootingSkill : MonoBehaviour {
 	private GameObject skillShotContainer;
 	private HealthBar healthBar;
 	private SkillBar skillBar;
-
+	//---------------------------------------------------------------
 	void Start(){ 
+		//link to health bar object , assume its index is 2 in transform hierachy
 		healthBar = transform.parent.GetChild(2).GetComponent<HealthBar>();
+		//link to skill bar object , assume its index is 3 in transform hierachy
 		skillBar = transform.parent.GetChild(3).GetComponent<SkillBar>();
 		if(!healthBar || !skillBar){
 			Debug.Log("no health or skill bar found");
@@ -43,7 +47,7 @@ public class ShootingSkill : MonoBehaviour {
 			skillShotContainer = GameObject.Find("Skill Shot Container");
 		}
 	}
-
+	//---------------------------------------------------------------
 	void Update(){
 		if(EnemyWaveController.GetWaveHasStarted()){
 			//cooldown skill over time
@@ -64,25 +68,24 @@ public class ShootingSkill : MonoBehaviour {
 			needleAdjustTime = needleAdjustTime - Time.unscaledDeltaTime;
 			Prisoner.SetPrisonIsCasting();
 			if (needleAdjustTime <= 0 ) {
+				//TODO refactor this
 				//Unpause to shoot
 				Time.timeScale = 1;
 				SkillShootingFromNeedle ();
+				//TODO refactor this
 				Destroy (GameObject.FindObjectOfType<GaugeMeter> ().gameObject);
 				gaugeIsDisplayed = false;
 				needleAdjustTime = maxAdjustTime;
-				//prisonerIsCastingSkill = false;
 				Prisoner.UnSetPrisonIsCasting();
-				prisonerJustUsedSkill = this.gameObject;
-				 
+				prisonerJustUsedSkill = this.gameObject; 
 				FindNotYetSkillUsersToDelaySkill();
-
 				pausingForSkill = false;
 				PlayerPrefManager.SetUITextStatus(PlayerPrefManager.GUITEXT_STATUS_CHANGING);
 				UITextController.SetUITextStatusType(UITextController.DISPLAY_TEXT.SKILL_NAME,skillName);
 			}
 		}
 	}
-
+	//---------------------------------------------------------------
 	private void OnMouseDown(){
 		//Disable this function if someprisoner is casting skill
 		if(Prisoner.GetIsCastingSkill() || 
@@ -99,8 +102,8 @@ public class ShootingSkill : MonoBehaviour {
 			}
 		}
 	}
-
-	public void DelayAfterOtherPrisonerShot ()
+	//---------------------------------------------------------------
+	private void DelayAfterOtherPrisonerShot ()
 	{
 		if (skillCoolDownTime <= 0) {
 			skillCoolDownTime = maxCoolDownTime * skillDelayRate;
@@ -109,12 +112,12 @@ public class ShootingSkill : MonoBehaviour {
 			skillCoolDownTime += maxCoolDownTime * skillDelayRate;
 		}
 	} 
-
+	//---------------------------------------------------------------
 	private void SetSkillBar(){ 
 		float skillScaleToSet = skillCoolDownTime/maxCoolDownTime;
 		skillBar.SetSkillBarAccordingly(skillScaleToSet);
 	}
-
+	//---------------------------------------------------------------
 	private void SkillShootingFromNeedle(){
 		Needle needle = GameObject.FindObjectOfType<Needle> ();
 		if (!needle) {
@@ -134,7 +137,7 @@ public class ShootingSkill : MonoBehaviour {
 		//reset cooldown for limitting use of skill
 		skillCoolDownTime = maxCoolDownTime;
 	}
-
+	//---------------------------------------------------------------
 	private void DisplayAimingAngle(){
 		Vector3 position = GameObject.FindGameObjectWithTag ("Prisoner Paddle").transform.position;
 		Instantiate (gaugeMeterPrefab, position, Quaternion.identity);
@@ -143,7 +146,7 @@ public class ShootingSkill : MonoBehaviour {
 		Time.timeScale = 0;
 		//PlayerPrefManager.SetSkillPause(PlayerPrefManager.SKILL_PAUSING);
 	}
-
+	//---------------------------------------------------------------
 	private void FindNotYetSkillUsersToDelaySkill(){
 		Prisoner[] prisonerArray = this.GetComponent<Prisoner>().GetPrisonerArray();
 		foreach (Prisoner thisPrisoner in prisonerArray) {

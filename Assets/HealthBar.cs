@@ -30,6 +30,7 @@ public class HealthBar : MonoBehaviour {
 
 	public void SetHealthBarAccordingly(float healthScaleToSet){
 		if(healthScaleToSet < 0f){
+			actualBarTransform.localScale = new Vector3(0f, 1f, 1f);
 			return;
 		}
 		actualBarTransform.localScale = new Vector3(healthScaleToSet, 1f, 1f);
