@@ -2,8 +2,11 @@
 2. Graphics
 3. Shop functions
 4. Adjust block properties
-5. Refactor the health handle into function
+
 6. BUG world selector button: child out of bound
 	=> this may be caused by playtesting and won the last map of the world, resulting in Maxworld number being increased
 	SOLUTION: remove save file (.json file)
 7. implement skill-usable & addable to enemy & prisoner
+
+8. Refactor the skill handle into function
+5. Refactor the health handle into function

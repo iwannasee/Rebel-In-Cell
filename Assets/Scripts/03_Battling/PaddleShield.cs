@@ -14,7 +14,7 @@ public class PaddleShield : MonoBehaviour {
 	void Update () {
 	
 	//Can control paddle if game is not paused by skill shooting
-		if (!Prisoner.GetIsCasingSkill() //PlayerPrefManager.GetSkillPause()
+		if (!Prisoner.GetIsCastingSkill() //PlayerPrefManager.GetSkillPause()
 		&& (Time.timeScale == 1)) {
 			PlayWithMouse ();
 		}

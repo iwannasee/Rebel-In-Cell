@@ -154,7 +154,7 @@ public class EnemyWaveController : MonoBehaviour {
 			PauseGame ();
 		}
 		else
-			if (Input.GetKeyUp (KeyCode.Escape) && (Time.timeScale == 0 && Prisoner.GetIsCasingSkill ())) {
+			if (Input.GetKeyUp (KeyCode.Escape) && (Time.timeScale == 0 && Prisoner.GetIsCastingSkill ())) {
 				PauseGame ();
 			}
 			else
