@@ -29,7 +29,6 @@ public class Enemy : MonoBehaviour {
 		}else{
 			enemyShotContainer = GameObject.Find("Enemy Shot Container");
 		}
-
 		Prisoners = GameObject.FindGameObjectsWithTag("Prisoner");
 	}
 		
@@ -45,7 +44,6 @@ public class Enemy : MonoBehaviour {
 			}	
 		}
 	}
-
 	//---------------------------------------------------------------
 	void Fire(){
 		if (!enemyShotContainer) {
@@ -72,8 +70,6 @@ public class Enemy : MonoBehaviour {
 			print("no prisoner found");
 		}
 	}
-
-
 	//---------------------------------------------------------------
 	public void EnemyDestroy(){
 		enemyCount = GameObject.FindGameObjectsWithTag ("Enemy").Length;

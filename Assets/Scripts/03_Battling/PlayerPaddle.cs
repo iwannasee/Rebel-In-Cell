@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaddleShield : MonoBehaviour {
+public class PlayerPaddle : MonoBehaviour {
 	public float moveSpeed;
 	public bool isPlayWithMouse;
 	public GameObject inventoryGameObj;
@@ -14,12 +14,15 @@ public class PaddleShield : MonoBehaviour {
 	void Update () {
 	
 	//Can control paddle if game is not paused by skill shooting
-		if (!Prisoner.GetIsCastingSkill() //PlayerPrefManager.GetSkillPause()
+		if (!Prisoner.GetIsCastingSkill()
 		&& (Time.timeScale == 1)) {
-			PlayWithMouse ();
+			if(isPlayWithMouse){
+				PlayWithMouse ();
+			}else{
+				PlayWithArrow();
+			}
 		}
 	}
-
 	//---------------------------------------------------------------
 	void PlayWithArrow(){
 		Vector3 newPos = new Vector3 (transform.position.x + Input.GetAxis ("Horizontal") * moveSpeed * Time.deltaTime, transform.position.y, 0);

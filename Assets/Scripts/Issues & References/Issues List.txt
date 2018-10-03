@@ -8,5 +8,8 @@
 	SOLUTION: remove save file (.json file)
 7. implement skill-usable & addable to enemy & prisoner
 
-8. Refactor the skill handle into function OK
-5. Refactor the health handle into function OK but moaning two times
+	OK 8. Refactor the skill handle into function OK
+	OK 5. Refactor the health handle into function OK but moaning two times
+
+9. the coins seem not appear
+

@@ -18,16 +18,17 @@ public class Health : MonoBehaviour {
 	public float maxHitImgInterval = 0.2f;
 
 	private float hitImgInterval;
-	public int health; 
+	private int health; 
 	private int lostHeathToChangeSprite;
 	private HealthBar healthBar;
 
 	private SpriteRenderer spriteRenderer;
 	private AudioSource audioSource;
+	//---------------------------------------------------------------
 	// Use this for initialization
+	//---------------------------------------------------------------
 	void Start () {
 		audioSource = GetComponent<AudioSource>();
-
 		//Only active health bar function if the owner of this script is prisoner
 		if(GetComponent<Prisoner>()){
 			//link to health bar object , assume its index is 2 in transform hierachy
@@ -40,14 +41,12 @@ public class Health : MonoBehaviour {
 		hitImgInterval = maxHitImgInterval;
 		spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
 
-		//spriteRenderer.sprite = heathStatusSprites[heathStatusSprites.Length-1];
 		if(heathStatusSprites.Length > 0 && maxHealth >= heathStatusSprites.Length){
 			lostHeathToChangeSprite = maxHealth / heathStatusSprites.Length;
 		}
-
 		health = maxHealth;
 	}
-
+	//---------------------------------------------------------------
 	void OnTriggerEnter2D(Collider2D collider){
 		if(GetComponent<Enemy>() || GetComponent<BlockOfStage>()){
 			if(collider.GetComponent<RadiantDamage> ()){
@@ -61,7 +60,7 @@ public class Health : MonoBehaviour {
 						return;
 					}
 
-					if(GetComponent<Enemy>()){
+					if(GetComponent<Enemy>()){ 
 						GetComponent<Enemy>().EnemyDestroy();
 						return;
 					}
@@ -73,11 +72,10 @@ public class Health : MonoBehaviour {
 			}
 		}
 	}
+	//---------------------------------------------------------------
 	void OnCollisionEnter2D (Collision2D collision)
 	{
-		if(health <=0){
-			return;
-		}
+		if(health <=0){return;}
 
 		GameObject collidingObject = collision.gameObject;
 		if (collidingObject.GetComponent<RadiantDamage> ()) {
@@ -85,34 +83,33 @@ public class Health : MonoBehaviour {
 			int inflictedDamage = radiantDamage.GetDamage();
 			health = health - inflictedDamage;
 
+			//if this health is of prisoner
 			if(GetComponent<Prisoner>()){
 				SetHealthBar(); 
-				StartCoroutine("PlayHitSprite");
+				StartCoroutine("PlayHitSpriteAndHitSound");
 			}
 
 			if(lostHeathToChangeSprite != 0){
 				ChangeSpriteFollowHealth();
 			}
 
+			//Handle when health is <= 0
 			if(health <= 0){
+				//if this health is of block
 				if(GetComponent<BlockOfStage>()){
 					GetComponent<BlockOfStage>().BlockDestroy();
 					return;
 				}
-
+				//if this health is of enemy
 				if(GetComponent<Enemy>()){
 					GetComponent<Enemy>().EnemyDestroy();
 					return;
 				}
 			}
-
-			if(lostHeathToChangeSprite != 0){
-				ChangeSpriteFollowHealth();
-			}
 		}
 	}
-
-	IEnumerator PlayHitSprite() 
+	//---------------------------------------------------------------
+	IEnumerator PlayHitSpriteAndHitSound() 
     {
         transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = hitImg;
         audioSource.clip = hitClip;
@@ -133,21 +130,23 @@ public class Health : MonoBehaviour {
 			ChangeSpriteFollowHealth(); 
 		} 
     }
-
+	//---------------------------------------------------------------
+	//(for prisoner) set health bar based on remaining health
 	private void SetHealthBar(){
 		float healthScaleToSet = (float)health/(float)maxHealth;
 		print("healthScaleToSet " + healthScaleToSet);
 		healthBar.SetHealthBarAccordingly(healthScaleToSet);
 	}
-
+	//---------------------------------------------------------------
 	private void ChangeSpriteFollowHealth() {
 		if((maxHealth % lostHeathToChangeSprite) == 0){
 			int spriteIndex = health/ lostHeathToChangeSprite;
 			spriteRenderer.sprite = heathStatusSprites[spriteIndex];
 		}
 	}
-
+	//---------------------------------------------------------------
 	public int GetHealth(){
 		return health;
 	}
+	//---------------------------------------------------------------
 }
