@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockOfStage : MonoBehaviour {
-	// Use this for initialization
+
 	private int WaveBlockCount;
 	private GameObject ItemContainer;
-	//---------------------------------------------------------------
-	void Start () {
-
-	}
 
 	//---------------------------------------------------------------
 	public void BlockDestroy(){

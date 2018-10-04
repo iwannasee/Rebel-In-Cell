@@ -32,7 +32,7 @@ public class EnemyPaddle : MonoBehaviour {
 	}
 	//---------------------------------------------------------------
 	void OnTriggerEnter2D(Collider2D collider){
-		if(collider.gameObject.GetComponent<SkillShot>()||
+		if(collider.gameObject.GetComponent<CharacterSkillShot>()||
 			collider.gameObject.GetComponent<ProjectileBall>()){
 		   		//nearestShot = collider.gameObject;
 		   }

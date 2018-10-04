@@ -1,0 +1,18 @@
+1. Back Ground Music
+2. Graphics
+3. Shop functions
+4. Adjust block properties
+
+6. BUG world selector button: child out of bound
+	=> this may be caused by playtesting and won the last map of the world, resulting in Maxworld number being increased
+	SOLUTION: remove save file (.json file)
+7. implement skill-usable & addable to enemy & prisoner
+
+	OK 8. Refactor the skill handle into function OK
+	OK 5. Refactor the health handle into function OK but moaning two times
+
+9. the coins seem not appear
+
+EXTENSION final fantasy-liked: control 4 characters, battling in turn by shooting bouncy projectile
+	to defeat enemies.
+
