@@ -7,8 +7,12 @@ public class Prisoner : MonoBehaviour {
 	static private bool prisonerIsCastingSkill = false;
 	private Prisoner[] prisonerArray;
 	private static bool allPrisonerDead;
+
+	//every renderer components of this character when played
+	//include vehicle back and front, health & skill bar and this own char renderer
 	//---------------------------------------------------------------
 	void Start(){
+
 
 		allPrisonerDead = false;
 		prisonerArray = GameObject.FindObjectsOfType<Prisoner>();
@@ -50,7 +54,5 @@ public class Prisoner : MonoBehaviour {
 	public static void SetPrisonIsCasting(){
 		prisonerIsCastingSkill = true;
 	}
-
-
 
 }

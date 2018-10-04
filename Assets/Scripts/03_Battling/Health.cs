@@ -18,7 +18,7 @@ public class Health : MonoBehaviour {
 	public float maxHitImgInterval = 0.2f;
 
 	private float hitImgInterval;
-	private int health; 
+	public int health; 
 	private int lostHeathToChangeSprite;
 	private HealthBar healthBar;
 

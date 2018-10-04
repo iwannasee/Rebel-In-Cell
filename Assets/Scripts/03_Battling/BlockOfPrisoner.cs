@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class BlockOfPrisoner : MonoBehaviour {
 	// Use this for initialization
-	public static int ShelterBrickCount = 0;
+	public static int ShelterBlockCount = 0;
 	public int maxHealth;
 	private int health;
 	
 	//---------------------------------------------------------------
 	void Start () {
 		health = maxHealth;	
-		ShelterBrickCount++;
+		ShelterBlockCount++;
 	}
 	//---------------------------------------------------------------
 	// Update is called once per frame
@@ -30,7 +30,7 @@ public class BlockOfPrisoner : MonoBehaviour {
 	void TimesHitHandle(){ 
 		if (health <= 0) {
 			Destroy (gameObject);
-			ShelterBrickCount--;
+			ShelterBlockCount--;
 		}
 	}
 }

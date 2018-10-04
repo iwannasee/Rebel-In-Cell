@@ -22,16 +22,23 @@ public class ShootingSkill : MonoBehaviour {
 	private int tapTimes;
 	private bool gaugeIsDisplayed = false;
 	private GameObject skillShotContainer;
+	private SkillCastingFadeEffect skillCastingEffect;
+	Renderer[] standOutRenderers;
 	private HealthBar healthBar;
 	private SkillBar skillBar;
 	//---------------------------------------------------------------
 	void Start(){ 
+		skillCastingEffect = GameObject.FindGameObjectWithTag("Skill Casting Effect").GetComponent<SkillCastingFadeEffect>();
 		//link to health bar object , assume its index is 2 in transform hierachy
 		healthBar = transform.parent.GetChild(2).GetComponent<HealthBar>();
 		//link to skill bar object , assume its index is 3 in transform hierachy
 		skillBar = transform.parent.GetChild(3).GetComponent<SkillBar>();
 		if(!healthBar || !skillBar){
 			Debug.Log("no health or skill bar found");
+		}
+
+		if(GetComponent<Prisoner>()){
+			FindRendersToStandOut();
 		}
 
 		skillCoolDownTime = maxCoolDownTime;
@@ -71,6 +78,8 @@ public class ShootingSkill : MonoBehaviour {
 				//TODO refactor this
 				//Unpause to shoot
 				Time.timeScale = 1;
+				skillCastingEffect.EndEffect();
+				ExitStandOut();
 				SkillShootingFromNeedle ();
 				//TODO refactor this
 				Destroy (GameObject.FindObjectOfType<GaugeMeter> ().gameObject);
@@ -97,6 +106,8 @@ public class ShootingSkill : MonoBehaviour {
 		if (skillCoolDownTime <= 0 && (Time.timeScale == 1)) {
 			tapTimes++; 
 			if (tapTimes >= tapTimesToUseSkill) {
+				skillCastingEffect.StartEffect();
+				MakeThisCasterStandOut();
 				DisplayAimingAngle ();
 				tapTimes = 0;
 			}
@@ -158,4 +169,21 @@ public class ShootingSkill : MonoBehaviour {
 			}
 		}
 	}
+
+	private void MakeThisCasterStandOut(){
+		foreach(Renderer renderer in standOutRenderers){
+			renderer.sortingLayerName = "StandOut";
+		}
+	}
+
+	private void ExitStandOut(){
+		foreach(Renderer renderer in standOutRenderers){
+			renderer.sortingLayerName = "Characters";
+		}
+	}
+
+	private void FindRendersToStandOut(){		
+			Transform thisCharacterBlock = transform.parent;
+			standOutRenderers = thisCharacterBlock.GetComponentsInChildren<SpriteRenderer>();
+		}
 }

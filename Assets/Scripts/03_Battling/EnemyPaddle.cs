@@ -40,7 +40,7 @@ public class EnemyPaddle : MonoBehaviour {
 	//---------------------------------------------------------------
 	//Find shot from prisoners
 	void FindShotsInScene(){
-		ProjectileShots = GameObject.FindGameObjectsWithTag ("Projectile Shot");
+		ProjectileShots = GameObject.FindGameObjectsWithTag ("Stage Shot");
 	}
 	//---------------------------------------------------------------
 	Vector3 GetPositionOfNearestShot ()
