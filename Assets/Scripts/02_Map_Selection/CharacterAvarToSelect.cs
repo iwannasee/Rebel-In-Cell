@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterAvarToSelect : MonoBehaviour {
 	public GameObject prisonerPref;
+
 	private GameObject readyList;
 	private Sprite thisPrisonerSprt;
 	private bool selected = false;

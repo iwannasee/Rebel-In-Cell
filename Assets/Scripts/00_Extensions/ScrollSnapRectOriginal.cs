@@ -7,13 +7,13 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Mask))]
 [RequireComponent(typeof(ScrollRect))]
-public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
-	//public GameObject mapDict;
+public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
+
     [Tooltip("Set starting page index - starting from 0")]
     public int startingPage = 0;
     [Tooltip("Threshold time for fast swipe in seconds")]
     public float fastSwipeThresholdTime = 0.3f;
-    [Tooltip("Threshold time for fast swipe in (unscaled) pixels")]
+    [Tooltip("Threshold time for fast swipe in (unscaled) pixels")] 
     public int fastSwipeThresholdDistance = 100;
     [Tooltip("How fast will page lerp to target position")]
     public float decelerationRate = 10f;
@@ -59,45 +59,12 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     // container with Image components - one Image for each page
     private List<Image> _pageSelectionImages;
 
-	public GameObject worldMapGameObject;
-	public Transform mapList;
-
-	private bool maptileSetUpEnd = false;
-
     //------------------------------------------------------------------------
     void Start() {
-		_scrollRectComponent = GetComponent<ScrollRect>();
+        _scrollRectComponent = GetComponent<ScrollRect>();
         _scrollRectRect = GetComponent<RectTransform>();
         _container = _scrollRectComponent.content;
-
-		if(mapList.childCount != MapDictionary.GetThisWorldLocations().Length){
-			Debug.LogError("the number of maps in scene is not equal to the number of maps in the database");
-		}
-		_pageCount = 0;
-		mapList.gameObject.SetActive(true);
-		for (int index = 0; index < mapList.childCount; index++){
-			string locationName = MapDictionary.GetThisWorldLocations()[index];
-			Transform mapTileObj = mapList.GetChild (index);
-			//Set name for the map tile
-			mapTileObj.GetComponent<MapTile>().SetMapName(locationName);
-			//Compare the name with the name available in player data
-			if(PlayerProgress.playerData.availableMaps.Contains(locationName)){
-				//copy the map tile and move to container
-				GameObject mapTileToDisplay = Instantiate(mapTileObj.gameObject) as GameObject;
-				mapTileToDisplay.transform.SetParent(_container.transform,false);
-		
-				//increase page number
-				_pageCount++;
-
-				//display corresponding dot
-				worldMapGameObject.transform.GetChild (index).gameObject.SetActive (true);
-			}else{
-				worldMapGameObject.transform.GetChild (index).gameObject.SetActive (false);
-			}
-		}
-	
-		//Destroy(mapList.gameObject);
-		mapList.gameObject.SetActive(false);
+        _pageCount = _container.childCount;
 
         // is it horizontal or vertical scrollrect
         if (_scrollRectComponent.horizontal && !_scrollRectComponent.vertical) {
@@ -114,71 +81,20 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         // init
         SetPagePositions();
         SetPage(startingPage);
-        //InitPageSelection();
+        InitPageSelection();
         SetPageSelection(startingPage);
 
-		maptileSetUpEnd = true;
         // prev and next buttons
         if (nextButton)
             nextButton.GetComponent<Button>().onClick.AddListener(() => { NextScreen(); });
 
         if (prevButton)
             prevButton.GetComponent<Button>().onClick.AddListener(() => { PreviousScreen(); });
-    }
-
+	}
 
     //------------------------------------------------------------------------
     void Update() {
-		//Move below
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		// if a new map is added to the map list
-		if (TextInputController.newlyAdded) {
-			//remove all the maptile in container first
-			foreach (Transform child in _container.transform){
-				GameObject.Destroy(child.gameObject);
-			}
-			_container.transform.DetachChildren();
-
-			//reset page count to 0
-			_pageCount = 0; 
-
-			//Loop again through the reference map list, and make new map container
-			for (int index = 0; index < mapList.childCount; index++){
-				Transform mapTileObj = mapList.GetChild (index); 
-				string locationName = mapTileObj.GetComponent<MapTile>().GetMapName();
-
-				//Compare the name with the name available in player data
-				if(PlayerProgress.playerData.availableMaps.Contains(locationName)){
-					Debug.Log(locationName + " is found");
-					GameObject mapTileToDisplay = Instantiate(mapTileObj.gameObject) as GameObject;
-					mapTileToDisplay.transform.SetParent(_container.transform,false);
-					//increase page number
-					_pageCount++;
-					//display corresponding dot
-					worldMapGameObject.transform.GetChild (index).gameObject.SetActive (true);
-				}else{
-					worldMapGameObject.transform.GetChild (index).gameObject.SetActive (false);
-				}
-			}
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-			//re-create the map scrolling
-			SetPagePositions();
-
-			//set the page to be first seen to just displayed page before
-			SetPage(_currentPage);
-
-
-			//Move below
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-			//hide the map list out
-			mapList.gameObject.SetActive(false);
-
-			//turn off the switch of this process
-			TextInputController.newlyAdded = false;
-			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		}
-	
+		// if moving to target position
         if (_lerp) {
             // prevent overshooting with values greater than 1
             float decelerate = Mathf.Min(decelerationRate * Time.deltaTime, 1f);
@@ -191,6 +107,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
                 // clear also any scrollrect move that may interfere with our lerping
                 _scrollRectComponent.velocity = Vector2.zero;
             }
+
             // switches selection icon exactly to correct page
             if (_showPageSelection) {
                 SetPageSelection(GetNearestPage());
@@ -213,13 +130,13 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
             // center position of all pages
             offsetX = width / 2;
             // total width
-			containerWidth = width * _pageCount;
+            containerWidth = width * _pageCount;
             // limit fast swipe length - beyond this length it is fast swipe no more
             _fastSwipeThresholdMaxLimit = width;
         } else {
             height = (int)_scrollRectRect.rect.height;
             offsetY = height / 2;
-			containerHeight = height * _pageCount;
+            containerHeight = height * _pageCount;
             _fastSwipeThresholdMaxLimit = height;
         }
 
@@ -233,7 +150,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         _pagePositions.Clear();
 
         // iterate through all container childern and set their positions
-		for (int i = 0; i < _pageCount; i++) {
+        for (int i = 0; i < _pageCount; i++) {
             RectTransform child = _container.GetChild(i).GetComponent<RectTransform>();
             Vector2 childPosition;
             if (_horizontal) {
@@ -248,17 +165,17 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
 
     //------------------------------------------------------------------------
     private void SetPage(int aPageIndex) {
-		aPageIndex = Mathf.Clamp(aPageIndex, 0, _pageCount - 1);
+        aPageIndex = Mathf.Clamp(aPageIndex, 0, _pageCount - 1);
         _container.anchoredPosition = _pagePositions[aPageIndex];
         _currentPage = aPageIndex;
     }
 
     //------------------------------------------------------------------------
     private void LerpToPage(int aPageIndex) {
-		aPageIndex = Mathf.Clamp(aPageIndex, 0,_pageCount - 1);
+        aPageIndex = Mathf.Clamp(aPageIndex, 0, _pageCount - 1);
         _lerpTo = _pagePositions[aPageIndex];
         _lerp = true;
-        _currentPage = aPageIndex; 
+        _currentPage = aPageIndex;
     }
 
     //------------------------------------------------------------------------
@@ -267,7 +184,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         _showPageSelection = unselectedPage != null && selectedPage != null;
         if (_showPageSelection) {
             // also container with selection images must be defined and must have exatly the same amount of items as pages container
-			if (pageSelectionIcons == null || pageSelectionIcons.childCount != _pageCount) {
+            if (pageSelectionIcons == null || pageSelectionIcons.childCount != _pageCount) {
                 Debug.LogWarning("Different count of pages and selection icons - will not show page selection");
                 _showPageSelection = false;
             } else {
@@ -289,26 +206,24 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     //------------------------------------------------------------------------
     private void SetPageSelection(int aPageIndex) {
         // nothing to change
-		print("_previousPageSelectionIndex  " + _previousPageSelectionIndex);
         if (_previousPageSelectionIndex == aPageIndex) {
             return;
         }
         
         // unselect old
-        if(_pageSelectionImages != null){
-			if (_previousPageSelectionIndex >= 0) {
-	            _pageSelectionImages[_previousPageSelectionIndex].sprite = unselectedPage;
-	            _pageSelectionImages[_previousPageSelectionIndex].SetNativeSize();
-	        }
-
-	        // select new
-	        _pageSelectionImages[aPageIndex].sprite = selectedPage;
-	        _pageSelectionImages[aPageIndex].SetNativeSize();
-
-	        _previousPageSelectionIndex = aPageIndex;
+        if (_previousPageSelectionIndex >= 0) {
+            _pageSelectionImages[_previousPageSelectionIndex].sprite = unselectedPage;
+            _pageSelectionImages[_previousPageSelectionIndex].SetNativeSize();
         }
-	}
 
+        // select new
+        _pageSelectionImages[aPageIndex].sprite = selectedPage;
+        _pageSelectionImages[aPageIndex].SetNativeSize();
+
+        _previousPageSelectionIndex = aPageIndex;
+	}
+	
+	
     //------------------------------------------------------------------------
     private void NextScreen() {
         LerpToPage(_currentPage + 1);
@@ -334,6 +249,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
                 nearestPage = i;
             }
         }
+
         return nearestPage;
     }
 
@@ -369,11 +285,8 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
             LerpToPage(GetNearestPage());
         }
         _dragging = false;
-
-
-        worldMapGameObject.GetComponent<WorldMap>().ShowCorrespondIndicator();
-		string locationName = _container.GetChild(_currentPage).GetComponent<MapTile>().GetMapName();
-		Debug.Log("current map is : " + locationName);		
+        Debug.Log (_currentPage);
+		
 	}
 	
     //------------------------------------------------------------------------
@@ -391,7 +304,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
             }
         }
     }
-
+    
 	//------------------------------------------------------------------------
 	public int GetCurrentPage(){
     	return _currentPage;
@@ -401,16 +314,4 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
 	public bool GetDragStatus(){
     	return _dragging;
     }
-	//------------------------------------------------------------------------
-    public string GetCurrentMapName(){
-		Transform currentMaptileTrans = _container.transform.GetChild(_currentPage);
-		MapTile currentMaptile = currentMaptileTrans.GetComponent<MapTile>();
-		string currentMapName = currentMaptile.GetMapName();
-		return currentMapName;
-    }
-	//------------------------------------------------------------------------
-    public bool GetMapSetUpEnd(){
-		return maptileSetUpEnd;
-    }
-	//------------------------------------------------------------------------
 }
