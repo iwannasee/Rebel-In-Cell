@@ -35,6 +35,7 @@ public class SaveLoadSystem : MonoBehaviour  {
 			loadedData.availableCharacters.Add(CommonData.char_pippo);
 			loadedData.availableVehicles = new List<string>();
 			loadedData.availableVehicles.Add(CommonData.veh_oven);
+			loadedData.availableVehicles.Add(CommonData.veh_test);
 			SaveGame(loadedData);
 			return loadedData;
 		}else{

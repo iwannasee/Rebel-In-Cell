@@ -82,7 +82,7 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
         SetPagePositions();
         SetPage(startingPage);
         InitPageSelection();
-        SetPageSelection(startingPage);
+        SetPageSelection(startingPage); 
 
         // prev and next buttons
         if (nextButton)
@@ -93,7 +93,7 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
 	}
 
     //------------------------------------------------------------------------
-    void Update() {
+    void Update() { 
 		// if moving to target position
         if (_lerp) {
             // prevent overshooting with values greater than 1
@@ -123,7 +123,7 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
         int offsetY = 0;
         int containerWidth = 0;
         int containerHeight = 0;
-
+       
         if (_horizontal) {
             // screen width in pixels of scrollrect window
             width = (int)_scrollRectRect.rect.width;
@@ -142,31 +142,39 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
 
         // set width of container
         Vector2 newSize = new Vector2(containerWidth, containerHeight);
+		
         _container.sizeDelta = newSize;
-        Vector2 newPosition = new Vector2(containerWidth / 2, containerHeight / 2);
+		
+        //Vector2 newPosition = new Vector2(containerWidth / 2, containerHeight / 2);
+		Vector2 newPosition = new Vector2(containerWidth / 2, containerHeight / 2);
         _container.anchoredPosition = newPosition;
-
+		print(  _container.name + " " + _container.offsetMax);
+		 
         // delete any previous settings
         _pagePositions.Clear();
-
+         
         // iterate through all container childern and set their positions
         for (int i = 0; i < _pageCount; i++) {
             RectTransform child = _container.GetChild(i).GetComponent<RectTransform>();
             Vector2 childPosition;
             if (_horizontal) {
-                childPosition = new Vector2(i * width - containerWidth / 2 + offsetX, 0f);
+               	//childPosition = new Vector2(i * width - containerWidth / 2 + offsetX, 0f);
+				childPosition = new Vector2(i * width - containerWidth / 2 + offsetX, child.anchoredPosition.y);
             } else {
-                childPosition = new Vector2(0f, -(i * height - containerHeight / 2 + offsetY));
+               childPosition = new Vector2(0f, -(i * height - containerHeight / 2 + offsetY));
+				//childPosition = new Vector2(0f, 0f);
             }
-            child.anchoredPosition = childPosition;
+           child.anchoredPosition = childPosition;
             _pagePositions.Add(-childPosition);
         }
+		
     }
 
     //------------------------------------------------------------------------
     private void SetPage(int aPageIndex) {
         aPageIndex = Mathf.Clamp(aPageIndex, 0, _pageCount - 1);
         _container.anchoredPosition = _pagePositions[aPageIndex];
+		print("aPageIndex " + aPageIndex + " _pagePositions " + _pagePositions.Count);
         _currentPage = aPageIndex;
     }
 
@@ -249,7 +257,7 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
                 nearestPage = i;
             }
         }
-
+       
         return nearestPage;
     }
 
@@ -286,11 +294,12 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
         }
         _dragging = false;
         Debug.Log (_currentPage);
-		
+
 	}
 	
     //------------------------------------------------------------------------
     public void OnDrag(PointerEventData aEventData) {
+
         if (!_dragging) {
             // dragging started
             _dragging = true;
@@ -303,6 +312,7 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
                 SetPageSelection(GetNearestPage());
             }
         }
+
     }
     
 	//------------------------------------------------------------------------
