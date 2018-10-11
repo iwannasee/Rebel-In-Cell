@@ -103,6 +103,7 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
             if (Vector2.SqrMagnitude(_container.anchoredPosition - _lerpTo) < 0.25f) {
                 // snap to target and stop lerping
                 _container.anchoredPosition = _lerpTo;
+
                 _lerp = false;
                 // clear also any scrollrect move that may interfere with our lerping
                 _scrollRectComponent.velocity = Vector2.zero;
@@ -111,6 +112,7 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
             // switches selection icon exactly to correct page
             if (_showPageSelection) {
                 SetPageSelection(GetNearestPage());
+				
             }
         }
     }
@@ -148,7 +150,6 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
         //Vector2 newPosition = new Vector2(containerWidth / 2, containerHeight / 2);
 		Vector2 newPosition = new Vector2(containerWidth / 2, containerHeight / 2);
         _container.anchoredPosition = newPosition;
-		print(  _container.name + " " + _container.offsetMax);
 		 
         // delete any previous settings
         _pagePositions.Clear();
@@ -184,6 +185,13 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
         _lerpTo = _pagePositions[aPageIndex];
         _lerp = true;
         _currentPage = aPageIndex;
+
+		//external code inserted: From here
+        //Re-display the indicating arrow of available slot
+        //if(GetComponent<SelectBaseAvarList>()){
+			//GetComponent<SelectBaseAvarList>().RefreshBase();
+        //}
+        //To here
     }
 
     //------------------------------------------------------------------------

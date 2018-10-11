@@ -8,6 +8,8 @@ public class Selection_CharAvar : MonoBehaviour {
 	public string charInfoText;
 	private Sprite thisPrisonerSprt;
 	private bool bIslocked = true;
+
+
 	private CharacterInfoScreen charInfo;
 
 	// Use this for initialization
@@ -16,7 +18,7 @@ public class Selection_CharAvar : MonoBehaviour {
 		charInfo = FindAndGetCharInfo();
 	}
 
-	private CharacterInfoScreen FindAndGetCharInfo(){
+	public CharacterInfoScreen FindAndGetCharInfo(){
 		Transform charPanel = transform.parent.parent;
 		return charPanel.GetComponentInChildren<CharacterInfoScreen>();
 	}
@@ -28,9 +30,9 @@ public class Selection_CharAvar : MonoBehaviour {
 	public void CharacterIsSelecting(){
 		if(bIslocked){return;}
 
-		print(FindAndGetCharInfo().gameObject.name);
 		charInfo.SetOnScrnCharSprt(thisPrisonerSprt);
-		charInfo.SetInfoTextOfSelectedChar(charInfoText);	
+		charInfo.SetInfoTextOfSelectedChar(charInfoText);
+		charInfo.SetCharNameOnScreen(GetPrisonerPrefabName());	
 		//TODO update equipment and skill 
 	}
 

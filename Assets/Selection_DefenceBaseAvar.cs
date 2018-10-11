@@ -11,11 +11,6 @@ public class Selection_DefenceBaseAvar : MonoBehaviour {
 	void Start () {
 		characterSlot = transform.GetChild(1).GetComponent<Image>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
 	public string GetBasePrefabName(){
 		return BasePref.GetComponent<Vehicle>().vehileName;

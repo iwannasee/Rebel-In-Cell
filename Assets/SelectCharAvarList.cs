@@ -31,4 +31,16 @@ public class SelectCharAvarList : MonoBehaviour {
 			}
 		}
 	}
+
+	public Selection_CharAvar GetIsOnInfoScrnCharacter(){
+		CharacterInfoScreen charInfo = totalCharAvars[0].FindAndGetCharInfo();
+		string nameOnScreen = charInfo.GetCharNameOnScreen();
+		for(int i = 0; i< totalCharAvars.Length; i++){
+			if(totalCharAvars[i].GetPrisonerPrefabName() == nameOnScreen){
+				return totalCharAvars[i];
+			}
+		}
+
+		return null;
+	}
 }

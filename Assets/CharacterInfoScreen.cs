@@ -10,15 +10,7 @@ public class CharacterInfoScreen : MonoBehaviour {
 	public Image equipmentImage;
 	public Text charInfoText;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	private string charName;
 
 	public void SetOnScrnCharSprt(Sprite spriteToUpdate){
 		displayCharImage.sprite = spriteToUpdate;
@@ -38,5 +30,13 @@ public class CharacterInfoScreen : MonoBehaviour {
 
 	public void ClickTest(){
 		print( "click test " +EventSystem.current.currentSelectedGameObject.name);
+	}
+
+	public void SetCharNameOnScreen(string nameToSet){
+		charName = nameToSet;
+	}
+
+	public string GetCharNameOnScreen(){
+		return charName;
 	}
 }
