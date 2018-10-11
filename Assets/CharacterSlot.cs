@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterSlot : MonoBehaviour {
 	private Transform arrow;
-
+    private GameObject prefabOfSelectedCharacter;
 	// Use this for initialization
 	void Start () {
 		//hide the arrow indicating available slot
@@ -35,14 +35,22 @@ public class CharacterSlot : MonoBehaviour {
 		Transform actualImgSprtObj = selectingCharacter.transform.GetChild(0);
 		Sprite selectingCharSprite = actualImgSprtObj.GetComponent<Image>().sprite;
 
-		//set that to the image sprite in the slot
-		GetComponent<Image>().sprite = selectingCharSprite;
+        //Get for-playing character prefab
+        prefabOfSelectedCharacter = selectingCharacter.GetCharPrefabOfThisAvar();
+        //set that to the image sprite in the slot
+        GetComponent<Image>().sprite = selectingCharSprite;
 		GetComponent<Button>().interactable = true;
 		HideArrow();
 	}
 
 	private void RemoveCharacterFromSlot(){
-		ShowArrow();
+        ShowArrow();
 		GetComponent<Image>().sprite = null;
-	}
+        prefabOfSelectedCharacter = null;
+    }
+
+    public GameObject GetCharacterPrefabInThisSlot()
+    {
+        return prefabOfSelectedCharacter;
+    }
 }

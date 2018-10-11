@@ -32,7 +32,7 @@ public class Health : MonoBehaviour {
 		//Only active health bar function if the owner of this script is prisoner
 		if(GetComponent<Prisoner>()){
 			//link to health bar object , assume its index is 2 in transform hierachy
-			healthBar = transform.parent.GetChild(2).GetComponent<HealthBar>();
+			healthBar = transform.parent.GetComponentInChildren<HealthBar>();
 			if(!healthBar){
 				Debug.Log("no health bar found");
 			}

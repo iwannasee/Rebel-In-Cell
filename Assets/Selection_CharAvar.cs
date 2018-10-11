@@ -39,4 +39,9 @@ public class Selection_CharAvar : MonoBehaviour {
 	public void UnlockCharacterSelection(){
 		bIslocked = false;
 	}
+
+    public GameObject GetCharPrefabOfThisAvar()
+    {
+        return prisonerPref;
+    }
 }

@@ -15,4 +15,9 @@ public class Selection_DefenceBaseAvar : MonoBehaviour {
 	public string GetBasePrefabName(){
 		return BasePref.GetComponent<Vehicle>().vehileName;
 	}
+
+    public GameObject GetBasePrefabToPlay()
+    {
+        return BasePref;
+    }
 }

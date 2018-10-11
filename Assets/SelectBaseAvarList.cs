@@ -12,8 +12,11 @@ public class SelectBaseAvarList : MonoBehaviour {
 	//the list of actual playable bases
 	private GameObject[] baseAvar;
 
-	// Use this for initialization
-	void Start () {
+
+    private static GameObject baseGameObjectToPlay = null;
+    private static GameObject[] charactersToPlay;
+    // Use this for initialization
+    void Start () {
 		FilterAvailableBases();
 
 		for(int i = 0; i <baseAvar.Length; i++){
@@ -22,7 +25,9 @@ public class SelectBaseAvarList : MonoBehaviour {
 			thisAvar.transform.SetParent(basesListFrame.transform, false) ;
 		}
 
-	}
+        //renew this array every time the selection scene start. the number [1] is just a random number
+        charactersToPlay = new GameObject[1];
+    }
 	 
 	private void FilterAvailableBases(){
 		int dataTotalNumberOfVehs = PlayerProgress.playerData.availableVehicles.Count; 
@@ -57,7 +62,8 @@ public class SelectBaseAvarList : MonoBehaviour {
 	}
 
 	public void RefreshBase(){
-		print("refresh arrow");
+		print("refresh arrow");     
+
 		CharacterSlot[] availableSlots = GetCharSlotOfCurrentBase();
 		//Show arrows to click to get character on seat
 		foreach (CharacterSlot thisSlot in availableSlots){
@@ -73,12 +79,82 @@ public class SelectBaseAvarList : MonoBehaviour {
 
 	private CharacterSlot[] GetCharSlotOfCurrentBase(){
 		//Get current displaying base
-		int currentBaseIndex = GetComponent<ScrollSnapRectOriginal>().GetCurrentPage();
-		Transform baseListTransform = transform.GetChild(0);
-		Transform currentDisplayingBase = baseListTransform.GetChild(currentBaseIndex);
+        Transform currentDisplayingBase = GetCurrentBase();
 
-		//Get position(s) of available slots 
-		CharacterSlot[] availableSlots = currentDisplayingBase.GetComponentsInChildren<CharacterSlot>();
+        //Get position(s) of available slots 
+        CharacterSlot[] availableSlots = currentDisplayingBase.GetComponentsInChildren<CharacterSlot>();
 		return availableSlots;
 	}
+
+    private Transform GetCurrentBase()
+    {
+        int currentBaseIndex = GetComponent<ScrollSnapRectOriginal>().GetCurrentPage();
+        Transform baseListTransform = transform.GetChild(0);
+        return baseListTransform.GetChild(currentBaseIndex);
+    }
+
+    
+    public void GoTheBattle()
+    {
+        //Get the current base
+        Transform currentBaseAvar = GetCurrentBase();
+
+        //Set char prefabs to go to battle
+        CharacterSlot[] charSlots = GetCharSlotOfCurrentBase();
+        charactersToPlay = new GameObject[charSlots.Length];
+        for (int i = 0; i < charSlots.Length; i++)
+        {
+            charactersToPlay[i] = null;
+            //ReadyCharAvar readyChar = thisPrisoner.GetComponent<ReadyCharAvar>();
+            charactersToPlay[i] = charSlots[i].GetCharacterPrefabInThisSlot();
+            if (charactersToPlay[i])
+            {
+                Debug.Log("Playable Char " + charactersToPlay[i].name);
+            }
+        }
+
+        // if no character selected in the slot, ignore go to battle
+        int actualPrisonerCount = 0;
+        for (int i = 0; i < charactersToPlay.Length; i++)
+        {
+            if (charactersToPlay[i] != null)
+            {
+                actualPrisonerCount++;
+            }
+        }
+        if (actualPrisonerCount <= 0)
+        {
+            //TODO display warning message here	
+            Debug.Log("actualPrisonerCount " + actualPrisonerCount + " ->You have to select at least one Prisoner");
+            return;
+        }
+
+        //Set base prefab to go to battle
+        Selection_DefenceBaseAvar defenceBaseAvar = currentBaseAvar.GetComponent<Selection_DefenceBaseAvar>();
+        baseGameObjectToPlay = defenceBaseAvar.GetBasePrefabToPlay();
+
+        //only start battle if there is at least one character selected and base selected
+        if (baseGameObjectToPlay)
+        {
+            string mapToPlay = GameObject.FindObjectOfType<MapSelectManager>().GetSelectedMap();
+            int currentWorld = PlayerProgress.presentWorldIndex;
+            LevelManager.SLoadLevel("03 World " + currentWorld + " " + mapToPlay);
+        }
+        else
+        {
+            //TODO display warning message here
+            Debug.Log("You have to select at least one Vehicle");
+        }
+
+    }
+
+    public static GameObject[] GetCharactersToPlay()
+    {
+        return charactersToPlay;
+    }
+
+    public static GameObject GetBaseGameObjectToPlay()
+    {
+        return baseGameObjectToPlay;
+    }
 } 

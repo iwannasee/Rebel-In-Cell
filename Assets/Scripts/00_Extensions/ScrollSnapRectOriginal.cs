@@ -90,6 +90,13 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
 
         if (prevButton)
             prevButton.GetComponent<Button>().onClick.AddListener(() => { PreviousScreen(); });
+
+        //if there is only one page ( one base), disable buttons
+        if(GetPageCount() == 1)
+        {
+            nextButton.gameObject.SetActive(false);
+            prevButton.gameObject.SetActive(false);
+        } 
 	}
 
     //------------------------------------------------------------------------
@@ -331,5 +338,10 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
 	//------------------------------------------------------------------------
 	public bool GetDragStatus(){
     	return _dragging;
+    }
+
+    public int GetPageCount()
+    {
+        return _pageCount;
     }
 }

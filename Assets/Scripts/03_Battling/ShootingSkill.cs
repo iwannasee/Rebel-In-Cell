@@ -29,10 +29,10 @@ public class ShootingSkill : MonoBehaviour {
 	//---------------------------------------------------------------
 	void Start(){ 
 		skillCastingEffect = GameObject.FindGameObjectWithTag("Skill Casting Effect").GetComponent<SkillCastingFadeEffect>();
-		//link to health bar object , assume its index is 2 in transform hierachy
-		healthBar = transform.parent.GetChild(2).GetComponent<HealthBar>();
-		//link to skill bar object , assume its index is 3 in transform hierachy
-		skillBar = transform.parent.GetChild(3).GetComponent<SkillBar>();
+		
+		healthBar = transform.parent.GetComponentInChildren<HealthBar>();
+		
+		skillBar = transform.parent.GetComponentInChildren<SkillBar>();
 		if(!healthBar || !skillBar){
 			Debug.Log("no health or skill bar found");
 		}

@@ -6,18 +6,23 @@ public class PrisonerDeployor : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if ((ReadyList.prisonersWillPlay.Length > 0) && (ReadyList.vehicleWillPlay)) {
-			int totalNumber = ReadyList.prisonersWillPlay.Length;
-			for (int i = 0; i < totalNumber; i++) {
-				GameObject vehicle = Instantiate (ReadyList.vehicleWillPlay, transform.GetChild (i).position, Quaternion.identity) as GameObject;
-				if (ReadyList.prisonersWillPlay [i]) {
-					GameObject prisoner = Instantiate (ReadyList.prisonersWillPlay [i], transform.GetChild (i).position, Quaternion.identity) as GameObject;
-					prisoner.transform.SetParent (vehicle.transform);
-				} else {
-					Debug.Log ("The position " + i + " is blank");
-				}
-				vehicle.transform.SetParent (transform.GetChild (i));
-			}
+        GameObject[] charsToPlay = SelectBaseAvarList.GetCharactersToPlay();
+        GameObject baseToPlay = SelectBaseAvarList.GetBaseGameObjectToPlay();
+        if ((charsToPlay.Length > 0) && baseToPlay) {
+            GameObject charBase = Instantiate(baseToPlay, transform.GetChild(0).position, Quaternion.identity) as GameObject;
+
+            //temporarily use healthbar component as a index of character slot
+            HealthBar[] healthBars = charBase.GetComponentsInChildren<HealthBar>();
+            Debug.Log("healthBars " + healthBars.Length);
+            for (int i = 0; i < healthBars.Length; i++)
+            {
+                // if character of index i exists, instantiate it and attach it to character slot game object
+                if (charsToPlay[i]) {
+                    GameObject character = Instantiate(charsToPlay[i], healthBars[i].transform.parent.position, Quaternion.identity) as GameObject;
+                    character.transform.SetParent(healthBars[i].transform.parent);
+                }
+                else { Debug.Log("The position " + i + " is blank"); }
+            }
 		} else {
 			Debug.Log ("there is no character or no vehicle selected");
 		}
