@@ -55,4 +55,12 @@ public class Prisoner : MonoBehaviour {
 		prisonerIsCastingSkill = true;
 	}
 
+	public string GetPrisonerName(){
+		return prisonerName;
+	}
+
+	public Sprite GetPrisonerSprt(){
+		Sprite prisonerSprt = transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
+		return prisonerSprt;
+	}
 }

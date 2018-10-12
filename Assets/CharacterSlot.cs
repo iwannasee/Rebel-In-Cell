@@ -25,32 +25,96 @@ public class CharacterSlot : MonoBehaviour {
 		arrow.gameObject.SetActive(false);
 	}
 
+	public bool IsCharAvarSelectedInThisSlot(){
+		//TODO promote this variable to member variable later
+		SelectCharAvarList charAvarList = GameObject.FindGameObjectWithTag("Select Char Avar List").GetComponent<SelectCharAvarList>();
+
+		string nameInPrefab = "";
+
+		if(GetCharacterPrefabInThisSlot()){
+			nameInPrefab = GetCharacterPrefabInThisSlot().GetComponent<Prisoner>().GetPrisonerName();
+		}
+
+		for(int i = 0; i< charAvarList.transform.childCount; i++){
+			string PrisonerPrefabName = charAvarList.transform.GetChild(0).GetComponent<Selection_CharAvar>().GetPrisonerPrefabName();
+			if(nameInPrefab == PrisonerPrefabName){
+				print("hy not OK");
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void SelectingCharacterToSlot(){
+		if(prefabOfSelectedCharacter != null){
+			RemoveCharacterFromSlot();
+		}
+		
 		//Get selecting character
 		SelectCharAvarList charAvarList = GameObject.FindGameObjectWithTag("Select Char Avar List").GetComponent<SelectCharAvarList>();
+
 		Selection_CharAvar selectingCharacter = charAvarList.GetIsOnInfoScrnCharacter();
-		 
+		//De-effect of selection in avar list
+		//charAvarList.DeselectAllCharacters();
+
 		if(selectingCharacter == null){return;}
 		//get the selecting character sprite
 		Transform actualImgSprtObj = selectingCharacter.transform.GetChild(0);
 		Sprite selectingCharSprite = actualImgSprtObj.GetComponent<Image>().sprite;
+
+		//Show effect of selection character
+		selectingCharacter.SetCharSelected();
+		selectingCharacter.MakeEffectOnSelected();
 
         //Get for-playing character prefab
         prefabOfSelectedCharacter = selectingCharacter.GetCharPrefabOfThisAvar();
         //set that to the image sprite in the slot
         GetComponent<Image>().sprite = selectingCharSprite;
 		GetComponent<Button>().interactable = true;
-		HideArrow();
+		
+		HideAllArrows();
 	}
 
 	private void RemoveCharacterFromSlot(){
-        ShowArrow();
+		//Disable interaction of the slot button
+		GetComponent<Button>().interactable = false;
+
+		/*	OPTIONAL */
+        //UnSelectedCharacter
+		string nameOfBeingSelectedChar = prefabOfSelectedCharacter.GetComponent<Prisoner>().GetPrisonerName();
+		SelectCharAvarList charAvarList = GameObject.FindGameObjectWithTag("Select Char Avar List").GetComponent<SelectCharAvarList>();
+		charAvarList.DeselectCharacterByName(nameOfBeingSelectedChar);
+
+
+		prefabOfSelectedCharacter = null;
 		GetComponent<Image>().sprite = null;
-        prefabOfSelectedCharacter = null;
+
+		//Show arrows only on vacant slots
+		CharacterSlot[] slots = transform.parent.GetComponentsInChildren<CharacterSlot>();
+		for(int i = 0; i < slots.Length; i++){
+			//Find vacant slots
+			if(slots[i].IsSlotVacant()){
+				slots[i].ShowArrow();
+			}
+		}
     }
 
     public GameObject GetCharacterPrefabInThisSlot()
     {
         return prefabOfSelectedCharacter;
+    }
+
+	//Hide All Arrows of the base of this slot
+    private void HideAllArrows(){
+		//Get the slots of the base
+		CharacterSlot[] slots = transform.parent.GetComponentsInChildren<CharacterSlot>();
+		//Hide every arrows of slots 
+		foreach(CharacterSlot slot in slots){
+			slot.HideArrow();
+		}
+    }
+
+    public bool IsSlotVacant(){
+		return (prefabOfSelectedCharacter == null);
     }
 }

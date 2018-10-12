@@ -20,7 +20,6 @@ public class SelectBaseAvarList : MonoBehaviour {
 		FilterAvailableBases();
 
 		for(int i = 0; i <baseAvar.Length; i++){
-			print( "baseAvar " + baseAvar[i].name);
 			GameObject thisAvar = Instantiate(baseAvar[i]) as GameObject; 
 			thisAvar.transform.SetParent(basesListFrame.transform, false) ;
 		}
@@ -31,7 +30,6 @@ public class SelectBaseAvarList : MonoBehaviour {
 	 
 	private void FilterAvailableBases(){
 		int dataTotalNumberOfVehs = PlayerProgress.playerData.availableVehicles.Count; 
-		print("dataTotalNumberOfVehs " + dataTotalNumberOfVehs);
 		baseAvar = new GameObject[dataTotalNumberOfVehs]; 
 		for (int i = 0; i < dataTotalNumberOfVehs; i++){  
 			string nameInData = PlayerProgress.playerData.availableVehicles[i]; 
@@ -44,36 +42,43 @@ public class SelectBaseAvarList : MonoBehaviour {
 		}
 	}
 
+	//Used By button /event trigger
 	public void ShowAvailableSlotsInBase(){ 
+		//bool charIsSelected = false;
+
+		GameObject SelectCharAvarListGameObj = GameObject.FindGameObjectWithTag("Select Char Avar List");
+		int AvarCount = SelectCharAvarListGameObj.transform.childCount;
+		for (int i = 0; i< ; i++){
+			if(
+		}
 		//Get position(s) of available slots 
 		CharacterSlot[] availableSlots = GetCharSlotOfCurrentBase();
 
 		//Show arrows to click to get character on seat
 		foreach (CharacterSlot thisSlot in availableSlots){
-			//if there is a character in this slot, dont show anything
-			if(thisSlot.GetComponent<Image>().sprite != null){
-				continue;
-			}
-			//else, show the arrow
-			else{
-				thisSlot.ShowArrow();
-			}
+			
+			thisSlot.ShowArrow();
+			/*
+			//if there is not character in this slot, show arrow
+			if(thisSlot.IsCharAvarSelectedInThisSlot()){
+				charIsSelected = true;
+				thisSlot.HideArrow();
+			}*/
 		}
 	}
 
 	public void RefreshBase(){
-		print("refresh arrow");     
-
 		CharacterSlot[] availableSlots = GetCharSlotOfCurrentBase();
 		//Show arrows to click to get character on seat
 		foreach (CharacterSlot thisSlot in availableSlots){
 			//Hide arrow
 			thisSlot.HideArrow();
 			//if there is a character in this slot, remove it
-			if(thisSlot.GetComponent<Image>().sprite != null){
+			if(thisSlot.GetCharacterPrefabInThisSlot()){
 				thisSlot.GetComponent<Image>().sprite = null;
 			}
 		}
+
 	}
 
 

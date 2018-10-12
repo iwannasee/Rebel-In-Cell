@@ -182,7 +182,6 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
     private void SetPage(int aPageIndex) {
         aPageIndex = Mathf.Clamp(aPageIndex, 0, _pageCount - 1);
         _container.anchoredPosition = _pagePositions[aPageIndex];
-		print("aPageIndex " + aPageIndex + " _pagePositions " + _pagePositions.Count);
         _currentPage = aPageIndex;
     }
 
