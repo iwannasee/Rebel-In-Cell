@@ -55,14 +55,18 @@ public class SelectCharAvarList : MonoBehaviour {
 		print("char to deselect " + charNameToDeselect);
 		for(int i= 0; i< totalCharAvars.Length; i++){
 			string charNameOnCharAvar = totalCharAvars[i].GetPrisonerPrefabName();
+            
 			if(charNameOnCharAvar == charNameToDeselect){
+
 				CharacterInfoScreen charInfo = totalCharAvars[0].FindAndGetCharInfo();
-				string nameOnScreen = charInfo.GetCharNameOnScreen();
-				if(charNameToDeselect == nameOnScreen){
+				string nameOnInfoScreen = charInfo.GetCharNameOnScreen();
+
+				/*if(charNameToDeselect == nameOnInfoScreen)
+                {
 					totalCharAvars[i].MakeEffectOnSelecting();
 					totalCharAvars[i].SetCharDeSelected();
 					return;
-				}
+				}*/
 				totalCharAvars[i].RemoveEffectOnSelected();
 				totalCharAvars[i].SetCharDeSelected();
 				return;

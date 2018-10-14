@@ -44,28 +44,24 @@ public class SelectBaseAvarList : MonoBehaviour {
 
 	//Used By button /event trigger
 	public void ShowAvailableSlotsInBase(){ 
-		//bool charIsSelected = false;
 
-		GameObject SelectCharAvarListGameObj = GameObject.FindGameObjectWithTag("Select Char Avar List");
-		int AvarCount = SelectCharAvarListGameObj.transform.childCount;
-		for (int i = 0; i< ; i++){
-			if(
-		}
 		//Get position(s) of available slots 
 		CharacterSlot[] availableSlots = GetCharSlotOfCurrentBase();
 
 		//Show arrows to click to get character on seat
 		foreach (CharacterSlot thisSlot in availableSlots){
-			
 			thisSlot.ShowArrow();
-			/*
-			//if there is not character in this slot, show arrow
-			if(thisSlot.IsCharAvarSelectedInThisSlot()){
-				charIsSelected = true;
-				thisSlot.HideArrow();
-			}*/
 		}
 	}
+
+    public void HideAllPoppingArrows()
+    {
+        CharacterSlot[] slots = GetCharSlotOfCurrentBase();
+        foreach(CharacterSlot slot in slots)
+        {
+            slot.HideArrow();
+        }
+    }
 
 	public void RefreshBase(){
 		CharacterSlot[] availableSlots = GetCharSlotOfCurrentBase();

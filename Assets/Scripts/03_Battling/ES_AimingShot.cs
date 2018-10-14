@@ -64,7 +64,7 @@ public class ES_AimingShot : MonoBehaviour {
 			Vector3 dir = (Prisoners [rdNum].transform.position - transform.position).normalized;
 			//Actual Shot
 			shotRgBody.velocity = dir * shotSpeed;
-			print(Prisoners[rdNum].name + " " + shotRgBody.velocity);
+			//print(Prisoners[rdNum].name + " " + shotRgBody.velocity);
 		} else{
 			print("no prisoner found");
 		}

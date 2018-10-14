@@ -8,12 +8,16 @@ public class Selection_CharAvar : MonoBehaviour {
 	public string charInfoText;
 	private bool bIslocked = true;
 
-	private bool bIsSelected = false;
-	private CharacterInfoScreen charInfo;
+	//private bool bIsSelectingToViewInfo = false;
+
+    private bool bIsSelected = false;
+    private CharacterInfoScreen charInfo;
 
 	// Use this for initialization
 	void Start () {
-		charInfo = FindAndGetCharInfo();
+        //Set not-selecting 
+        DeEffectOfSelecting();
+        charInfo = FindAndGetCharInfo();
 	}
 
 	public CharacterInfoScreen FindAndGetCharInfo(){
@@ -31,17 +35,26 @@ public class Selection_CharAvar : MonoBehaviour {
 	}
 
 	public void CharacterIsSelecting(){
+        
 		if(bIslocked){return;}
 
 
 		charInfo.SetOnScrnCharSprt(GetThisCharAvarSprt());
 		charInfo.SetInfoTextOfSelectedChar(charInfoText);
 		charInfo.SetCharNameOnScreen(GetPrisonerPrefabName());
-			
-		if(bIsSelected){return;}
-		SetCharSelectToInfoScrn();
-		//TODO update equipment and skill 
-	}
+
+        GameObject baseAvarList = GameObject.FindGameObjectWithTag("Base Avar List");
+        if (bIsSelected) {
+            SetCharSelectToInfoScrn();
+            baseAvarList.GetComponent<SelectBaseAvarList>().HideAllPoppingArrows();
+        } else{
+            SetCharSelectToInfoScrn();
+
+            baseAvarList.GetComponent<SelectBaseAvarList>().ShowAvailableSlotsInBase();
+        }
+
+        //TODO update equipment and skill 
+    }
 
 	public void UnlockCharacterSelection(){
 		bIslocked = false;
@@ -58,11 +71,10 @@ public class Selection_CharAvar : MonoBehaviour {
 		//Deselecting all the avar first
 		Selection_CharAvar[] charAvars = transform.parent.GetComponentsInChildren<Selection_CharAvar>();
 		for (int i = 0; i <charAvars.Length; i++){
-			if(!charAvars[i].GetIsCharSelected()){
-				charAvars[i].RemoveEffectOnSelected();
-			}
+			//if(!charAvars[i].GetIsCharSelected()){
+				charAvars[i].DeEffectOfSelecting();
+			//}
 		}
-
     	//show effect when this avar is selecting
 		MakeEffectOnSelecting();
     }
@@ -70,22 +82,30 @@ public class Selection_CharAvar : MonoBehaviour {
 	public void SetCharDeSelected(){
     	bIsSelected = false;
     }
-	public bool GetIsCharSelected(){
-    	return bIsSelected;
-    }
+
 	public void SetCharSelected(){
     	bIsSelected = true;
     }
+
+    public bool GetIsCharSelected()
+    {
+        return bIsSelected;
+    }
+
     public void SetCharAvarImageSprite(){
 		Sprite spriteToSet = GetCharPrefabOfThisAvar().GetComponent<Prisoner>().GetPrisonerSprt();
 		transform.GetChild(0).GetComponent<Image>().sprite = spriteToSet;
     }
 
 	public void MakeEffectOnSelecting(){
-		GetComponent<Image>().color = new Color(1,0,0,0.5f);
+        transform.GetChild(1).gameObject.SetActive(true);
+    }
+    private void DeEffectOfSelecting()
+    {
+        transform.GetChild(1).gameObject.SetActive(false);
     }
 
-	public void MakeEffectOnSelected(){
+    public void MakeEffectOnSelected(){
 		GetComponent<Image>().color = new Color(1,0,0,1);
     }
 

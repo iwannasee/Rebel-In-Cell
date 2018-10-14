@@ -15,24 +15,29 @@ public class Prisoner : MonoBehaviour {
 
 
 		allPrisonerDead = false;
-		prisonerArray = GameObject.FindObjectsOfType<Prisoner>();
+		prisonerArray = transform.parent.parent.GetComponentsInChildren<Prisoner>();
+        print("there are " + prisonerArray.Length + " chars in scene");
 	}
 	//---------------------------------------------------------------
 	public void CheckAlivePrisonerLeft(){
 		int alivePrisonerNum = prisonerArray.Length;
 		foreach(Prisoner thisPrisoner in prisonerArray){
-			Health thisPrisonerHealth = GetComponent<Health>();
+			Health thisPrisonerHealth = thisPrisoner.GetComponent<Health>();
 			bool isDead = (thisPrisonerHealth.GetHealth() <= 0);
 			if(isDead){
 				alivePrisonerNum--;
-			}
+                print("alivePrisonerNum " + alivePrisonerNum);
+            }
 		}
+
 		if (alivePrisonerNum <=0){
 			allPrisonerDead = true;
 			//as all the prisoners are down, set the game is lost
 		 	WinLoseCondition wlCondition=GameObject.FindGameObjectWithTag("Win Lose Condition").GetComponent<WinLoseCondition>();
 			wlCondition.Lose();
 		}
+
+        
 	}
 	//---------------------------------------------------------------
 	public static bool GetAllPrisonerDead(){

@@ -10,7 +10,7 @@ public class PrisonerDeployor : MonoBehaviour {
         GameObject baseToPlay = SelectBaseAvarList.GetBaseGameObjectToPlay();
         if ((charsToPlay.Length > 0) && baseToPlay) {
             GameObject charBase = Instantiate(baseToPlay, transform.GetChild(0).position, Quaternion.identity) as GameObject;
-
+            charBase.transform.SetParent(transform.GetChild(0));
             //temporarily use healthbar component as a index of character slot
             HealthBar[] healthBars = charBase.GetComponentsInChildren<HealthBar>();
             Debug.Log("healthBars " + healthBars.Length);

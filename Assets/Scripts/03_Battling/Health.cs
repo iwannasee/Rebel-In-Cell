@@ -125,6 +125,7 @@ public class Health : MonoBehaviour {
             transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = deadImg;
             //Check the number of alive prisoners
 			if(GetComponent<Prisoner>()){
+                print("run this");
 				GetComponent<Prisoner>().CheckAlivePrisonerLeft();
 			}
 			audioSource.clip = dieClip;

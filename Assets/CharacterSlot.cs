@@ -89,13 +89,10 @@ public class CharacterSlot : MonoBehaviour {
 		prefabOfSelectedCharacter = null;
 		GetComponent<Image>().sprite = null;
 
-		//Show arrows only on vacant slots
+		//Show arrows in every slots
 		CharacterSlot[] slots = transform.parent.GetComponentsInChildren<CharacterSlot>();
 		for(int i = 0; i < slots.Length; i++){
-			//Find vacant slots
-			if(slots[i].IsSlotVacant()){
-				slots[i].ShowArrow();
-			}
+			slots[i].ShowArrow();
 		}
     }
 
@@ -112,9 +109,5 @@ public class CharacterSlot : MonoBehaviour {
 		foreach(CharacterSlot slot in slots){
 			slot.HideArrow();
 		}
-    }
-
-    public bool IsSlotVacant(){
-		return (prefabOfSelectedCharacter == null);
     }
 }
