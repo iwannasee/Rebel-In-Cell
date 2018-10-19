@@ -33,8 +33,14 @@ public class ShootingSkill : MonoBehaviour {
 	//---------------------------------------------------------------
 	void Start(){ 
 		skillShotToPlay = GetSkillShotToPlay();
-		playingSkillName = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotSkillName();
-		maxCoolDownTime = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotCoolDownSpeed();
+
+		if(skillShotToPlay.GetComponent<CharacterSkillShot>()){
+			playingSkillName = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotSkillName();
+			maxCoolDownTime = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotCoolDownSpeed();
+		}else if(skillShotToPlay.GetComponent<SupportSkillShot>()){
+			playingSkillName = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotSkillName();
+			maxCoolDownTime = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotCoolDownSpeed();
+		}
 
 		skillCastingEffect = GameObject.FindGameObjectWithTag("Skill Casting Effect").GetComponent<SkillCastingFadeEffect>();
 		

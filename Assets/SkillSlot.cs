@@ -79,33 +79,40 @@ public class SkillSlot : MonoBehaviour {
 
 		if(selectingSkill.GetComponent<CharacterSkillShot>()){
 			string skillNameToSave = selectingSkill.GetComponent<CharacterSkillShot>().GetShotSkillName();
-			string charName = skillPanel.GetSkillUsingCharName();
-			switch(charName){
-			case CommonData.char_pippo:
-				PlayerProgress.playerData.latestUsedSkill_Pippo = skillNameToSave;	
-				break;
-
-			case CommonData.char_johnny:
-				PlayerProgress.playerData.latestUsedSkill_Johnny = skillNameToSave;	
-				break;
-
-			case CommonData.char_mathial:
-				PlayerProgress.playerData.latestUsedSkill_Mathial = skillNameToSave;	
-				break;
-
-			case CommonData.char_kolav:
-				PlayerProgress.playerData.latestUsedSkill_Kolav = skillNameToSave;	
-				break;
-
-				default: break;
-			}
+			SaveAsLatestUsedSkill (skillNameToSave);
 			skillSlotImage.sprite = selectingSkill.GetComponent<CharacterSkillShot>().GetShotSprtIcon();
-
+		}else if(selectingSkill.GetComponent<SupportSkillShot>()){
+			string skillNameToSave = selectingSkill.GetComponent<SupportSkillShot>().GetShotSkillName();
+			SaveAsLatestUsedSkill (skillNameToSave);
+			skillSlotImage.sprite = selectingSkill.GetComponent<SupportSkillShot>().GetShotSprtIcon();
 		}
-		SaveLoadSystem.SaveGame(PlayerProgress.playerData);
 
 		skillPanelObj.SetActive(false);
 		//Get the showing skill sprite to set skill slot image sprite
 		//TODO implement save function here
 	}
+
+	void SaveAsLatestUsedSkill (string skillNameToSave)
+	{
+		string charName = skillPanel.GetSkillUsingCharName ();
+		switch (charName) {
+		case CommonData.char_pippo:
+			PlayerProgress.playerData.latestUsedSkill_Pippo = skillNameToSave;
+			break;
+		case CommonData.char_johnny:
+			PlayerProgress.playerData.latestUsedSkill_Johnny = skillNameToSave;
+			break;
+		case CommonData.char_mathial:
+			PlayerProgress.playerData.latestUsedSkill_Mathial = skillNameToSave;
+			break;
+		case CommonData.char_kolav:
+			PlayerProgress.playerData.latestUsedSkill_Kolav = skillNameToSave;
+			break;
+		default:
+			break;
+		}
+
+		SaveLoadSystem.SaveGame(PlayerProgress.playerData);
+	}
+
 }
