@@ -24,17 +24,22 @@ public class ShootingSkill : MonoBehaviour {
 	private float skillCoolDownTime; 
 	private float needleAdjustTime;
 	private int tapTimes;
-	private bool gaugeIsDisplayed = false;
+	private bool bIsSkillCastEffectShowing = false;
 	private GameObject skillShotContainer;
 	private SkillCastingFadeEffect skillCastingEffect;
 	Renderer[] standOutRenderers;
 	private HealthBar healthBar;
 	private SkillBar skillBar;
+
+	private bool bIsShootingSkill = false;
+	private bool bIsSkillUsedThisCharge = false;
+
 	//---------------------------------------------------------------
 	void Start(){ 
 		skillShotToPlay = GetSkillShotToPlay();
+		bIsShootingSkill = (skillShotToPlay.GetComponent<CharacterSkillShot>() != null);
 
-		if(skillShotToPlay.GetComponent<CharacterSkillShot>()){
+		if(bIsShootingSkill){
 			playingSkillName = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotSkillName();
 			maxCoolDownTime = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotCoolDownSpeed();
 		}else if(skillShotToPlay.GetComponent<SupportSkillShot>()){
@@ -73,20 +78,25 @@ public class ShootingSkill : MonoBehaviour {
 		if(EnemyWaveController.GetWaveHasStarted()){
 			//cooldown skill over time
 			skillCoolDownTime = skillCoolDownTime - Time.deltaTime;
-			//visualize cooldown status
+
+			//visualize cooldown status 
 			SetSkillBar();
 		}
 
-		if (gaugeIsDisplayed) {
+		if (bIsSkillCastEffectShowing) {
 			//if Wave UI Text is displayed while gauge is displayed
 			if (UITextController.GetUITextStatusType () == UITextController.DISPLAY_TEXT.WAVE) {
 				Destroy (GameObject.FindObjectOfType<GaugeMeter> ().gameObject); //hide the gauge (destroying it)
 				tapTimes = 0; //reset the tap times
-				gaugeIsDisplayed = false;//the flag telling the gauge is NOT displayed to shot skill
+				bIsSkillCastEffectShowing = false;//the flag telling the gauge is NOT displayed to shot skill
 				Prisoner.UnSetPrisonIsCasting() ; //the flag telling prisoner is NOT about to shot skill
 				return; 
 			} 
+
+			SkillCasting_Regeneration();
+
 			needleAdjustTime = needleAdjustTime - Time.unscaledDeltaTime;
+
 			Prisoner.SetPrisonIsCasting();
 			if (needleAdjustTime <= 0 ) {
 				//TODO refactor this
@@ -95,13 +105,17 @@ public class ShootingSkill : MonoBehaviour {
 				skillCastingEffect.EndEffect();
 				ExitStandOut();
 
-				//if the skill is the shooting skill
-				SkillShootingFromNeedle ();
-				//TODO refactor this
-				Destroy (GameObject.FindObjectOfType<GaugeMeter> ().gameObject);
-				// else if the skill is the supporting skill
+				if(!bIsSkillUsedThisCharge){
+					//if the skill is the shooting skill
+					if(bIsShootingSkill){
+						SkillShootingFromNeedle ();
+					// else if the skill is the supporting skill
+					}else{
+						CastSupportSkill();
+					}
+				}
 
-				gaugeIsDisplayed = false;
+				bIsSkillCastEffectShowing = false;
 				needleAdjustTime = maxAdjustTime;
 				Prisoner.UnSetPrisonIsCasting();
 				prisonerJustUsedSkill = this.gameObject; 
@@ -113,8 +127,9 @@ public class ShootingSkill : MonoBehaviour {
 		}
 	}
 	//---------------------------------------------------------------
-	private void OnMouseDown(){
-		//Disable this function if someprisoner is casting skill
+	private void OnMouseUp(){
+
+		//Disable this function if someprisoner is casting skill 
 		if(Prisoner.GetIsCastingSkill() || 
 		//Or the stage is clear
 			(UITextController.GetUITextStatusType()== UITextController.DISPLAY_TEXT.CLEAR)||
@@ -126,10 +141,14 @@ public class ShootingSkill : MonoBehaviour {
 			if (tapTimes >= tapTimesToUseSkill) {
 				skillCastingEffect.StartEffect();
 				MakeThisCasterStandOut();
-				DisplayAimingAngle ();
+				ShowSkillCastEffect ();
 				tapTimes = 0;
 			}
 		}
+	}
+
+	private void OnMouseDown(){
+		
 	}
 	//---------------------------------------------------------------
 	private void DelayAfterOtherPrisonerShot ()
@@ -144,7 +163,7 @@ public class ShootingSkill : MonoBehaviour {
 	//---------------------------------------------------------------
 	private void SetSkillBar(){ 
 		float skillScaleToSet = skillCoolDownTime/maxCoolDownTime;
-		skillBar.SetSkillBarAccordingly(skillScaleToSet);
+		skillBar.SetSkillBarAccordingly(skillScaleToSet); 
 	}
 	//---------------------------------------------------------------
 	private void SkillShootingFromNeedle(){
@@ -165,6 +184,8 @@ public class ShootingSkill : MonoBehaviour {
 		}
 		//reset cooldown for limitting use of skill
 		skillCoolDownTime = maxCoolDownTime;
+		bIsSkillUsedThisCharge = true;
+		Destroy (GameObject.FindObjectOfType<GaugeMeter> ().gameObject);
 	}
 
 	//---------------------------------------------------------------
@@ -172,10 +193,22 @@ public class ShootingSkill : MonoBehaviour {
 	private void DisplayAimingAngle(){
 		Vector3 position = GameObject.FindGameObjectWithTag ("Prisoner Paddle").transform.position;
 		Instantiate (gaugeMeterPrefab, position, Quaternion.identity);
-		gaugeIsDisplayed = true;
+		/*
+		bIsSkillCastEffectShowing = true;
+		pausingForSkill = true;
+		Time.timeScale = 0;*/
+		//PlayerPrefManager.SetSkillPause(PlayerPrefManager.SKILL_PAUSING);
+	}
+	private void ShowSkillCastEffect(){
+		bIsSkillUsedThisCharge = false;
+		bIsSkillCastEffectShowing = true;
 		pausingForSkill = true;
 		Time.timeScale = 0;
-		//PlayerPrefManager.SetSkillPause(PlayerPrefManager.SKILL_PAUSING);
+		if(skillShotToPlay.GetComponent<CharacterSkillShot>()){
+			DisplayAimingAngle();
+		}else if (skillShotToPlay.GetComponent<SupportSkillShot>()){
+			print("show vfx of skill casting");
+		}
 	}
 	//---------------------------------------------------------------
 	private void FindNotYetSkillUsersToDelaySkill(){
@@ -230,10 +263,49 @@ public class ShootingSkill : MonoBehaviour {
 		return null;
 	}
 
-	private void CastSkill(){
-		if(GetSkillShotToPlay().GetComponent<SupportSkillShot>()){
-			SupportSkillShot skill = GetComponent<SupportSkillShot>();
+	private void CastSupportSkill(){
+		
+		switch(playingSkillName){
+			case CommonData.Johnny_Regeneration:
+				print("cast supporting now");
+			break;
+			case CommonData.Johnny_Epidemic:
 
+			break;
+			case CommonData.Johnny_Achemysto:
+
+			break;
+			case CommonData.Mathial_DragonStance:
+
+			break;
+			case CommonData.Mathial_PrayingMantisStance:
+
+			break;
+			case CommonData.Mathial_ReverseBowStance:
+
+			break;
+
+			default:
+			break;
+		}
+
+		skillCoolDownTime = maxCoolDownTime;
+
+	}
+
+	private void SkillCasting_Regeneration(){
+		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+		print (needleAdjustTime);
+
+		if(Input.GetMouseButtonDown(0)){
+			if(hit.collider != null)
+			{
+			//TODO replace the magic number
+				hit.transform.gameObject.GetComponent<Health>().HealthUp(30);
+				needleAdjustTime = 0f;
+				bIsSkillUsedThisCharge = true;
+				bIsSkillCastEffectShowing = false;
+			}
 		}
 	}
 }

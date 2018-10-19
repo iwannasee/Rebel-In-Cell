@@ -153,5 +153,13 @@ public class Health : MonoBehaviour {
 	public int GetHealth(){
 		return health;
 	}
+
+	public void HealthUp(int heathToAdd){
+		health += heathToAdd;
+		if(health>= maxHealth){
+			health = maxHealth;
+		}
+		SetHealthBar();
+	}
 	//---------------------------------------------------------------
 }
