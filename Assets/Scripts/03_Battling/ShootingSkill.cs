@@ -210,13 +210,24 @@ public class ShootingSkill : MonoBehaviour {
 		string lastUsedSkillName = Prisoner.GetCharacterLastUsedSkill(charName);
 
 		for(int i = 0 ; i< skillShotPrefabs.Length; i++){
-			if(skillShotPrefabs[i].GetComponent<CharacterSkillShot>().GetShotSkillName() == lastUsedSkillName){
-				return skillShotPrefabs[i];
+			if(skillShotPrefabs[i].GetComponent<CharacterSkillShot>()){
+				if(skillShotPrefabs[i].GetComponent<CharacterSkillShot>().GetShotSkillName() == lastUsedSkillName){
+					return skillShotPrefabs[i];
+				}
+			}else if(skillShotPrefabs[i].GetComponent<SupportSkillShot>()){
+				if(skillShotPrefabs[i].GetComponent<SupportSkillShot>().GetShotSkillName() == lastUsedSkillName){
+					return skillShotPrefabs[i];
+				}
 			}
 		}
 
 		return null;
 	}
 
+	private void CastSkill(){
+		if(GetSkillShotToPlay().GetComponent<SupportSkillShot>()){
+			SupportSkillShot skill = GetComponent<SupportSkillShot>();
 
+		}
+	}
 }

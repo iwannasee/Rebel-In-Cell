@@ -4,23 +4,12 @@ using UnityEngine;
 
 public class SupportSkillShot : MonoBehaviour {
 
-	public GameObject explodeParticlePref;
+	public GameObject skillParticlePref;
 	public Sprite shotSprtIcon;
-	public float shotSpeed;
 	public float coolDownSpeed;
 	public string skillName;
 
-	private int shotPower;
-
-	private Rigidbody2D rg2D;
-
-
-	//---------------------------------------------------------------
-	// Use this for initialization
-	void Start () {
-		shotPower = GetShotPower();
-		
-	} 
+	public int shotPower;
 
 	public Sprite GetShotSprtIcon(){
 		return shotSprtIcon;
@@ -31,7 +20,7 @@ public class SupportSkillShot : MonoBehaviour {
 	}
 
 	public int GetShotPower(){
-		return explodeParticlePref.GetComponent<RadiantDamage>().GetDamage();
+		return shotPower;
 	}
 
 	public float GetShotCoolDownSpeed(){

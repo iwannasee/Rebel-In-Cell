@@ -49,6 +49,7 @@ public class SkillPanel : MonoBehaviour {
 		GameObject skillToShowInfo = skillsOfPassingInChar[selectingSkillIndex];
 
 		//Set skill name to display
+		//If the skill is shooting skill
 		if(skillToShowInfo.GetComponent<CharacterSkillShot>()){
 			SelectingSkill = skillToShowInfo;
 			CharacterSkillShot skillShot = skillToShowInfo.GetComponent<CharacterSkillShot>();
@@ -59,13 +60,24 @@ public class SkillPanel : MonoBehaviour {
 			//Power Property
 			int skillPower = skillShot.GetShotPower();
 			SetPowerPropertyToDisplay(skillPower);
-
+			//Cooldown Speed Property
 			float skillReUseSpeed = skillShot.GetShotCoolDownSpeed();
 			SetCoolDownSpeedPropertyToDisplay(skillReUseSpeed);
+
+		//If the skill is supporting skill
+		}else if(skillToShowInfo.GetComponent<SupportSkillShot>()){
+			SelectingSkill = skillToShowInfo;
+			SupportSkillShot skillShot = skillToShowInfo.GetComponent<SupportSkillShot>();
+			string skillNameToDisplay = skillShot.GetShotSkillName();
+			SetSkillNameToDisplay(skillNameToDisplay);
+
+			//Set equivalent property to display
+			//Power Property
+			int skillPower = skillShot.GetShotPower();
+			SetPowerPropertyToDisplay(skillPower);
 			//Cooldown Speed Property
-			//........
-		}else{
-			print("this is not shooting skill");
+			float skillReUseSpeed = skillShot.GetShotCoolDownSpeed();
+			SetCoolDownSpeedPropertyToDisplay(skillReUseSpeed);
 		}
 	}
 
@@ -82,10 +94,24 @@ public class SkillPanel : MonoBehaviour {
 		switch(type){
 			case SkillSlot.SkillType.SKILL_SHOOT:
 				for(int i = 0; i < skills.Length; i++){
-					
-					CharacterSkillShot thisSkillShot = skills[i].GetComponent<CharacterSkillShot>();
-					Sprite shotSprt = thisSkillShot.GetShotSprtIcon();
-					string shotName = thisSkillShot.GetShotSkillName();
+					Sprite shotSprt = null;
+					string shotName = "";
+					int skillPower = 0;
+					float skillReUseSpeed = 0f;
+
+					if(skills[i].GetComponent<CharacterSkillShot>()){
+						CharacterSkillShot thisSkillShot = skills[i].GetComponent<CharacterSkillShot>();
+						shotSprt = thisSkillShot.GetShotSprtIcon();
+						shotName = thisSkillShot.GetShotSkillName();
+						skillPower = thisSkillShot.GetShotPower();
+						skillReUseSpeed = thisSkillShot.GetShotCoolDownSpeed();
+					}else if(skills[i].GetComponent<SupportSkillShot>()){
+						SupportSkillShot thisSpSkillShot = skills[i].GetComponent<SupportSkillShot>();
+						shotSprt = thisSpSkillShot.GetShotSprtIcon();
+						shotName = thisSpSkillShot.GetShotSkillName();
+						skillPower = thisSpSkillShot.GetShotPower();
+						skillReUseSpeed = thisSpSkillShot.GetShotCoolDownSpeed();
+					}
 
 					Transform shotSlotToSetSprt = shotListPanel.transform.GetChild(i);
 
@@ -100,10 +126,7 @@ public class SkillPanel : MonoBehaviour {
 							shotSlotToSetSprt.GetComponent<Image>().sprite = IsSelectingSprite;
 							SetSkillNameToDisplay(shotName);
 
-							int skillPower = thisSkillShot.GetShotPower();
 							SetPowerPropertyToDisplay(skillPower);
-
-							float skillReUseSpeed = thisSkillShot.GetShotCoolDownSpeed();
 							SetCoolDownSpeedPropertyToDisplay(skillReUseSpeed);
 
 							SelectingSkill = skills[i];

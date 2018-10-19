@@ -24,8 +24,13 @@ public class CharacterInfoScreen : MonoBehaviour {
 		string selectedCharName = charPrefToSetInfo.GetComponent<Prisoner>().GetPrisonerName();
 		SetCharNameOnScreen(selectedCharName);
 
+		//check the shot type is shooting or supporting
 		GameObject latestUsedSkill = charPrefToSetInfo.GetComponent<ShootingSkill>().GetSkillShotToPlay();
-		SetSkillSprtOfSelectedChar(latestUsedSkill.GetComponent<CharacterSkillShot>().GetShotSprtIcon());
+		if(latestUsedSkill.GetComponent<CharacterSkillShot>()){
+			SetSkillSprtOfSelectedChar(latestUsedSkill.GetComponent<CharacterSkillShot>().GetShotSprtIcon());
+		}else if( latestUsedSkill.GetComponent<SupportSkillShot>()){
+			SetSkillSprtOfSelectedChar(latestUsedSkill.GetComponent<SupportSkillShot>().GetShotSprtIcon());
+		}
 		
 
 		//first load all skill (locked and unlocked) into skill slot
