@@ -22,7 +22,7 @@ public class RadiantDamage : MonoBehaviour {
 
 			rangeCollider.radius = 0.1f;
 		}
-	}  
+	}   
 	 
 	void Update(){
 		if(bIsRangeDamage){

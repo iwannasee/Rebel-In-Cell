@@ -12,6 +12,29 @@ public class CharacterInfoScreen : MonoBehaviour {
 
 	private string charName;
 
+	public void SetSelectedCharToInfoScrn(GameObject charPrefToSetInfo, Sprite charSprtToSet, string charInfoToShow){
+		if(!charPrefToSetInfo.GetComponent<Prisoner>()){
+			print("cannot set to info screen with non-character obj");
+			return;
+		}
+
+		SetOnScrnCharSprt(charSprtToSet);
+		SetInfoTextOfSelectedChar(charInfoToShow);
+
+		string selectedCharName = charPrefToSetInfo.GetComponent<Prisoner>().GetPrisonerName();
+		SetCharNameOnScreen(selectedCharName);
+
+		GameObject latestUsedSkill = charPrefToSetInfo.GetComponent<ShootingSkill>().GetSkillShotToPlay();
+		SetSkillSprtOfSelectedChar(latestUsedSkill.GetComponent<CharacterSkillShot>().GetShotSprtIcon());
+		
+
+		//first load all skill (locked and unlocked) into skill slot
+		if(skillImage.GetComponent<SkillSlot>()){
+			skillImage.GetComponent<SkillSlot>().LoadSelectedCharSkillsIntoSkillSlot(charPrefToSetInfo);
+		}
+
+	}
+
 	public void SetOnScrnCharSprt(Sprite spriteToUpdate){
 		displayCharImage.sprite = spriteToUpdate;
 	}
@@ -19,6 +42,7 @@ public class CharacterInfoScreen : MonoBehaviour {
 	public void SetSkillSprtOfSelectedChar(Sprite spriteToUpdate){
 		skillImage.sprite = spriteToUpdate;
 	}
+
 
 	public void SetEquipmentSprtOfSelectedChar(Sprite spriteToUpdate){
 		equipmentImage.sprite = spriteToUpdate;

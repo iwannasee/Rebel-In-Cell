@@ -31,11 +31,33 @@ public class SaveLoadSystem : MonoBehaviour  {
 			loadedData.availableMaps = new List<string>();
 			loadedData.availableMaps.Add("Bat Cave");
 			loadedData.completedMaps = new List<string>();
+
 			loadedData.availableCharacters = new List<string>();
 			loadedData.availableCharacters.Add(CommonData.char_pippo);
+			loadedData.availableCharacters.Add(CommonData.char_johnny);
+			loadedData.availableCharacters.Add(CommonData.char_kolav);
+
+			loadedData.pippo_availableskills = new List<string>();
+			loadedData.pippo_availableskills.Add(CommonData.Pippo_FireBall);
+			loadedData.pippo_availableskills.Add(CommonData.Pippo_Bazooka);
+			loadedData.pippo_availableskills.Add(CommonData.Pippo_Shotgun);
+			loadedData.latestUsedSkill_Pippo = CommonData.Pippo_FireBall;
+
+			loadedData.johnny_availableskills = new List<string>();
+			loadedData.johnny_availableskills.Add(CommonData.Johnny_Regeneration);
+			loadedData.johnny_availableskills.Add(CommonData.Johnny_Achemysto);
+			loadedData.latestUsedSkill_Johnny = CommonData.Johnny_Regeneration;
+
+			loadedData.kolav_availableskills = new List<string>();
+			loadedData.kolav_availableskills.Add(CommonData.Kolav_LaserGlance);
+			loadedData.kolav_availableskills.Add(CommonData.Kolav_KineticArm);
+			loadedData.latestUsedSkill_Kolav = CommonData.Kolav_KineticArm;
+
 			loadedData.availableVehicles = new List<string>();
 			loadedData.availableVehicles.Add(CommonData.veh_oven);
 			loadedData.availableVehicles.Add(CommonData.veh_test);
+
+
 			SaveGame(loadedData);
 			return loadedData;
 		}else{

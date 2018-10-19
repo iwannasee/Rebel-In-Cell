@@ -89,8 +89,16 @@ public class CharacterSlot : MonoBehaviour {
 		prefabOfSelectedCharacter = null;
 		GetComponent<Image>().sprite = null;
 
-		//Show arrows in every slots
+		//if any slot contains the character selected on Screen, dont show arrow
+		string nameOfAvarOnSelecting = charAvarList.GetIsOnInfoScrnCharacter().GetPrisonerPrefabName();
 		CharacterSlot[] slots = transform.parent.GetComponentsInChildren<CharacterSlot>();
+		for(int i = 0; i < slots.Length; i++){
+			if(slots[i].GetCharPrefNameInThisSlot() == nameOfAvarOnSelecting){
+				return;
+			}
+		}
+
+		//Show arrows in every slots
 		for(int i = 0; i < slots.Length; i++){
 			slots[i].ShowArrow();
 		}
@@ -101,6 +109,13 @@ public class CharacterSlot : MonoBehaviour {
         return prefabOfSelectedCharacter;
     }
 
+    private string GetCharPrefNameInThisSlot(){
+    	string charName = "";
+    	if(prefabOfSelectedCharacter){
+    		charName = prefabOfSelectedCharacter.GetComponent<Prisoner>().GetPrisonerName();
+    	}
+    	return charName;
+    }
 	//Hide All Arrows of the base of this slot
     private void HideAllArrows(){
 		//Get the slots of the base
@@ -110,4 +125,6 @@ public class CharacterSlot : MonoBehaviour {
 			slot.HideArrow();
 		}
     }
+
+   	
 }

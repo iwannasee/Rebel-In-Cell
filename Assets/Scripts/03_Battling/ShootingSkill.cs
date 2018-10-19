@@ -5,19 +5,23 @@ using UnityEngine;
 public class ShootingSkill : MonoBehaviour {
 	public int tapTimesToUseSkill;
 	public GameObject gaugeMeterPrefab;
-	public GameObject skillShotPrefab;
-	public float maxCoolDownTime = 10;
+
+	//TODO Make sure skill shot prefab number is equal to the equivalent char skill shot number in Common Data
+	public GameObject[] skillShotPrefabs;
 	public float maxAdjustTime = 4;
+
+	private GameObject skillShotToPlay;
 	[Range(0.0f, 1.0f)]//delay time to prevent use prisoner skill continously
-	public float skillDelayRate; 
-	public string skillName;
+	public float skillDelayRate;
+	private float maxCoolDownTime;
+	private string playingSkillName;
 
 	//TODO implement skill casting sound using skill clip
 	//public AudioClip skillClip;
 	static private GameObject prisonerJustUsedSkill;
 	static private bool pausingForSkill = false;
 
-	private float skillCoolDownTime;
+	private float skillCoolDownTime; 
 	private float needleAdjustTime;
 	private int tapTimes;
 	private bool gaugeIsDisplayed = false;
@@ -28,6 +32,10 @@ public class ShootingSkill : MonoBehaviour {
 	private SkillBar skillBar;
 	//---------------------------------------------------------------
 	void Start(){ 
+		skillShotToPlay = GetSkillShotToPlay();
+		playingSkillName = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotSkillName();
+		maxCoolDownTime = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotCoolDownSpeed();
+
 		skillCastingEffect = GameObject.FindGameObjectWithTag("Skill Casting Effect").GetComponent<SkillCastingFadeEffect>();
 		
 		healthBar = transform.parent.GetComponentInChildren<HealthBar>();
@@ -80,9 +88,13 @@ public class ShootingSkill : MonoBehaviour {
 				Time.timeScale = 1;
 				skillCastingEffect.EndEffect();
 				ExitStandOut();
+
+				//if the skill is the shooting skill
 				SkillShootingFromNeedle ();
 				//TODO refactor this
 				Destroy (GameObject.FindObjectOfType<GaugeMeter> ().gameObject);
+				// else if the skill is the supporting skill
+
 				gaugeIsDisplayed = false;
 				needleAdjustTime = maxAdjustTime;
 				Prisoner.UnSetPrisonIsCasting();
@@ -90,7 +102,7 @@ public class ShootingSkill : MonoBehaviour {
 				FindNotYetSkillUsersToDelaySkill();
 				pausingForSkill = false;
 				PlayerPrefManager.SetUITextStatus(PlayerPrefManager.GUITEXT_STATUS_CHANGING);
-				UITextController.SetUITextStatusType(UITextController.DISPLAY_TEXT.SKILL_NAME,skillName);
+				UITextController.SetUITextStatusType(UITextController.DISPLAY_TEXT.SKILL_NAME,playingSkillName);
 			}
 		}
 	}
@@ -131,14 +143,14 @@ public class ShootingSkill : MonoBehaviour {
 	//---------------------------------------------------------------
 	private void SkillShootingFromNeedle(){
 		Needle needle = GameObject.FindObjectOfType<Needle> ();
-		if (!needle) {
+		if (!needle) { 
 			return;
 		}
 		GameObject needleGameObj = needle.gameObject;
 		Transform needleGameObjTrans = needleGameObj.GetComponent<Transform> ();
 
 		//Fire shot and attach the shot to the needle parent
-		GameObject shot = Instantiate (skillShotPrefab) as GameObject;
+		GameObject shot = Instantiate (skillShotToPlay) as GameObject;
 		shot.transform.position = needleGameObjTrans.GetChild(0).position;
 		if(skillShotContainer){
 			shot.transform.parent = skillShotContainer.transform;
@@ -148,7 +160,9 @@ public class ShootingSkill : MonoBehaviour {
 		//reset cooldown for limitting use of skill
 		skillCoolDownTime = maxCoolDownTime;
 	}
+
 	//---------------------------------------------------------------
+	//if the skill is shooting skill
 	private void DisplayAimingAngle(){
 		Vector3 position = GameObject.FindGameObjectWithTag ("Prisoner Paddle").transform.position;
 		Instantiate (gaugeMeterPrefab, position, Quaternion.identity);
@@ -186,4 +200,23 @@ public class ShootingSkill : MonoBehaviour {
 			Transform thisCharacterBlock = transform.parent;
 			standOutRenderers = thisCharacterBlock.GetComponentsInChildren<SpriteRenderer>();
 		}
+
+	public GameObject GetSkillShotToPlay(){
+		if(!GetComponent<Prisoner>()){
+			print("The actor using this shooting skill script is not character player");
+			return null;
+		}
+		string charName = GetComponent<Prisoner>().GetPrisonerName();
+		string lastUsedSkillName = Prisoner.GetCharacterLastUsedSkill(charName);
+
+		for(int i = 0 ; i< skillShotPrefabs.Length; i++){
+			if(skillShotPrefabs[i].GetComponent<CharacterSkillShot>().GetShotSkillName() == lastUsedSkillName){
+				return skillShotPrefabs[i];
+			}
+		}
+
+		return null;
+	}
+
+
 }

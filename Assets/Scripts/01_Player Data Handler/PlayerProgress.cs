@@ -5,7 +5,6 @@ using System.IO;
 public class PlayerProgress : MonoBehaviour {
 				
 	public static GameData playerData = new GameData();
-
 	//TODO remove this bool after
 	private static bool playerDataLoaded = false; 
 
@@ -20,6 +19,10 @@ public class PlayerProgress : MonoBehaviour {
 			Debug.Log("presentWorldIndex is :" + presentWorldIndex);
 			//DontDestroyOnLoad(gameObject);
 		}
+
+
 	}
 
+
 }
+

@@ -7,13 +7,11 @@ public class Prisoner : MonoBehaviour {
 	static private bool prisonerIsCastingSkill = false;
 	private Prisoner[] prisonerArray;
 	private static bool allPrisonerDead;
-
+	private List<string> skills;
 	//every renderer components of this character when played
 	//include vehicle back and front, health & skill bar and this own char renderer
 	//---------------------------------------------------------------
 	void Start(){
-
-
 		allPrisonerDead = false;
 		prisonerArray = transform.parent.parent.GetComponentsInChildren<Prisoner>();
         print("there are " + prisonerArray.Length + " chars in scene");
@@ -67,5 +65,30 @@ public class Prisoner : MonoBehaviour {
 	public Sprite GetPrisonerSprt(){
 		Sprite prisonerSprt = transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
 		return prisonerSprt;
+	}
+
+	public static string GetCharacterLastUsedSkill(string charName){
+		string lastUsedSkill = "" ;
+		switch(charName){
+			case CommonData.char_pippo:
+			lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Pippo;
+				break;
+
+			case CommonData.char_johnny:
+			lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Johnny;
+				break;
+
+			case CommonData.char_mathial:
+			lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Mathial;
+				break;
+
+			case CommonData.char_kolav:
+			lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Kolav;
+				break;
+
+				default: break;
+			}
+
+		return lastUsedSkill;
 	}
 }
