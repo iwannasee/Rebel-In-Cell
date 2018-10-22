@@ -31,7 +31,6 @@ public class SkillCastingFadeEffect : MonoBehaviour {
 		}
 		  
 		if(bIsEndEffect){
-			print("is effecting " + spriteRenderer.color);
 			alphaChannel -= Time.unscaledDeltaTime *effectSpeed;
 			spriteRenderer.color = new Color (spriteRenderer.color.r,spriteRenderer.color.g,spriteRenderer.color.b, alphaChannel);
 			if(alphaChannel <= 0){

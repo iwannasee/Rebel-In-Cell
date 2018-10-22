@@ -119,9 +119,10 @@ public class Health : MonoBehaviour {
 
         yield return new WaitForSeconds(maxHitImgInterval);
 
-
+        //if health is over, disable skill playing of char, set char die and check result
 		if (health <= 0 && (audioSource.clip!= dieClip))
         {
+            GetComponent<ShootingSkill>().enabled = false;
             transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = deadImg;
             //Check the number of alive prisoners
 			if(GetComponent<Prisoner>()){
@@ -144,7 +145,11 @@ public class Health : MonoBehaviour {
 	private void ChangeSpriteFollowHealth() {
 		if((maxHealth % lostHeathToChangeSprite) == 0){
 			int spriteIndex = health/ lostHeathToChangeSprite;
-			spriteRenderer.sprite = heathStatusSprites[spriteIndex];
+            if(spriteIndex == heathStatusSprites.Length){
+                spriteIndex -= 1;
+            }
+            spriteRenderer.sprite = heathStatusSprites[spriteIndex];
+            
 		}else{
 			Debug.Log("Warning! the health point of " + this.gameObject.name + " is not set properly. Resulting in sprite reset after hit cannot be done");
 		}
@@ -160,6 +165,8 @@ public class Health : MonoBehaviour {
 			health = maxHealth;
 		}
 		SetHealthBar();
-	}
+        ChangeSpriteFollowHealth();
+
+    }
 	//---------------------------------------------------------------
 }

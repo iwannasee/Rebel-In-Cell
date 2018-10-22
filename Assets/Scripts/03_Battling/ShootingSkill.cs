@@ -24,6 +24,7 @@ public class ShootingSkill : MonoBehaviour {
 	private float skillCoolDownTime; 
 	private float needleAdjustTime;
 	private int tapTimes;
+    private int shotPower;
 	private bool bIsSkillCastEffectShowing = false;
 	private GameObject skillShotContainer;
 	private SkillCastingFadeEffect skillCastingEffect;
@@ -33,7 +34,7 @@ public class ShootingSkill : MonoBehaviour {
 
 	private bool bIsShootingSkill = false;
 	private bool bIsSkillUsedThisCharge = false;
-
+    private bool mouseIsDown = false;
 	//---------------------------------------------------------------
 	void Start(){ 
 		skillShotToPlay = GetSkillShotToPlay();
@@ -42,10 +43,14 @@ public class ShootingSkill : MonoBehaviour {
 		if(bIsShootingSkill){
 			playingSkillName = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotSkillName();
 			maxCoolDownTime = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotCoolDownSpeed();
-		}else if(skillShotToPlay.GetComponent<SupportSkillShot>()){
+            shotPower = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotPower();
+
+        }
+        else if(skillShotToPlay.GetComponent<SupportSkillShot>()){
 			playingSkillName = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotSkillName();
 			maxCoolDownTime = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotCoolDownSpeed();
-		}
+            shotPower = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotPower();
+        }
 
 		skillCastingEffect = GameObject.FindGameObjectWithTag("Skill Casting Effect").GetComponent<SkillCastingFadeEffect>();
 		
@@ -86,14 +91,18 @@ public class ShootingSkill : MonoBehaviour {
 		if (bIsSkillCastEffectShowing) {
 			//if Wave UI Text is displayed while gauge is displayed
 			if (UITextController.GetUITextStatusType () == UITextController.DISPLAY_TEXT.WAVE) {
-				Destroy (GameObject.FindObjectOfType<GaugeMeter> ().gameObject); //hide the gauge (destroying it)
+                if (bIsShootingSkill){
+                    Destroy(GameObject.FindObjectOfType<GaugeMeter>().gameObject); //hide the gauge (destroying it)
+                }
+				
 				tapTimes = 0; //reset the tap times
 				bIsSkillCastEffectShowing = false;//the flag telling the gauge is NOT displayed to shot skill
 				Prisoner.UnSetPrisonIsCasting() ; //the flag telling prisoner is NOT about to shot skill
 				return; 
-			} 
+			}
 
-			SkillCasting_Regeneration();
+            //Only support skills can be activated right on the adjusting time
+            CastSupportSkillWhenAdjTimeIs(true);
 
 			needleAdjustTime = needleAdjustTime - Time.unscaledDeltaTime;
 
@@ -111,7 +120,7 @@ public class ShootingSkill : MonoBehaviour {
 						SkillShootingFromNeedle ();
 					// else if the skill is the supporting skill
 					}else{
-						CastSupportSkill();
+                        CastSupportSkillWhenAdjTimeIs(false);
 					}
 				}
 
@@ -127,7 +136,7 @@ public class ShootingSkill : MonoBehaviour {
 		}
 	}
 	//---------------------------------------------------------------
-	private void OnMouseUp(){
+	private void OnMouseDown(){
 
 		//Disable this function if someprisoner is casting skill 
 		if(Prisoner.GetIsCastingSkill() || 
@@ -145,13 +154,16 @@ public class ShootingSkill : MonoBehaviour {
 				tapTimes = 0;
 			}
 		}
-	}
+        mouseIsDown = true;
+    }
 
-	private void OnMouseDown(){
-		
-	}
-	//---------------------------------------------------------------
-	private void DelayAfterOtherPrisonerShot ()
+    private void OnMouseUpAsButton()
+    {
+        mouseIsDown = false;
+    }
+
+    //---------------------------------------------------------------
+    private void DelayAfterOtherPrisonerShot ()
 	{
 		if (skillCoolDownTime <= 0) {
 			skillCoolDownTime = maxCoolDownTime * skillDelayRate;
@@ -199,6 +211,7 @@ public class ShootingSkill : MonoBehaviour {
 		Time.timeScale = 0;*/
 		//PlayerPrefManager.SetSkillPause(PlayerPrefManager.SKILL_PAUSING);
 	}
+
 	private void ShowSkillCastEffect(){
 		bIsSkillUsedThisCharge = false;
 		bIsSkillCastEffectShowing = true;
@@ -263,14 +276,15 @@ public class ShootingSkill : MonoBehaviour {
 		return null;
 	}
 
-	private void CastSupportSkill(){
+	private void CastSupportSkillWhenAdjTimeIs(bool isCastWhenAdjustTime){
 		
 		switch(playingSkillName){
 			case CommonData.Johnny_Regeneration:
-				print("cast supporting now");
-			break;
-			case CommonData.Johnny_Epidemic:
+                SkillCasting_Regeneration(isCastWhenAdjustTime);
 
+            break;
+			case CommonData.Johnny_Epidemic:
+                SkillCasting_Epidemic(isCastWhenAdjustTime);
 			break;
 			case CommonData.Johnny_Achemysto:
 
@@ -292,20 +306,44 @@ public class ShootingSkill : MonoBehaviour {
 		skillCoolDownTime = maxCoolDownTime;
 
 	}
-
-	private void SkillCasting_Regeneration(){
+    /// <summary>
+    /// Skill Name: Regeneration
+    /// Effect: select a character and recover health point for that character
+    /// *Note: if player does not select any character ( tap on), then when adjustment time is over, heal the char who casts
+    /// Heath recovery power: temporarily equal the power of the skill shot
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
+	private void SkillCasting_Regeneration(bool isCastWhenAdjustTime)
+    {
+        if (mouseIsDown) { return; }
+        if (!isCastWhenAdjustTime){
+            GetComponent<Health>().HealthUp(shotPower);
+            return;
+        }
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-		print (needleAdjustTime);
 
 		if(Input.GetMouseButtonDown(0)){
-			if(hit.collider != null)
-			{
-			//TODO replace the magic number
-				hit.transform.gameObject.GetComponent<Health>().HealthUp(30);
-				needleAdjustTime = 0f;
-				bIsSkillUsedThisCharge = true;
-				bIsSkillCastEffectShowing = false;
-			}
-		}
-	}
+            if (hit.collider != null){
+                hit.transform.gameObject.GetComponent<Health>().HealthUp(shotPower);
+                needleAdjustTime = 0f;
+                bIsSkillUsedThisCharge = true;
+                bIsSkillCastEffectShowing = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Skill Name: Epidemic
+    /// Effect:
+    /// *Note:
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
+    private void SkillCasting_Epidemic(bool isCastWhenAdjustTime)
+    {
+        if (!isCastWhenAdjustTime)
+        {
+
+            return;
+        }
+    }
 }
