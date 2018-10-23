@@ -26,6 +26,7 @@ public class ShootingSkill : MonoBehaviour {
 	private int tapTimes;
     private int shotPower;
 	private bool bIsSkillCastEffectShowing = false;
+	private GameObject castSkillFX;
 	private GameObject skillShotContainer;
 	private SkillCastingFadeEffect skillCastingEffect;
 	Renderer[] standOutRenderers;
@@ -220,7 +221,7 @@ public class ShootingSkill : MonoBehaviour {
 		if(skillShotToPlay.GetComponent<CharacterSkillShot>()){
 			DisplayAimingAngle();
 		}else if (skillShotToPlay.GetComponent<SupportSkillShot>()){
-			print("show vfx of skill casting");
+
 		}
 	}
 	//---------------------------------------------------------------
@@ -287,7 +288,7 @@ public class ShootingSkill : MonoBehaviour {
                 SkillCasting_Epidemic(isCastWhenAdjustTime);
 			break;
 			case CommonData.Johnny_Achemysto:
-
+				SkillCasting_Achemysto(isCastWhenAdjustTime);
 			break;
 			case CommonData.Mathial_DragonStance:
 
@@ -317,14 +318,14 @@ public class ShootingSkill : MonoBehaviour {
     {
         if (mouseIsDown) { return; }
         if (!isCastWhenAdjustTime){
-            GetComponent<Health>().HealthUp(shotPower);
+            GetComponent<Health>().AddHealth(shotPower);
             return;
         }
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
 		if(Input.GetMouseButtonDown(0)){
             if (hit.collider != null){
-                hit.transform.gameObject.GetComponent<Health>().HealthUp(shotPower);
+                hit.transform.gameObject.GetComponent<Health>().AddHealth(shotPower);
                 needleAdjustTime = 0f;
                 bIsSkillUsedThisCharge = true;
                 bIsSkillCastEffectShowing = false;
@@ -335,15 +336,68 @@ public class ShootingSkill : MonoBehaviour {
     /// <summary>
     /// Skill Name: Epidemic
     /// Effect:
-    /// *Note:
+    /// *Note: shot power is not used in this skill
     /// </summary>
     /// <param name="isCastWhenAdjustTime"></param>
     private void SkillCasting_Epidemic(bool isCastWhenAdjustTime)
     {
+		if (mouseIsDown) { return; }
+		int heathCost = skillShotToPlay.GetComponent<SkillEffect_Epidemic>().GetLifeCost();
+		if(GetComponent<Health>().GetHealth() < heathCost){
+			return;
+		}
+
         if (!isCastWhenAdjustTime)
         {
-
+			GetComponent<Health>().AddHealth(-heathCost);
+			GameObject shot = Instantiate (skillShotToPlay) as GameObject;
+			shot.transform.position = transform.position;
             return;
         }
+
+		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+
+		if(Input.GetMouseButtonDown(0)){
+            if (hit.collider != null){
+				hit.transform.gameObject.GetComponent<Health>().AddHealth(-heathCost);
+				GameObject shot = Instantiate (skillShotToPlay) as GameObject;
+				shot.transform.position = hit.collider.transform.position;
+				needleAdjustTime = 0f;
+                bIsSkillUsedThisCharge = true;
+                bIsSkillCastEffectShowing = false;
+            }
+        }
     }
+
+	/// <summary>
+    /// Skill Name: Reinforcement
+    /// Effect: lengthen the paddle
+    /// *Note: this effect can use up eternally.
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
+	private void SkillCasting_Reinforcement(bool isCastWhenAdjustTime){
+		GameObject playerPaddle = GameObject.FindGameObjectWithTag("Prisoner Paddle");
+		float scaleRate = (float) shotPower * 0.1f;
+		playerPaddle.transform.localScale = new Vector3(1 + scaleRate,1,1);
+	}
+
+	/// <summary>
+    /// Skill Name: Achemysto
+    /// Effect: Increase 15% hp for all character
+    /// *Note: auto skill
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
+	private void SkillCasting_Achemysto(bool isCastWhenAdjustTime){
+		if (mouseIsDown) { return; }
+		//float newSkillCastDuration = castSkillFX.GetComponent<ParticleSystem>().main.duration;
+
+        if (!isCastWhenAdjustTime){
+        	//Implement here
+        	Prisoner[] AllChar = GetComponent<Prisoner>().GetPrisonerArray();
+        	for(int i = 0; i < AllChar.Length; i++){
+        		AllChar[i].GetComponent<Health>().AddHealth(shotPower);
+        	}
+        	 
+        }
+	} 
 }

@@ -55,6 +55,7 @@ public class ES_AimingShot : MonoBehaviour {
 		//Generate a Shot
 		GameObject shot = Instantiate (enemyShot, ShootSpawner.transform.position, Quaternion.identity) as GameObject;
 		shot.transform.parent = enemyShotContainer.transform;
+		shot.GetComponent<EnemyShot>().SetTheEnemyWhoShot(this.GetComponent<Enemy>());
 		//Get a random target for the shot
 
 		int rdNum = Random.Range (0, Prisoners.Length);

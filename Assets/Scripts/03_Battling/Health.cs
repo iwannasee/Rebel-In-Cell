@@ -75,7 +75,7 @@ public class Health : MonoBehaviour {
 	//---------------------------------------------------------------
 	void OnCollisionEnter2D (Collision2D collision)
 	{
-		if(health <=0){return;}
+		//if(health <=0){return;}
 
 		GameObject collidingObject = collision.gameObject;
 		if (collidingObject.GetComponent<RadiantDamage> ()) {
@@ -159,10 +159,12 @@ public class Health : MonoBehaviour {
 		return health;
 	}
 
-	public void HealthUp(int heathToAdd){
+	public void AddHealth(int heathToAdd){
 		health += heathToAdd;
 		if(health>= maxHealth){
-			health = maxHealth;
+			health = maxHealth; 
+		}else if(health <= 0){
+			health = 1;
 		}
 		SetHealthBar();
         ChangeSpriteFollowHealth();

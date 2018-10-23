@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class SupportSkillShot : MonoBehaviour {
 
-	public GameObject skillParticlePref;
-	public Sprite shotSprtIcon;
+	public GameObject castSkillFXPref;
+	public Sprite shotSprtIcon; 
 	public float coolDownSpeed;
 	public string skillName;
-
+	 
 	public int shotPower;
+
 
 	public Sprite GetShotSprtIcon(){
 		return shotSprtIcon;
