@@ -24,11 +24,14 @@ public class Health : MonoBehaviour {
 
 	private SpriteRenderer spriteRenderer;
 	private AudioSource audioSource;
+
+    private bool isDead;
 	//---------------------------------------------------------------
 	// Use this for initialization
 	//---------------------------------------------------------------
 	void Start () {
-		audioSource = GetComponent<AudioSource>();
+        isDead = false;
+        audioSource = GetComponent<AudioSource>();
 		//Only active health bar function if the owner of this script is prisoner
 		if(GetComponent<Prisoner>()){
 			//link to health bar object , assume its index is 2 in transform hierachy
@@ -84,7 +87,8 @@ public class Health : MonoBehaviour {
 
 			
 
-			if(lostHeathToChangeSprite != 0){
+			if(lostHeathToChangeSprite != 0)
+            {
 				ChangeSpriteFollowHealth();
 			}
 
@@ -109,7 +113,7 @@ public class Health : MonoBehaviour {
 			}
 
 			//if this health is of prisoner
-			if(GetComponent<Prisoner>()){
+			if(GetComponent<Prisoner>() && !isDead){
 				SetHealthBar(); 
 				StartCoroutine("PlayHitSpriteAndHitSound");
 			}
@@ -118,6 +122,7 @@ public class Health : MonoBehaviour {
 	//---------------------------------------------------------------
 	IEnumerator PlayHitSpriteAndHitSound() 
     {
+        
         transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = hitImg;
         audioSource.clip = hitClip;
         audioSource.Play();
@@ -125,13 +130,14 @@ public class Health : MonoBehaviour {
         yield return new WaitForSeconds(maxHitImgInterval);
 
         //if health is over, disable skill playing of char, set char die and check result
-		if (health <= 0 && (audioSource.clip!= dieClip))
+		if (health <= 0)
         {
+            isDead = true;
             GetComponent<ShootingSkill>().enabled = false;
             transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = deadImg;
             //Check the number of alive prisoners
 			if(GetComponent<Prisoner>()){
-                print("run this");
+   
 				GetComponent<Prisoner>().CheckAlivePrisonerLeft();
 			}
 			audioSource.clip = dieClip;
@@ -148,7 +154,8 @@ public class Health : MonoBehaviour {
 	}
 	//---------------------------------------------------------------
 	private void ChangeSpriteFollowHealth() {
-		if((maxHealth % lostHeathToChangeSprite) == 0){
+		if((maxHealth % lostHeathToChangeSprite) == 0 && !isDead)
+        {
 			int spriteIndex = health/ lostHeathToChangeSprite;
             if(spriteIndex == heathStatusSprites.Length){
                 spriteIndex -= 1;

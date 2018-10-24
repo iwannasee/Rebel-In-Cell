@@ -101,7 +101,8 @@ public class ProjectileBall : MonoBehaviour {
 
 	public void PushBall(){
 		rg2D = this.GetComponent<Rigidbody2D>() ;
-		rg2D.velocity = new Vector2 (0f, transform.position.y + startForce);
+		rg2D.velocity = new Vector2(Random.onUnitSphere.x * startForce, Random.onUnitSphere.z*startForce);
+        print("velocity of ball: " + rg2D.velocity);
 	}
 
 	private void ResetTimeHitWallInARow(){
