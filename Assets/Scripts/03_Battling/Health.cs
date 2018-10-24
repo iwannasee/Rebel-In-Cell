@@ -19,7 +19,7 @@ public class Health : MonoBehaviour {
 
 	private float hitImgInterval;
 	public int health; 
-	private int lostHeathToChangeSprite;
+	private int lostHeathToChangeSprite = 0;
 	private HealthBar healthBar;
 
 	private SpriteRenderer spriteRenderer;
@@ -75,7 +75,6 @@ public class Health : MonoBehaviour {
 	//---------------------------------------------------------------
 	void OnCollisionEnter2D (Collision2D collision)
 	{
-		//if(health <=0){return;}
 
 		GameObject collidingObject = collision.gameObject;
 		if (collidingObject.GetComponent<RadiantDamage> ()) {
@@ -83,7 +82,7 @@ public class Health : MonoBehaviour {
 			int inflictedDamage = radiantDamage.GetDamage();
 			health = health - inflictedDamage;
 
-	
+			
 
 			if(lostHeathToChangeSprite != 0){
 				ChangeSpriteFollowHealth();
@@ -91,6 +90,12 @@ public class Health : MonoBehaviour {
 
 			//Handle when health is <= 0
 			if(health <= 0){
+				//if this health is of base
+				if(GetComponent<Vehicle>()){
+					WinLoseCondition wlCondition=GameObject.FindGameObjectWithTag("Win Lose Condition").GetComponent<WinLoseCondition>();
+					wlCondition.Lose();
+				}
+
 				//if this health is of block
 				if(GetComponent<BlockOfStage>()){
 					GetComponent<BlockOfStage>().BlockDestroy();
@@ -157,6 +162,10 @@ public class Health : MonoBehaviour {
 	//---------------------------------------------------------------
 	public int GetHealth(){
 		return health;
+	}
+
+	public int GetMaxHealth(){
+		return maxHealth;
 	}
 
 	public void AddHealth(int heathToAdd){

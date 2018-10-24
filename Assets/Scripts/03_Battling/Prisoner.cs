@@ -6,6 +6,7 @@ public class Prisoner : MonoBehaviour {
 	public string prisonerName;
 	static private bool prisonerIsCastingSkill = false;
 	private Prisoner[] prisonerArray;
+	//TODO consider remove this bool
 	private static bool allPrisonerDead;
 	private List<string> skills;
 	//every renderer components of this character when played
@@ -22,13 +23,13 @@ public class Prisoner : MonoBehaviour {
 		foreach(Prisoner thisPrisoner in prisonerArray){
 			Health thisPrisonerHealth = thisPrisoner.GetComponent<Health>();
 			bool isDead = (thisPrisonerHealth.GetHealth() <= 0);
-			if(isDead){
+			if(isDead){ 
 				alivePrisonerNum--;
                 print("alivePrisonerNum " + alivePrisonerNum);
             }
 		}
 
-		if (alivePrisonerNum <=0){
+		if ((alivePrisonerNum <=0)){
 			allPrisonerDead = true;
 			//as all the prisoners are down, set the game is lost
 		 	WinLoseCondition wlCondition=GameObject.FindGameObjectWithTag("Win Lose Condition").GetComponent<WinLoseCondition>();

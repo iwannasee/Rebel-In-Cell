@@ -8,8 +8,11 @@ public class WinLoseCondition : MonoBehaviour {
 	private static bool isWinner;
 
 	private MusicManager musicMng;
+	private static bool isGameOver = false;
+
 	// Use this for initialization
 	void Start () {
+		isGameOver = false;
 		GameObject MusicManagerObj = GameObject.FindGameObjectWithTag("Music Manager");
 		if(!MusicManagerObj){
 			print("no music manager object found");
@@ -18,10 +21,12 @@ public class WinLoseCondition : MonoBehaviour {
 
 		musicMng = MusicManagerObj.GetComponent<MusicManager>();
 
+		Vehicle playerBase = GameObject.FindGameObjectWithTag("Vehicle").GetComponent<Vehicle>();
+
 	}
 
 	void Update(){
-		if(Prisoner.GetAllPrisonerDead()){
+		if(isGameOver){
 			regretfulTime -= Time.unscaledDeltaTime;
 			if(regretfulTime<=0){
 				int currentWorldIndex = PlayerProgress.presentWorldIndex;
@@ -40,6 +45,7 @@ public class WinLoseCondition : MonoBehaviour {
 	}
 
 	public void Lose(){
+		isGameOver = true;
 		isWinner = false;
 		PlayerPrefManager.SetUITextStatus (PlayerPrefManager.GUITEXT_STATUS_CHANGING);
 		UITextController.SetUITextStatusType (UITextController.DISPLAY_TEXT.LOSE, "");
@@ -63,5 +69,9 @@ public class WinLoseCondition : MonoBehaviour {
 	/// <param name="win">If set to <c>true</c> window.</param>
 	public static void SetIsWinner(bool win){
 		isWinner = win;
+	}
+
+	public static bool GetIsGameOver(){
+		return isGameOver;
 	}
 }

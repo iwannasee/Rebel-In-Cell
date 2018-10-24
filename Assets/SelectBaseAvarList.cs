@@ -9,6 +9,9 @@ public class SelectBaseAvarList : MonoBehaviour {
 	[Tooltip("the GameObject for holding playable Base avar list")]
 	public GameObject basesListFrame;
 
+
+	public GameObject BaseInfo;
+
 	//the list of actual playable bases
 	private GameObject[] baseAvar;
 
@@ -23,7 +26,7 @@ public class SelectBaseAvarList : MonoBehaviour {
 			GameObject thisAvar = Instantiate(baseAvar[i]) as GameObject; 
 			thisAvar.transform.SetParent(basesListFrame.transform, false) ;
 		}
-
+		UpdateBaseInfo();
         //renew this array every time the selection scene start. the number [1] is just a random number
         charactersToPlay = new GameObject[1];
     }
@@ -74,9 +77,17 @@ public class SelectBaseAvarList : MonoBehaviour {
 				thisSlot.GetComponent<Image>().sprite = null;
 			}
 		}
-
+	
 	}
 
+	public void UpdateBaseInfo(){
+		BaseInfo baseInfo = BaseInfo.GetComponent<BaseInfo>();
+
+		string nameToDisplay = GetCurrentBase().GetComponent<Selection_DefenceBaseAvar>().GetBasePrefabName();
+		baseInfo.SetDisplayBaseName(nameToDisplay);
+		int healthToDisplay = GetCurrentBase().GetComponent<Selection_DefenceBaseAvar>().GetBaseHealth();
+		baseInfo.SetDisplayBaseHealth(healthToDisplay);
+	}
 
 	private CharacterSlot[] GetCharSlotOfCurrentBase(){
 		//Get current displaying base
@@ -87,10 +98,11 @@ public class SelectBaseAvarList : MonoBehaviour {
 		return availableSlots;
 	}
 
-    private Transform GetCurrentBase()
+    public Transform GetCurrentBase()
     {
         int currentBaseIndex = GetComponent<ScrollSnapRectOriginal>().GetCurrentPage();
         Transform baseListTransform = transform.GetChild(0);
+	
         return baseListTransform.GetChild(currentBaseIndex);
     }
 

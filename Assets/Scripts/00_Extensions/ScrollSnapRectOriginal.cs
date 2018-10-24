@@ -114,6 +114,10 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
                 _lerp = false;
                 // clear also any scrollrect move that may interfere with our lerping
                 _scrollRectComponent.velocity = Vector2.zero;
+
+				if(GetComponent<SelectBaseAvarList>()){
+               		GetComponent<SelectBaseAvarList>().UpdateBaseInfo();
+                }
             }
 
             // switches selection icon exactly to correct page

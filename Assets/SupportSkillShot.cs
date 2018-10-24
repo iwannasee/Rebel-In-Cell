@@ -8,6 +8,7 @@ public class SupportSkillShot : MonoBehaviour {
 	public Sprite shotSprtIcon; 
 	public float coolDownSpeed;
 	public string skillName;
+	public bool bIsAutoSkill;
 	 
 	public int shotPower;
 
@@ -28,4 +29,7 @@ public class SupportSkillShot : MonoBehaviour {
 		return coolDownSpeed;
 	}
 
+	public bool GetIsAutoSkill(){
+		return bIsAutoSkill;
+	}
 }

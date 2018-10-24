@@ -48,6 +48,6 @@ public class VehicleAvarToSelect : MonoBehaviour {
 	}
 
 	public string GetVehiclePrefabName(){
-		return vehiclePref.GetComponent<Vehicle>().vehileName;
+		return vehiclePref.GetComponent<Vehicle>().GetBaseName();
 	}
 }

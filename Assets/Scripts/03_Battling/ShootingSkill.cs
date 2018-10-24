@@ -36,6 +36,7 @@ public class ShootingSkill : MonoBehaviour {
 	private bool bIsShootingSkill = false;
 	private bool bIsSkillUsedThisCharge = false;
     private bool mouseIsDown = false;
+    private bool bIsAutoSkill = false;
 	//---------------------------------------------------------------
 	void Start(){ 
 		skillShotToPlay = GetSkillShotToPlay();
@@ -51,6 +52,7 @@ public class ShootingSkill : MonoBehaviour {
 			playingSkillName = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotSkillName();
 			maxCoolDownTime = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotCoolDownSpeed();
             shotPower = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotPower();
+			bIsAutoSkill = skillShotToPlay.GetComponent<SupportSkillShot>().GetIsAutoSkill();
         }
 
 		skillCastingEffect = GameObject.FindGameObjectWithTag("Skill Casting Effect").GetComponent<SkillCastingFadeEffect>();
@@ -81,12 +83,22 @@ public class ShootingSkill : MonoBehaviour {
 	}
 	//---------------------------------------------------------------
 	void Update(){
+		if(WinLoseCondition.GetIsGameOver() == true){
+			return; 
+		}
+
 		if(EnemyWaveController.GetWaveHasStarted()){
 			//cooldown skill over time
 			skillCoolDownTime = skillCoolDownTime - Time.deltaTime;
 
 			//visualize cooldown status 
 			SetSkillBar();
+
+			if(skillCoolDownTime <= 0){
+				if(bIsAutoSkill){
+					CastAutoPlaySkill();
+				}
+			}
 		}
 
 		if (bIsSkillCastEffectShowing) {
@@ -171,6 +183,10 @@ public class ShootingSkill : MonoBehaviour {
 		}
 		else {
 			skillCoolDownTime += maxCoolDownTime * skillDelayRate;
+		}
+
+		if(skillCoolDownTime > maxCoolDownTime){
+			skillCoolDownTime = maxCoolDownTime;
 		}
 	} 
 	//---------------------------------------------------------------
@@ -277,6 +293,7 @@ public class ShootingSkill : MonoBehaviour {
 		return null;
 	}
 
+	//Play manual skill
 	private void CastSupportSkillWhenAdjTimeIs(bool isCastWhenAdjustTime){
 		
 		switch(playingSkillName){
@@ -287,9 +304,7 @@ public class ShootingSkill : MonoBehaviour {
 			case CommonData.Johnny_Epidemic:
                 SkillCasting_Epidemic(isCastWhenAdjustTime);
 			break;
-			case CommonData.Johnny_Achemysto:
-				SkillCasting_Achemysto(isCastWhenAdjustTime);
-			break;
+
 			case CommonData.Mathial_DragonStance:
 
 			break;
@@ -307,6 +322,26 @@ public class ShootingSkill : MonoBehaviour {
 		skillCoolDownTime = maxCoolDownTime;
 
 	}
+
+	//Play auto-skill
+	private void CastAutoPlaySkill(){
+		
+		switch(playingSkillName){
+		case CommonData.Johnny_Achemysto:
+				SkillCasting_Achemysto();
+			break;
+			default:
+			break;
+		}
+		prisonerJustUsedSkill = this.gameObject; 
+		FindNotYetSkillUsersToDelaySkill();
+		PlayerPrefManager.SetUITextStatus(PlayerPrefManager.GUITEXT_STATUS_CHANGING);
+		UITextController.SetUITextStatusType(UITextController.DISPLAY_TEXT.SKILL_NAME,playingSkillName);
+		skillCoolDownTime = maxCoolDownTime;
+
+	}
+
+
     /// <summary>
     /// Skill Name: Regeneration
     /// Effect: select a character and recover health point for that character
@@ -386,18 +421,19 @@ public class ShootingSkill : MonoBehaviour {
     /// Effect: Increase 15% hp for all character
     /// *Note: auto skill
     /// </summary>
-    /// <param name="isCastWhenAdjustTime"></param>
-	private void SkillCasting_Achemysto(bool isCastWhenAdjustTime){
-		if (mouseIsDown) { return; }
-		//float newSkillCastDuration = castSkillFX.GetComponent<ParticleSystem>().main.duration;
-
-        if (!isCastWhenAdjustTime){
-        	//Implement here
-        	Prisoner[] AllChar = GetComponent<Prisoner>().GetPrisonerArray();
-        	for(int i = 0; i < AllChar.Length; i++){
-        		AllChar[i].GetComponent<Health>().AddHealth(shotPower);
-        	}
-        	 
+	private void SkillCasting_Achemysto(){
+        //Implement here
+        Prisoner[] AllChar = GetComponent<Prisoner>().GetPrisonerArray();
+        for(int i = 0; i < AllChar.Length; i++){
+        	AllChar[i].GetComponent<Health>().AddHealth(shotPower);
         }
 	} 
+
+	/// <summary>
+    /// Skill Name: Locomotion
+	/// Effect: Use up 40% base durability to make paddle in fire. when paddle in fire, if the stage shot hit it, lauch a shot vertically towards enemy side.
+    /// *Note: 
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
+
 }

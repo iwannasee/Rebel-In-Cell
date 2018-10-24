@@ -13,11 +13,15 @@ public class Selection_DefenceBaseAvar : MonoBehaviour {
 	}
 
 	public string GetBasePrefabName(){
-		return BasePref.GetComponent<Vehicle>().vehileName;
-	}
+		return BasePref.GetComponent<Vehicle>().GetBaseName();
+	} 
 
     public GameObject GetBasePrefabToPlay()
     {
         return BasePref;
+    }
+
+    public int GetBaseHealth(){
+		return BasePref.GetComponent<Health>().GetMaxHealth();
     }
 }
