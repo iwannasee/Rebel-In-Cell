@@ -46,12 +46,29 @@ public class CharacterSkillShot : MonoBehaviour {
 		return skillName;
 	}
 
+	public void SetShotPower(int powerToSet){
+		if(GetComponent<RadiantDamage>()){
+			GetComponent<RadiantDamage>().SetDamage(powerToSet);
+		}else{
+			explodeParticlePref.GetComponent<RadiantDamage>().SetDamage(powerToSet);
+		}
+	}
+
 	public int GetShotPower(){
-		return explodeParticlePref.GetComponent<RadiantDamage>().GetDamage();
+		if(GetComponent<RadiantDamage>()){
+			return GetComponent<RadiantDamage>().GetDamage();
+		}else{
+			return explodeParticlePref.GetComponent<RadiantDamage>().GetDamage();
+		}
 	}
 
 	public float GetShotCoolDownSpeed(){
 		return coolDownSpeed;
 	}
 
+	public void ActivateEffect(string skillName){
+		switch(skillName){
+			
+		}
+	}
 } 

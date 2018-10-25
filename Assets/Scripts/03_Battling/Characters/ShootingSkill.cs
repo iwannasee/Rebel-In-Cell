@@ -304,7 +304,7 @@ public class ShootingSkill : MonoBehaviour {
 			case CommonData.Johnny_Epidemic:
                 SkillCasting_Epidemic(isCastWhenAdjustTime);
 			break;
-
+			/*
 			case CommonData.Mathial_DragonStance:
 
 			break;
@@ -313,6 +313,34 @@ public class ShootingSkill : MonoBehaviour {
 			break;
 			case CommonData.Mathial_ReverseBowStance:
 
+			break;
+			*/
+			case CommonData.Vie_Reinforcement:
+				SkillCasting_Reinforcement(isCastWhenAdjustTime);
+			break;
+
+			case CommonData.Vie_Degravitation:
+				SkillCasting_Degravitation(isCastWhenAdjustTime);
+			break;
+
+			case CommonData.Vie_Blackholification:
+				SkillCasting_Blackholification(isCastWhenAdjustTime);
+			break;
+
+			case CommonData.Lynu_PrayOfPower:
+				SkillCasting_PrayOfPower(isCastWhenAdjustTime);
+			break;
+
+			case CommonData.Lynu_PrayOfLongLasting:
+				SkillCasting_PrayOfLongLasting(isCastWhenAdjustTime);
+			break;
+
+			case CommonData.Maja_MajakumaWish:
+				SkillCasting_MajakumaWish(isCastWhenAdjustTime);
+			break;
+
+			case CommonData.Pippo_FireWall:
+				SkillCasting_FireWall(isCastWhenAdjustTime);
 			break;
 
 			default:
@@ -393,7 +421,7 @@ public class ShootingSkill : MonoBehaviour {
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
 		if(Input.GetMouseButtonDown(0)){
-            if (hit.collider != null){
+            if (hit.collider != null && hit.collider.GetComponent<Prisoner>()){
 				hit.transform.gameObject.GetComponent<Health>().AddHealth(-heathCost);
 				GameObject shot = Instantiate (skillShotToPlay) as GameObject;
 				shot.transform.position = hit.collider.transform.position;
@@ -413,27 +441,82 @@ public class ShootingSkill : MonoBehaviour {
 	private void SkillCasting_Reinforcement(bool isCastWhenAdjustTime){
 		GameObject playerPaddle = GameObject.FindGameObjectWithTag("Prisoner Paddle");
 		float scaleRate = (float) shotPower * 0.1f;
-		playerPaddle.transform.localScale = new Vector3(1 + scaleRate,1,1);
+		Vector3 paddleScale = playerPaddle.transform.localScale;
+		playerPaddle.transform.localScale = new Vector3(paddleScale.x + scaleRate,paddleScale.y,paddleScale.z);
 	}
 
+	private void SkillCasting_Degravitation(bool isCastWhenAdjustTime){
+
+	}
+
+	private void SkillCasting_Blackholification(bool isCastWhenAdjustTime){
+
+	}
+
+	private void SkillCasting_PrayOfPower(bool isCastWhenAdjustTime){
+		if (!isCastWhenAdjustTime){
+			//Get All chars
+			Prisoner[] AllChar = GetComponent<Prisoner>().GetPrisonerArray();
+
+			//Find Shooting skill scripts of all chars
+			for(int i = 0; i < AllChar.Length; i++){
+				GameObject skill = AllChar[i].GetComponent<ShootingSkill>().GetSkillShotToPlay();
+				if(skill.GetComponent<CharacterSkillShot>()){
+					int skillPowerToSet = skill.GetComponent<CharacterSkillShot>().GetShotPower() + shotPower/3;
+					skill.GetComponent<CharacterSkillShot>().SetShotPower(skillPowerToSet);
+				}else if (skill.GetComponent<SupportSkillShot>()){
+					int skillPowerToSet = skill.GetComponent<SupportSkillShot>().GetShotPower() + shotPower/3;
+					skill.GetComponent<SupportSkillShot>().SetShotPower(skillPowerToSet);
+				}
+	        }
+        }
+		//Find the power property and set it 150%
+	}
+
+	private void SkillCasting_MajakumaWish(bool isCastWhenAdjustTime){
+
+	}
+
+	private void SkillCasting_PrayOfLongLasting(bool isCastWhenAdjustTime){
+
+	}
+
+	/// <summary>
+    /// Skill Name: Fire Wall
+    /// Effect: The paddle will become burned. While it is burning, if any thing hits it, 
+    /// shoot a low-damage vertically from that hit position
+    /// *Note: 
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
+	private void SkillCasting_FireWall(bool isCastWhenAdjustTime){
+        if (!isCastWhenAdjustTime){
+        	//Get the player paddle
+			GameObject playerPaddle = GameObject.FindGameObjectWithTag("Prisoner Paddle");
+			//show fire effect on paddle
+			GameObject shot = Instantiate (skillShotToPlay) as GameObject;
+			shot.transform.SetParent(playerPaddle.transform);
+			Destroy(shot, (float)shotPower/8);
+			shot.transform.localPosition = new Vector2(0,0);
+			needleAdjustTime = 0f;
+            bIsSkillUsedThisCharge = true;
+            bIsSkillCastEffectShowing = false;
+            return;
+        }
+	}
+
+
+	//AUTO SKILLS
 	/// <summary>
     /// Skill Name: Achemysto
     /// Effect: Increase 15% hp for all character
     /// *Note: auto skill
     /// </summary>
-	private void SkillCasting_Achemysto(){
+	private void SkillCasting_Achemysto(){ 
         //Implement here
         Prisoner[] AllChar = GetComponent<Prisoner>().GetPrisonerArray();
         for(int i = 0; i < AllChar.Length; i++){
         	AllChar[i].GetComponent<Health>().AddHealth(shotPower);
         }
 	} 
-
-	/// <summary>
-    /// Skill Name: Locomotion
-	/// Effect: Use up 40% base durability to make paddle in fire. when paddle in fire, if the stage shot hit it, lauch a shot vertically towards enemy side.
-    /// *Note: 
-    /// </summary>
-    /// <param name="isCastWhenAdjustTime"></param>
 
 }

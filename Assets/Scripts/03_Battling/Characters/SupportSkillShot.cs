@@ -25,6 +25,10 @@ public class SupportSkillShot : MonoBehaviour {
 		return shotPower;
 	}
 
+	public void SetShotPower(int powerToSet){
+		shotPower = powerToSet;
+	}
+
 	public float GetShotCoolDownSpeed(){
 		return coolDownSpeed;
 	}

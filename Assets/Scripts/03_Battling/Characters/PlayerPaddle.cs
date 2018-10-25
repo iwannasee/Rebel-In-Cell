@@ -7,6 +7,7 @@ public class PlayerPaddle : MonoBehaviour {
 	public bool isPlayWithMouse;
 	public GameObject inventoryGameObj;
 	private Inventory inventory;
+	
 	void Start(){
 		inventory = inventoryGameObj.GetComponent<Inventory>();
 	}

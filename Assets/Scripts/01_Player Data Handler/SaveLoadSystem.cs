@@ -40,7 +40,7 @@ public class SaveLoadSystem : MonoBehaviour  {
 			loadedData.pippo_availableskills = new List<string>();
 			loadedData.pippo_availableskills.Add(CommonData.Pippo_FireBall);
 			loadedData.pippo_availableskills.Add(CommonData.Pippo_Bazooka);
-			loadedData.pippo_availableskills.Add(CommonData.Pippo_Shotgun);
+			loadedData.pippo_availableskills.Add(CommonData.Pippo_FireWall);
 			loadedData.latestUsedSkill_Pippo = CommonData.Pippo_FireBall;
 
 			loadedData.johnny_availableskills = new List<string>();
@@ -49,9 +49,9 @@ public class SaveLoadSystem : MonoBehaviour  {
 			loadedData.latestUsedSkill_Johnny = CommonData.Johnny_Regeneration;
 
 			loadedData.kolav_availableskills = new List<string>();
-			loadedData.kolav_availableskills.Add(CommonData.Kolav_LaserGlance);
-			loadedData.kolav_availableskills.Add(CommonData.Kolav_KineticArm);
-			loadedData.latestUsedSkill_Kolav = CommonData.Kolav_KineticArm;
+			loadedData.kolav_availableskills.Add(CommonData.Kolav_GangBlade);
+			loadedData.kolav_availableskills.Add(CommonData.Kolav_Riot);
+			loadedData.latestUsedSkill_Kolav = CommonData.Kolav_GangBlade;
 
 			loadedData.availableVehicles = new List<string>();
 			loadedData.availableVehicles.Add(CommonData.veh_oven);

@@ -8,12 +8,20 @@ public class CommonData : MonoBehaviour {
 	public const string char_johnny = "Johnny"; 
 	public const string char_mathial = "Mathial"; 
 	public const string char_kolav = "Kolav"; 
+	public const string char_maja = "Maja";
+	public const string char_bape = "Bape";
+	public const string char_vie = "Vie";
+	public const string char_lynu = "Lynu";
 
 	public static List <string> charNameList = new List<string>(new string[]{
 		char_pippo,
 		char_johnny,
 		char_mathial,
-		char_kolav
+		char_kolav,
+		char_maja,
+		char_bape,
+		char_vie,
+		char_lynu
 	});
 	//---------------------------------------------------------------
 	public const string veh_oven = "Oven";
@@ -27,11 +35,11 @@ public class CommonData : MonoBehaviour {
 
 	public const string Pippo_FireBall = "Fire Ball";
 	public const string Pippo_Bazooka = "Bazooka";
-	public const string Pippo_Shotgun = "Shotgun";
+	public const string Pippo_FireWall = "Fire Wall";
 	public static List <string> PippoSkills = new List<string>(new string[]{
 		Pippo_FireBall,
 		Pippo_Bazooka,
-		Pippo_Shotgun
+		Pippo_FireWall
 	});
 
 	public const string Johnny_Regeneration = "Regeneration";
@@ -52,13 +60,49 @@ public class CommonData : MonoBehaviour {
 		Mathial_ReverseBowStance
 	});
 
-	public const string Kolav_PlasmaBomb = "Plasma Bomb";
-	public const string Kolav_LaserGlance = "Laser Glance";
-	public const string Kolav_KineticArm = "Kinetic Arm";
+	public const string Kolav_GangBlade = "Gang Blade";
+	public const string Kolav_Riot = "Riot";
+	public const string Kolav_SlingGun = "Sling Gun";
 	public static List <string> KolavSkills = new List<string>(new string[]{
-		Kolav_PlasmaBomb,
-		Kolav_LaserGlance,
-		Kolav_KineticArm
+		Kolav_GangBlade,
+		Kolav_Riot,
+		Kolav_SlingGun
+	});
+
+	public const string Maja_PoisonMagic = "Poison Magic";
+	public const string Maja_AchillesHeel = "Achilles' heel Revealer";
+	public const string Maja_MajakumaWish = "Majakuma Wish";
+	public static List <string> MajaSkills = new List<string>(new string[]{
+		Maja_PoisonMagic,
+		Maja_AchillesHeel,
+		Maja_MajakumaWish
+	});
+
+	public const string Bape_GrowingBomb = "Growing Bomb";
+	public const string Bape_DynamoArrow = "Dynamo Arrow";
+	public const string Bape_TimeHealingBomb = "Healing C4";
+	public static List <string> BapeSkills = new List<string>(new string[]{
+		Bape_GrowingBomb,
+		Bape_DynamoArrow,
+		Bape_TimeHealingBomb
+	});
+
+	public const string Vie_Reinforcement = "Reinforcement";
+	public const string Vie_Degravitation = "Degravitation";
+	public const string Vie_Blackholification = "Blackholification";
+	public static List <string> VieSkills = new List<string>(new string[]{
+		Vie_Reinforcement,
+		Vie_Degravitation,
+		Vie_Blackholification
+	});
+
+	public const string Lynu_PrayOfPower = "Pray Of Power";
+	public const string Lynu_PrayOfLongLasting = "Pray Of Eternal";
+	public const string Lynu_HolyLight= "Holy Light";
+	public static List <string> LynuSkills = new List<string>(new string[]{
+		Lynu_PrayOfPower,
+		Lynu_PrayOfLongLasting,
+		Lynu_HolyLight
 	});
 
 	public const string Equip_StrawCloak = "Straw Cloak";

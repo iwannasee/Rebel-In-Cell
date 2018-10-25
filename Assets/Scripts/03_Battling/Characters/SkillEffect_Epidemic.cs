@@ -9,10 +9,12 @@ public class SkillEffect_Epidemic : MonoBehaviour {
 	public int lifeCost;
 
 	void Start(){
-		Instantiate(badStatusPref, transform.position, Quaternion.identity);
+		GameObject fx = Instantiate(badStatusPref, transform.position, Quaternion.identity) as GameObject;
+	
 		statusDuration = badStatusPref.GetComponent<ParticleSystem>().main.duration;
-		Destroy(badStatusPref, statusDuration);
+		Destroy(fx, statusDuration);
 		Destroy(gameObject, statusDuration);
+
 	}
 
 	void OnTriggerEnter2D(Collider2D collider){

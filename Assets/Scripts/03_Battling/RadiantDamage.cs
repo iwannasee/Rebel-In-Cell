@@ -36,4 +36,8 @@ public class RadiantDamage : MonoBehaviour {
 	public int GetDamage(){
 		return damage;
 	}
+
+	public void SetDamage(int damageToSet){
+		damage = damageToSet;
+	}
 }
