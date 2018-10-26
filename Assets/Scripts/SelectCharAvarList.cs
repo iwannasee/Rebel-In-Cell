@@ -9,7 +9,6 @@ public class SelectCharAvarList : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		totalCharAvars = GetComponentsInChildren<Selection_CharAvar>();
-		print(" totalCharAvars " + totalCharAvars.Length);
 		FilterAvailableChars();
 	}
 
@@ -28,7 +27,6 @@ public class SelectCharAvarList : MonoBehaviour {
 			for(int j = 0; j < totalCharAvars.Length; j ++){  
 				string nameInList = totalCharAvars[j].GetPrisonerPrefabName();
 				if(nameInData == nameInList){ 
-					print(nameInList +" found");
 					totalCharAvars[j].UnlockCharacterSelection();
 					//Set image sprite for the existing characters
 					totalCharAvars[j].SetCharAvarImageSprite();
@@ -52,7 +50,6 @@ public class SelectCharAvarList : MonoBehaviour {
 	}
 
 	public void DeselectCharacterByName(string charNameToDeselect){
-		print("char to deselect " + charNameToDeselect);
 		for(int i= 0; i< totalCharAvars.Length; i++){
 			string charNameOnCharAvar = totalCharAvars[i].GetPrisonerPrefabName();
             

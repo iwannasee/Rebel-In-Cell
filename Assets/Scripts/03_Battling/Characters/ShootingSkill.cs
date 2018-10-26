@@ -184,6 +184,29 @@ public class ShootingSkill : MonoBehaviour {
     }
 
     //---------------------------------------------------------------
+    private int GetShotPower()
+    {
+        int skillShotPow = 0;
+        if (skillShotToPlay.GetComponent<CharacterSkillShot>())
+        {
+            skillShotPow = skillShotToPlay.GetComponent<CharacterSkillShot>().GetShotPower();
+        }
+        else if(skillShotToPlay.GetComponent <SupportSkillShot>())
+        {
+            skillShotPow = skillShotToPlay.GetComponent<SupportSkillShot>().GetShotPower();
+        }
+        //this is applied for mathial dragon stance skill
+        if (bIsBoosted)
+        {
+            skillShotPow = skillShotPow + skillShotPow * 70/100;
+            bIsBoosted = false;
+        }
+        return skillShotPow;
+
+    }
+
+
+    //---------------------------------------------------------------
     private void DelayAfterOtherPrisonerShot ()
 	{
 		if (skillCoolDownTime <= 0) {
@@ -390,14 +413,17 @@ public class ShootingSkill : MonoBehaviour {
     {
         if (mouseIsDown) { return; }
         if (!isCastWhenAdjustTime){
-            GetComponent<Health>().AddHealth(shotPower);
+            int healthToAdd = GetShotPower();
+            GetComponent<Health>().AddHealth(healthToAdd);
             return;
         }
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
 		if(Input.GetMouseButtonDown(0)){
             if (hit.collider != null){
-                hit.transform.gameObject.GetComponent<Health>().AddHealth(shotPower);
+                int healthToAdd = GetShotPower();
+                hit.transform.gameObject.GetComponent<Health>().AddHealth(healthToAdd);
+                print(GetComponent<Prisoner>().GetPrisonerName() + " has power of " + healthToAdd);
                 needleAdjustTime = 0f;
                 bIsSkillUsedThisCharge = true;
                 bIsSkillCastEffectShowing = false;
@@ -460,40 +486,31 @@ public class ShootingSkill : MonoBehaviour {
 
     /// <summary>
     /// Skill Name: Dragon Stance
-    /// Effect: Boost attacks significantly in a short time
+    /// Effect: Boost attacks significantly in a short time. when select a char to boost, if select mathial itself
+    /// heal itself, if select other, boost him.
+    /// If not select anychar in adjust time, cast skill on a random char
     /// *Note: 
     /// </summary>
     /// <param name="isCastWhenAdjustTime"></param>
     private void SkillCasting_DragonStance(bool isCastWhenAdjustTime)
     {
         if (mouseIsDown) { return; }
-        if (!isCastWhenAdjustTime)
-        {
-            Prisoner randomChar = GetComponent<Prisoner>().GetRandomCharacter();
-            GameObject skill = randomChar.GetComponent<ShootingSkill>().GetSkillShotToPlay();
-            
-            if (skill.GetComponent<CharacterSkillShot>())
-            {
-                CharacterSkillShot skillShot = skill.GetComponent<CharacterSkillShot>();
-                int currentPw = skillShot.GetShotPower();
-                skillShot.SetShotPower(shotPower/100*currentPw + currentPw);
-            }else if (skill.GetComponent<SupportSkillShot>())
-            {
-                SupportSkillShot skillShot = skill.GetComponent<SupportSkillShot>();
-                int currentPw = skillShot.GetShotPower();
-                skillShot.SetShotPower(shotPower / 100 * currentPw + currentPw);
-            }
-
+        if (!isCastWhenAdjustTime){
             GetComponent<Health>().AddHealth(shotPower);
-            return;
+    
         }
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (hit.collider != null)
+        if (Input.GetMouseButtonDown(0)){
+            bool isCharacter = (hit.collider.GetComponent<Prisoner>() != null);
+            if (hit.collider != null && isCharacter)
             {
-                hit.transform.gameObject.GetComponent<Health>().AddHealth(shotPower);
+                ShootingSkill skill = hit.transform.gameObject.GetComponent<ShootingSkill>();
+                if (skill.GetComponent<Prisoner>() == this.GetComponent<Prisoner>()){
+                    GetComponent<Health>().AddHealth(shotPower);
+                }else{
+                    skill.bIsBoosted = true;
+                }
                 needleAdjustTime = 0f;
                 bIsSkillUsedThisCharge = true;
                 bIsSkillCastEffectShowing = false;
@@ -570,4 +587,5 @@ public class ShootingSkill : MonoBehaviour {
         }
 	} 
 
+ 
 }

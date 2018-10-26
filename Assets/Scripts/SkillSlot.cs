@@ -34,7 +34,6 @@ public class SkillSlot : MonoBehaviour {
 	}
 
 	public void ShowSkillsOfCharacter(){
-		print("show skill");
 		ShowSkillPanel();
 		skillPanel.ShowSkillInfo(charName, skillsToShow);
 	}
