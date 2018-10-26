@@ -9,18 +9,17 @@ public class CharacterSkillShot : MonoBehaviour {
 	public float coolDownSpeed;
 	public string skillName;
 
-	private int shotPower;
+	public int shotPower;
 
 	private Rigidbody2D rg2D;
 
+    //---------------------------------------------------------------
+    // Use this for initialization
+    void Start () {
+        ConvertPowerToDamage(shotPower);
 
-	//---------------------------------------------------------------
-	// Use this for initialization
-	void Start () {
-		shotPower = GetShotPower();
-
-		//TODO replace FindObjectOfType by FindObjectByTag
-		Needle needle = GameObject.FindObjectOfType<Needle>();
+        //TODO replace FindObjectOfType by FindObjectByTag
+        Needle needle = GameObject.FindObjectOfType<Needle>();
 		if (!needle) {
 			return; //exit if no needle found 
 		}
@@ -46,20 +45,20 @@ public class CharacterSkillShot : MonoBehaviour {
 		return skillName;
 	}
 
-	public void SetShotPower(int powerToSet){
+	public void ConvertPowerToDamage(int powerToConvert){
 		if(GetComponent<RadiantDamage>()){
-			GetComponent<RadiantDamage>().SetDamage(powerToSet);
+			GetComponent<RadiantDamage>().SetDamage(powerToConvert);
 		}else{
-			explodeParticlePref.GetComponent<RadiantDamage>().SetDamage(powerToSet);
+			explodeParticlePref.GetComponent<RadiantDamage>().SetDamage(powerToConvert);
 		}
 	}
 
-	public int GetShotPower(){
-		if(GetComponent<RadiantDamage>()){
-			return GetComponent<RadiantDamage>().GetDamage();
-		}else{
-			return explodeParticlePref.GetComponent<RadiantDamage>().GetDamage();
-		}
+    public void SetShotPower(int powerToSet)
+    {
+        shotPower = powerToSet;
+    }
+    public int GetShotPower(){
+        return shotPower;
 	}
 
 	public float GetShotCoolDownSpeed(){

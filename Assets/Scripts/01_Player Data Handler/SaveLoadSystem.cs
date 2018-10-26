@@ -35,9 +35,14 @@ public class SaveLoadSystem : MonoBehaviour  {
 			loadedData.availableCharacters = new List<string>();
 			loadedData.availableCharacters.Add(CommonData.char_pippo);
 			loadedData.availableCharacters.Add(CommonData.char_johnny);
-			loadedData.availableCharacters.Add(CommonData.char_kolav);
+			loadedData.availableCharacters.Add(CommonData.char_mathial);
+            loadedData.availableCharacters.Add(CommonData.char_kolav);
+            loadedData.availableCharacters.Add(CommonData.char_maja);
+            loadedData.availableCharacters.Add(CommonData.char_bape);
+            loadedData.availableCharacters.Add(CommonData.char_vie);
+            loadedData.availableCharacters.Add(CommonData.char_lynu);
 
-			loadedData.pippo_availableskills = new List<string>();
+            loadedData.pippo_availableskills = new List<string>();
 			loadedData.pippo_availableskills.Add(CommonData.Pippo_FireBall);
 			loadedData.pippo_availableskills.Add(CommonData.Pippo_Bazooka);
 			loadedData.pippo_availableskills.Add(CommonData.Pippo_FireWall);
@@ -45,15 +50,47 @@ public class SaveLoadSystem : MonoBehaviour  {
 
 			loadedData.johnny_availableskills = new List<string>();
 			loadedData.johnny_availableskills.Add(CommonData.Johnny_Regeneration);
-			loadedData.johnny_availableskills.Add(CommonData.Johnny_Achemysto);
+            loadedData.johnny_availableskills.Add(CommonData.Johnny_Epidemic);
+            loadedData.johnny_availableskills.Add(CommonData.Johnny_Achemysto);
 			loadedData.latestUsedSkill_Johnny = CommonData.Johnny_Regeneration;
 
-			loadedData.kolav_availableskills = new List<string>();
+            loadedData.mathial_availableskills = new List<string>();
+            loadedData.mathial_availableskills.Add(CommonData.Mathial_DragonStance);
+            loadedData.mathial_availableskills.Add(CommonData.Mathial_PrayingMantisStance);
+            loadedData.mathial_availableskills.Add(CommonData.Mathial_ReverseBowStance);
+            loadedData.latestUsedSkill_Mathial = CommonData.Mathial_DragonStance;
+
+            loadedData.kolav_availableskills = new List<string>();
 			loadedData.kolav_availableskills.Add(CommonData.Kolav_GangBlade);
 			loadedData.kolav_availableskills.Add(CommonData.Kolav_Riot);
-			loadedData.latestUsedSkill_Kolav = CommonData.Kolav_GangBlade;
+            loadedData.kolav_availableskills.Add(CommonData.Kolav_SlingGun);
+            loadedData.latestUsedSkill_Kolav = CommonData.Kolav_GangBlade;
 
-			loadedData.availableVehicles = new List<string>();
+            loadedData.maja_availableskills = new List<string>();
+            loadedData.maja_availableskills.Add(CommonData.Maja_PoisonMagic);
+            loadedData.maja_availableskills.Add(CommonData.Maja_AchillesHeel);
+            loadedData.maja_availableskills.Add(CommonData.Maja_MajakumaWish);
+            loadedData.latestUsedSkill_Maja = CommonData.Maja_PoisonMagic;
+
+            loadedData.bape_availableskills = new List<string>();
+            loadedData.bape_availableskills.Add(CommonData.Bape_GrowingBomb);
+            loadedData.bape_availableskills.Add(CommonData.Bape_DynamoArrow);
+            loadedData.bape_availableskills.Add(CommonData.Bape_TimeHealingBomb);
+            loadedData.latestUsedSkill_Bape = CommonData.Bape_GrowingBomb;
+
+            loadedData.vie_availableskills = new List<string>();
+            loadedData.vie_availableskills.Add(CommonData.Vie_Degravitation);
+            loadedData.vie_availableskills.Add(CommonData.Vie_Blackholification);
+            loadedData.vie_availableskills.Add(CommonData.Vie_Reinforcement);
+            loadedData.latestUsedSkill_Vie = CommonData.Vie_Degravitation;
+
+            loadedData.lynu_availableskills = new List<string>();
+            loadedData.lynu_availableskills.Add(CommonData.Lynu_PrayOfPower);
+            loadedData.lynu_availableskills.Add(CommonData.Lynu_PrayOfLongLasting);
+            loadedData.lynu_availableskills.Add(CommonData.Lynu_HolyLight);
+            loadedData.latestUsedSkill_Lynu = CommonData.Lynu_PrayOfPower;
+
+            loadedData.availableVehicles = new List<string>();
 			loadedData.availableVehicles.Add(CommonData.veh_oven);
 			loadedData.availableVehicles.Add(CommonData.veh_test);
 

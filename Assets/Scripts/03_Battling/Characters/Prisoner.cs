@@ -46,6 +46,12 @@ public class Prisoner : MonoBehaviour {
 	public Prisoner[] GetPrisonerArray(){
 		return prisonerArray;
 	}
+    
+    public Prisoner GetRandomCharacter()
+    {
+        Prisoner[] chars = GetPrisonerArray();
+        return chars[Random.Range(0, chars.Length - 1)];
+    }
 	//---------------------------------------------------------------
 	public static bool GetIsCastingSkill(){
 		return prisonerIsCastingSkill;
@@ -72,22 +78,38 @@ public class Prisoner : MonoBehaviour {
 		string lastUsedSkill = "" ;
 		switch(charName){
 			case CommonData.char_pippo:
-			lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Pippo;
+			    lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Pippo;
 				break;
 
 			case CommonData.char_johnny:
-			lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Johnny;
+			    lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Johnny;
 				break;
 
 			case CommonData.char_mathial:
-			lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Mathial;
+			    lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Mathial;
 				break;
 
 			case CommonData.char_kolav:
-			lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Kolav;
+			    lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Kolav;
 				break;
 
-				default: break;
+            case CommonData.char_maja:
+                lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Maja;
+                break;
+
+            case CommonData.char_bape:
+                lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Bape;
+                break;
+
+            case CommonData.char_vie:
+                lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Vie;
+                break;
+
+            case CommonData.char_lynu:
+                lastUsedSkill = PlayerProgress.playerData.latestUsedSkill_Lynu;
+                break;
+
+            default: break;
 			}
 
 		return lastUsedSkill;

@@ -4,11 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class SkillSlot : MonoBehaviour {
-	public enum SkillType{
-		SKILL_NONE,
-		SKILL_SHOOT,
-		SKILL_SUPPORT
-	}
 
 	public GameObject[] skillsToShow;
 	public GameObject skillPanelObj;
@@ -16,7 +11,7 @@ public class SkillSlot : MonoBehaviour {
 	public Button skillPanelCancelBtn;
 
 	private string charName = "";
-	SkillType skillType;
+
 	private SkillPanel skillPanel;
 	private Image skillSlotImage;
 
@@ -35,35 +30,13 @@ public class SkillSlot : MonoBehaviour {
 
 	public void LoadSelectedCharSkillsIntoSkillSlot(GameObject charPrefToShowSkill){
 		charName = charPrefToShowSkill.GetComponent<Prisoner>().GetPrisonerName();
-
-		switch (charName){
-
-			case CommonData.char_pippo:
-				skillsToShow = charPrefToShowSkill.GetComponent<ShootingSkill>().skillShotPrefabs;
-				skillType = SkillType.SKILL_SHOOT;
-				break;
-			case CommonData.char_johnny:
-				skillsToShow = charPrefToShowSkill.GetComponent<ShootingSkill>().skillShotPrefabs;
-				skillType = SkillType.SKILL_SHOOT;
-				break;
-			case CommonData.char_mathial:
-				skillsToShow = charPrefToShowSkill.GetComponent<ShootingSkill>().skillShotPrefabs;
-				skillType = SkillType.SKILL_SHOOT;
-				break; 
-			case CommonData.char_kolav:
-				skillsToShow = charPrefToShowSkill.GetComponent<ShootingSkill>().skillShotPrefabs;
-				skillType = SkillType.SKILL_SHOOT;
-				break;
-			default:
-				print("nothing is selecting");
-				break;
-		}
+        skillsToShow = charPrefToShowSkill.GetComponent<ShootingSkill>().skillShotPrefabs;
 	}
 
 	public void ShowSkillsOfCharacter(){
 		print("show skill");
 		ShowSkillPanel();
-		skillPanel.ShowSkillInfo(charName, skillsToShow, skillType);
+		skillPanel.ShowSkillInfo(charName, skillsToShow);
 	}
 
 	private void ShowSkillPanel(){

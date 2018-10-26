@@ -8,11 +8,13 @@ using UnityEngine;
 /// </summary>
 public class RadiantDamage : MonoBehaviour {
 
-	public int damage;
+	private int damage;
 	public float damageSpreadSpeed;
-	private CircleCollider2D rangeCollider;
+    public int damageIfNotSet;
+    private CircleCollider2D rangeCollider;
 	private float initRadius;
 	private bool bIsRangeDamage;
+    private bool damageIsSet = false;
 	// Use this for initialization
 	void Start () {
 		if(GetComponent<ParticleSystem>()){
@@ -34,10 +36,16 @@ public class RadiantDamage : MonoBehaviour {
 	}
 
 	public int GetDamage(){
+        if (!damageIsSet)
+        {
+            return damageIfNotSet;
+        }
 		return damage;
 	}
 
 	public void SetDamage(int damageToSet){
 		damage = damageToSet;
-	}
+        damageIsSet = true;
+
+    }
 }

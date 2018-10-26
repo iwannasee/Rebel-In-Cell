@@ -26,7 +26,9 @@ public class CharacterInfoScreen : MonoBehaviour {
 
 		//check the shot type is shooting or supporting
 		GameObject latestUsedSkill = charPrefToSetInfo.GetComponent<ShootingSkill>().GetSkillShotToPlay();
-		if(latestUsedSkill.GetComponent<CharacterSkillShot>()){
+        if (!latestUsedSkill) { print("no skillllll"); }
+
+        if (latestUsedSkill.GetComponent<CharacterSkillShot>()){
 			SetSkillSprtOfSelectedChar(latestUsedSkill.GetComponent<CharacterSkillShot>().GetShotSprtIcon());
 		}else if( latestUsedSkill.GetComponent<SupportSkillShot>()){
 			SetSkillSprtOfSelectedChar(latestUsedSkill.GetComponent<SupportSkillShot>().GetShotSprtIcon());

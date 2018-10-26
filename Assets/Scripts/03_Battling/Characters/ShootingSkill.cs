@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShootingSkill : MonoBehaviour {
+    public enum ShotBoostType
+    {
+        TEMP,
+        ETERNAL,
+        NONE
+    }
+
 	public int tapTimesToUseSkill;
 	public GameObject gaugeMeterPrefab;
 
@@ -37,6 +44,7 @@ public class ShootingSkill : MonoBehaviour {
 	private bool bIsSkillUsedThisCharge = false;
     private bool mouseIsDown = false;
     private bool bIsAutoSkill = false;
+    private bool bIsBoosted = false;
 	//---------------------------------------------------------------
 	void Start(){ 
 		skillShotToPlay = GetSkillShotToPlay();
@@ -304,18 +312,19 @@ public class ShootingSkill : MonoBehaviour {
 			case CommonData.Johnny_Epidemic:
                 SkillCasting_Epidemic(isCastWhenAdjustTime);
 			break;
-			/*
+			
 			case CommonData.Mathial_DragonStance:
+                SkillCasting_DragonStance(isCastWhenAdjustTime);
+                break;
+            /*
+            case CommonData.Mathial_PrayingMantisStance:
 
-			break;
-			case CommonData.Mathial_PrayingMantisStance:
+            break;
+            case CommonData.Mathial_ReverseBowStance:
 
-			break;
-			case CommonData.Mathial_ReverseBowStance:
-
-			break;
-			*/
-			case CommonData.Vie_Reinforcement:
+            break;
+            */
+            case CommonData.Vie_Reinforcement:
 				SkillCasting_Reinforcement(isCastWhenAdjustTime);
 			break;
 
@@ -449,7 +458,50 @@ public class ShootingSkill : MonoBehaviour {
 
 	}
 
-	private void SkillCasting_Blackholification(bool isCastWhenAdjustTime){
+    /// <summary>
+    /// Skill Name: Dragon Stance
+    /// Effect: Boost attacks significantly in a short time
+    /// *Note: 
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
+    private void SkillCasting_DragonStance(bool isCastWhenAdjustTime)
+    {
+        if (mouseIsDown) { return; }
+        if (!isCastWhenAdjustTime)
+        {
+            Prisoner randomChar = GetComponent<Prisoner>().GetRandomCharacter();
+            GameObject skill = randomChar.GetComponent<ShootingSkill>().GetSkillShotToPlay();
+            
+            if (skill.GetComponent<CharacterSkillShot>())
+            {
+                CharacterSkillShot skillShot = skill.GetComponent<CharacterSkillShot>();
+                int currentPw = skillShot.GetShotPower();
+                skillShot.SetShotPower(shotPower/100*currentPw + currentPw);
+            }else if (skill.GetComponent<SupportSkillShot>())
+            {
+                SupportSkillShot skillShot = skill.GetComponent<SupportSkillShot>();
+                int currentPw = skillShot.GetShotPower();
+                skillShot.SetShotPower(shotPower / 100 * currentPw + currentPw);
+            }
+
+            GetComponent<Health>().AddHealth(shotPower);
+            return;
+        }
+        RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (hit.collider != null)
+            {
+                hit.transform.gameObject.GetComponent<Health>().AddHealth(shotPower);
+                needleAdjustTime = 0f;
+                bIsSkillUsedThisCharge = true;
+                bIsSkillCastEffectShowing = false;
+            }
+        }
+    }
+
+    private void SkillCasting_Blackholification(bool isCastWhenAdjustTime){
 
 	}
 
@@ -470,7 +522,6 @@ public class ShootingSkill : MonoBehaviour {
 				}
 	        }
         }
-		//Find the power property and set it 150%
 	}
 
 	private void SkillCasting_MajakumaWish(bool isCastWhenAdjustTime){

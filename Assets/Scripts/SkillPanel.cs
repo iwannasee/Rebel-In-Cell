@@ -81,7 +81,7 @@ public class SkillPanel : MonoBehaviour {
 		}
 	}
 
-	public void ShowSkillInfo(string charName, GameObject[] skills, SkillSlot.SkillType type){
+	public void ShowSkillInfo(string charName, GameObject[] skills){
 		/*if(skillList.Length != skills.Length){
 			print("number of character skills is not relevant to number of skill slots in skill panel");
 			return;
@@ -91,8 +91,8 @@ public class SkillPanel : MonoBehaviour {
 		//}
 		skillsOfPassingInChar = skills;
 		skillUsingCharName = charName;
-		switch(type){
-			case SkillSlot.SkillType.SKILL_SHOOT:
+		//switch(type){
+			//case SkillSlot.SkillType.SKILL_SHOOT:
 				for(int i = 0; i < skills.Length; i++){
 					Sprite shotSprt = null;
 					string shotName = "";
@@ -147,10 +147,10 @@ public class SkillPanel : MonoBehaviour {
 					}
 				}
 
-				break;
+				//break;
 
-			default: break;
-		}
+			//default: break;
+		
 
 
 	}
@@ -181,7 +181,34 @@ public class SkillPanel : MonoBehaviour {
 			}
 			break;
 
-			default: break;
+            case CommonData.char_maja:
+                if (skillName == PlayerProgress.playerData.latestUsedSkill_Maja)
+                {
+                    isLatestUsed = true;
+                }
+                break;
+
+            case CommonData.char_bape:
+                if (skillName == PlayerProgress.playerData.latestUsedSkill_Bape)
+                {
+                    isLatestUsed = true;
+                }
+                break;
+
+            case CommonData.char_vie:
+                if (skillName == PlayerProgress.playerData.latestUsedSkill_Vie)
+                {
+                    isLatestUsed = true;
+                }
+                break;
+
+            case CommonData.char_lynu:
+                if (skillName == PlayerProgress.playerData.latestUsedSkill_Lynu)
+                {
+                    isLatestUsed = true;
+                }
+                break;
+            default: break;
 		}
 		return isLatestUsed;
 	}
@@ -211,8 +238,32 @@ public class SkillPanel : MonoBehaviour {
 				isSkillUnlocked = true;
 			}
 			break;
+            case CommonData.char_maja:
+                if (PlayerProgress.playerData.maja_availableskills.Contains(skillName))
+                {
+                    isSkillUnlocked = true;
+                }
+                break;
+            case CommonData.char_bape:
+                if (PlayerProgress.playerData.bape_availableskills.Contains(skillName))
+                {
+                    isSkillUnlocked = true;
+                }
+                break;
+            case CommonData.char_vie:
+                if (PlayerProgress.playerData.vie_availableskills.Contains(skillName))
+                {
+                    isSkillUnlocked = true;
+                }
+                break;
+            case CommonData.char_lynu:
+                if (PlayerProgress.playerData.lynu_availableskills.Contains(skillName))
+                {
+                    isSkillUnlocked = true;
+                }
+                break;
 
-			default: break;
+            default: break;
 		}
 
 		return isSkillUnlocked;

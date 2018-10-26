@@ -24,4 +24,16 @@ public class GameData {
 
 	public List<string> kolav_availableskills;
 	public string latestUsedSkill_Kolav;
+
+    public List<string> maja_availableskills;
+    public string latestUsedSkill_Maja;
+
+    public List<string>bape_availableskills;
+    public string latestUsedSkill_Bape;
+
+    public List<string> vie_availableskills;
+    public string latestUsedSkill_Vie;
+
+    public List<string> lynu_availableskills;
+    public string latestUsedSkill_Lynu;
 }

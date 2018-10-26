@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ES_AimingShot : MonoBehaviour {
 	public float shotSpeed;
+    public float shotPower;
 	public float randomCoolDownTweak;
 	public float maxCoolDownTime;
 	private float shotCoolDownTime;
