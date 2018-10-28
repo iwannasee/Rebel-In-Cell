@@ -10,7 +10,7 @@ public class ShotFromFireWall : MonoBehaviour {
 		Rigidbody2D rg2D = this.GetComponent<Rigidbody2D>() ;
 		rg2D.velocity = new Vector2 (0, shotSpeed );
 	}
-
+            
 	void OnTriggerEnter2D(Collider2D col){
 		if(col.gameObject.GetComponent<BlockOfStage>()  || col.gameObject.GetComponent<Enemy>() ||
 			col.gameObject.GetComponent<EnemyPaddle>()){

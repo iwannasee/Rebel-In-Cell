@@ -68,19 +68,31 @@ public class SkillSlot : MonoBehaviour {
 	{
 		string charName = skillPanel.GetSkillUsingCharName ();
 		switch (charName) {
-		case CommonData.char_pippo:
-			PlayerProgress.playerData.latestUsedSkill_Pippo = skillNameToSave;
-			break;
-		case CommonData.char_johnny:
-			PlayerProgress.playerData.latestUsedSkill_Johnny = skillNameToSave;
-			break;
-		case CommonData.char_mathial:
-			PlayerProgress.playerData.latestUsedSkill_Mathial = skillNameToSave;
-			break;
-		case CommonData.char_kolav:
-			PlayerProgress.playerData.latestUsedSkill_Kolav = skillNameToSave;
-			break;
-		default:
+		    case CommonData.char_pippo:
+			    PlayerProgress.playerData.latestUsedSkill_Pippo = skillNameToSave;
+			    break;
+		    case CommonData.char_johnny:
+			    PlayerProgress.playerData.latestUsedSkill_Johnny = skillNameToSave;
+			    break;
+		    case CommonData.char_mathial:
+			    PlayerProgress.playerData.latestUsedSkill_Mathial = skillNameToSave;
+			    break;
+		    case CommonData.char_kolav:
+			    PlayerProgress.playerData.latestUsedSkill_Kolav = skillNameToSave;
+			    break;
+            case CommonData.char_maja:
+                PlayerProgress.playerData.latestUsedSkill_Maja = skillNameToSave;
+                break;
+            case CommonData.char_bape:
+                PlayerProgress.playerData.latestUsedSkill_Bape = skillNameToSave;
+                break;
+            case CommonData.char_vie:
+                PlayerProgress.playerData.latestUsedSkill_Vie = skillNameToSave;
+                break;
+            case CommonData.char_lynu:
+                PlayerProgress.playerData.latestUsedSkill_Lynu = skillNameToSave;
+                break;
+            default:
 			break;
 		}
 
