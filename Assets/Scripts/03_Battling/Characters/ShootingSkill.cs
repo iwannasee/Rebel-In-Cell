@@ -474,14 +474,19 @@ public class ShootingSkill : MonoBehaviour {
     /// </summary>
     /// <param name="isCastWhenAdjustTime"></param>
 	private void SkillCasting_Reinforcement(bool isCastWhenAdjustTime){
-		GameObject playerPaddle = GameObject.FindGameObjectWithTag("Prisoner Paddle");
-		float scaleRate = (float) shotPower * 0.1f;
-		Vector3 paddleScale = playerPaddle.transform.localScale;
-		playerPaddle.transform.localScale = new Vector3(paddleScale.x + scaleRate,paddleScale.y,paddleScale.z);
+		if (!isCastWhenAdjustTime){
+			print("lengthening");
+			GameObject playerPaddle = GameObject.FindGameObjectWithTag("Prisoner Paddle");
+			float scaleRate = (float) shotPower * 0.01f;
+			Vector3 paddleScale = playerPaddle.transform.localScale;
+			playerPaddle.transform.localScale = new Vector3(paddleScale.x + scaleRate,paddleScale.y,paddleScale.z);
+		}
 	}
 
 	private void SkillCasting_Degravitation(bool isCastWhenAdjustTime){
-
+		if (!isCastWhenAdjustTime){
+			Debug.Log("Trial skill");
+		}
 	}
 
     /// <summary>
@@ -518,8 +523,18 @@ public class ShootingSkill : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Skill Name:	Blackholification
+    /// Effect: create a hurricane going from left screen to right screen
+    /// it deflects the direction of stage ball and swallows all harming shot
+    /// 
+    /// *Note: 
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
     private void SkillCasting_Blackholification(bool isCastWhenAdjustTime){
-
+		if (!isCastWhenAdjustTime){
+			Instantiate(skillShotToPlay);
+        }
 	}
 
 	private void SkillCasting_PrayOfPower(bool isCastWhenAdjustTime){
@@ -542,11 +557,15 @@ public class ShootingSkill : MonoBehaviour {
 	}
 
 	private void SkillCasting_MajakumaWish(bool isCastWhenAdjustTime){
-
+		if (!isCastWhenAdjustTime){
+			Debug.Log("Trial skill");
+		}
 	}
 
 	private void SkillCasting_PrayOfLongLasting(bool isCastWhenAdjustTime){
-
+		if (!isCastWhenAdjustTime){
+			Debug.Log("Trial skill");
+		}
 	}
 
 	/// <summary>
@@ -573,7 +592,7 @@ public class ShootingSkill : MonoBehaviour {
 	}
 
 
-	//AUTO SKILLS
+	//AUTO SKILLS 
 	/// <summary>
     /// Skill Name: Achemysto
     /// Effect: Increase 15% hp for all character
