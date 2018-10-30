@@ -53,10 +53,12 @@ public class Health : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider){
 		if(GetComponent<Enemy>() || GetComponent<BlockOfStage>()){
 			if(collider.GetComponent<RadiantDamage> ()){
+				print("collided :" + gameObject.name +" and " + collider.gameObject.name);
 				RadiantDamage radiantDamage = collider.GetComponent<RadiantDamage>();
 				int inflictedDamage = radiantDamage.GetDamage();
+				print("inflictedDamage :" + inflictedDamage);
 				health = health - inflictedDamage;
-
+				print("health :" + health);
 				if(health <= 0){
 					if(GetComponent<BlockOfStage>()){
 						GetComponent<BlockOfStage>().BlockDestroy();

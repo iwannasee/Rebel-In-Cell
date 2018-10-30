@@ -17,7 +17,7 @@ public class CharacterSkillShot : MonoBehaviour {
     // Use this for initialization
     void Start () {
         ConvertPowerToDamage(shotPower);
-
+         
         //TODO replace FindObjectOfType by FindObjectByTag
         Needle needle = GameObject.FindObjectOfType<Needle>();
 		if (!needle) {
@@ -31,8 +31,11 @@ public class CharacterSkillShot : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D col){
 		if(col.gameObject.GetComponent<BlockOfStage>() || col.gameObject.GetComponent<Enemy>() ||
 			col.gameObject.GetComponent<EnemyPaddle>()){
-			Instantiate(explodeParticlePref, transform.position, Quaternion.identity);
-			 
+			GameObject explosion = Instantiate(explodeParticlePref, transform.position, Quaternion.identity);
+
+			if(explosion.GetComponent<RadiantDamage>()){
+				explosion.GetComponent<RadiantDamage>().SetDamage(shotPower);
+			}
 			Destroy(gameObject);
 		}
 	}
