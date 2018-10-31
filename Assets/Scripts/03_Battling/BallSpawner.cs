@@ -5,12 +5,15 @@ using UnityEngine;
 public class BallSpawner : MonoBehaviour {
 	public GameObject BattleBallPrefab;
 	public float maxSpawningTime;
+	public float maxSpawningTimeByEffect;
 	public float maxWaitTimeForLaunched;
 
 	private float spawningTime;
 	private float waitTimeForLaunched;
 	private bool readyStartCountWaitTime = false;
 	private GameObject ball;
+
+
 
 	// Use this for initialization
 	//---------------------------------------------------------------
@@ -41,9 +44,13 @@ public class BallSpawner : MonoBehaviour {
 	void SpawnBattleBall(){
 		ball = Instantiate (BattleBallPrefab, transform.position, Quaternion.identity) as GameObject;
 		ball.transform.parent = transform;
+		ball.GetComponent<ProjectileBall>().SetBallSpawner(this);
 	}
 	//---------------------------------------------------------------
 	public void ResetBallAtWaveStart(){
 		spawningTime = 0;
+	}
+	public void ResetBallByEffect(){
+		spawningTime = maxSpawningTimeByEffect;
 	}
 }

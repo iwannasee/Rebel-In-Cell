@@ -15,7 +15,7 @@ public class ProjectileBall : MonoBehaviour {
 	private bool justHit = false;
 
 	private int limitTimeToHitWall;
-
+	BallSpawner ballSpawner;
 	//---------------------------------------------------------------
 	void Start () {
 		limitHit = maxLimitHit;
@@ -37,7 +37,7 @@ public class ProjectileBall : MonoBehaviour {
 					UITextController.SetUITextStatusType(UITextController.DISPLAY_TEXT.CRITICAL_HIT,"");
 				}
 				//TODO implement critical hit effect
-				Destroy (gameObject);
+				RemoveFromPlay();
 			}
 			//if the critical time (hitInterval) passed, recover hitlimit and critical time count
 			if (hitInterval <= 0) {
@@ -51,7 +51,7 @@ public class ProjectileBall : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D collision){
 		//If all the prisoners are down, stop bounding collision of this ball by destroying it
 		if(Prisoner.GetAllPrisonerDead()){
-			Destroy(gameObject);
+			RemoveFromPlay();
 		}
         if (collision.gameObject.GetComponent<BlockOfStage>())
         {
@@ -109,5 +109,16 @@ public class ProjectileBall : MonoBehaviour {
 
 	private void ResetTimeHitWallInARow(){
 		limitTimeToHitWall = totalTimeToHitWallInARow;
+	}
+
+	public void RemoveFromPlay(){
+		Destroy(gameObject);
+	}
+	public void SetBallSpawner(BallSpawner ballSpawnerToSet){
+		ballSpawner = ballSpawnerToSet;
+	}
+
+	public BallSpawner GetStageBallSpawner(){
+		return ballSpawner;
 	}
 }

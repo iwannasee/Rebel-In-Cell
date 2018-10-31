@@ -556,9 +556,39 @@ public class ShootingSkill : MonoBehaviour {
         }
 	}
 
+	/// <summary>
+	/// Skill Name:	Majakuma Wish
+    /// Effect: Erase All current stage shots in play, heal all chars 10 hp for each stage shot removed.
+    /// 
+    /// *Note: 
+    /// </summary>
+    /// <param name="isCastWhenAdjustTime"></param>
 	private void SkillCasting_MajakumaWish(bool isCastWhenAdjustTime){
 		if (!isCastWhenAdjustTime){
-			Debug.Log("Trial skill");
+			GameObject[] stageShots = GameObject.FindGameObjectsWithTag("Stage Shot");
+
+			int numOfShots = 0;
+			if(stageShots[0] != null){
+				BallSpawner ballSpawner = stageShots[0].GetComponent<ProjectileBall>().GetStageBallSpawner();
+				ballSpawner.ResetBallByEffect();
+				numOfShots = stageShots.Length;
+			}
+
+			for (int i = 0; i < stageShots.Length; i++){
+				stageShots[i].GetComponent<ProjectileBall>().RemoveFromPlay();
+			}
+
+			Prisoner[] AllChar = GetComponent<Prisoner>().GetPrisonerArray();
+			if(numOfShots <= 0 ){
+				numOfShots = 1;
+			}
+
+        	for(int i = 0; i < AllChar.Length; i++){
+				int healAmount = numOfShots*shotPower/7;
+				AllChar[i].GetComponent<Health>().AddHealth(numOfShots*shotPower/7);
+				print(" healAmount " + healAmount);
+       		}
+
 		}
 	}
 

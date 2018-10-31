@@ -15,7 +15,6 @@ public class GrowingBomb : MonoBehaviour {
 		GameObject explosionParticle = GetComponent<CharacterSkillShot>().explodeParticlePref;
 		damage = explosionParticle.GetComponent<RadiantDamage>();
 		initDamage = damage.GetDamage();
-		print("Init dame " + initDamage);
 
 
 	}

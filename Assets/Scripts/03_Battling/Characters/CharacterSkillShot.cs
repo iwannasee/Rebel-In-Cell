@@ -23,12 +23,18 @@ public class CharacterSkillShot : MonoBehaviour {
 		if (!needle) {
 			return; //exit if no needle found 
 		}
-		Vector3 shotDerivingPosition = needle.GetComponent<Transform> ().right;
+		Transform needleTransform = needle.GetComponent<Transform> ();
+		transform.rotation = needleTransform.rotation;
+		Vector3 shotDerivingPosition = needleTransform.right;
 		rg2D = this.GetComponent<Rigidbody2D>() ;
 		rg2D.velocity = new Vector2 (shotSpeed * shotDerivingPosition.x,shotSpeed * shotDerivingPosition.y );
 	} 
 
 	void OnCollisionEnter2D(Collision2D col){
+		if(skillName == "Riot"){
+			return;
+		}
+
 		if(col.gameObject.GetComponent<BlockOfStage>() || col.gameObject.GetComponent<Enemy>() ||
 			col.gameObject.GetComponent<EnemyPaddle>()){
 			GameObject explosion = Instantiate(explodeParticlePref, transform.position, Quaternion.identity);
@@ -36,6 +42,9 @@ public class CharacterSkillShot : MonoBehaviour {
 			if(explosion.GetComponent<RadiantDamage>()){
 				explosion.GetComponent<RadiantDamage>().SetDamage(shotPower);
 			}
+
+			Destroy(gameObject);
+		} else if(col.gameObject.GetComponent<Vehicle>()){
 			Destroy(gameObject);
 		}
 	}

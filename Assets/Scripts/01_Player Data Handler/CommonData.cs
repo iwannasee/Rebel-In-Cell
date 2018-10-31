@@ -112,8 +112,4 @@ public class CommonData : MonoBehaviour {
 		Equip_LeatherShirt
 	});
 	//---------------------------------------------------------------
-
-
-
-
 }
