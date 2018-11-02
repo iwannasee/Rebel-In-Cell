@@ -26,6 +26,7 @@ public class Health : MonoBehaviour {
 	private AudioSource audioSource;
 
     private bool isDead;
+
 	//---------------------------------------------------------------
 	// Use this for initialization
 	//---------------------------------------------------------------
@@ -54,6 +55,7 @@ public class Health : MonoBehaviour {
 		if(GetComponent<Enemy>() || GetComponent<BlockOfStage>()){
 			if(collider.GetComponent<RadiantDamage> ()){
 				RadiantDamage radiantDamage = collider.GetComponent<RadiantDamage>();
+
 				int inflictedDamage = radiantDamage.GetDamage();
 				print("inflictedDamage :" + inflictedDamage);
 				health = health - inflictedDamage;
@@ -88,36 +90,9 @@ public class Health : MonoBehaviour {
 
 			
 
-			if(lostHeathToChangeSprite != 0)
-            {
-				ChangeSpriteFollowHealth();
-			}
+			CheckLife ();
 
-			//Handle when health is <= 0
-			if(health <= 0){
-				//if this health is of base
-				if(GetComponent<Vehicle>()){
-					WinLoseCondition wlCondition=GameObject.FindGameObjectWithTag("Win Lose Condition").GetComponent<WinLoseCondition>();
-					wlCondition.Lose();
-				}
 
-				//if this health is of block
-				if(GetComponent<BlockOfStage>()){
-					GetComponent<BlockOfStage>().BlockDestroy();
-					return;
-				}
-				//if this health is of enemy
-				if(GetComponent<Enemy>()){
-					GetComponent<Enemy>().EnemyDestroy();
-					return;
-				}
-			}
-
-			//if this health is of prisoner
-			if(GetComponent<Prisoner>() && !isDead){
-				SetHealthBar(); 
-				StartCoroutine("PlayHitSpriteAndHitSound");
-			}
 		}
 	}
 	//---------------------------------------------------------------
@@ -155,6 +130,8 @@ public class Health : MonoBehaviour {
 	}
 	//---------------------------------------------------------------
 	private void ChangeSpriteFollowHealth() {
+		if(lostHeathToChangeSprite == 0){return;}
+
 		if((maxHealth % lostHeathToChangeSprite) == 0 && !isDead)
         {
 			int spriteIndex = health/ lostHeathToChangeSprite;
@@ -176,16 +153,49 @@ public class Health : MonoBehaviour {
 		return maxHealth;
 	}
 
-	public void AddHealth(int heathToAdd){
+	void CheckLife ()
+	{
+		if (lostHeathToChangeSprite != 0) {
+			ChangeSpriteFollowHealth ();
+		}
+		//Handle when health is <= 0
+		if (health <= 0) {
+			//if this health is of base
+			if (GetComponent<Vehicle> ()) {
+				WinLoseCondition wlCondition = GameObject.FindGameObjectWithTag ("Win Lose Condition").GetComponent<WinLoseCondition> ();
+				wlCondition.Lose ();
+			}
+			//if this health is of block
+			if (GetComponent<BlockOfStage> ()) {
+				GetComponent<BlockOfStage> ().BlockDestroy ();
+				return;
+			}
+			//if this health is of enemy
+			if (GetComponent<Enemy> ()) {
+				GetComponent<Enemy> ().EnemyDestroy ();
+				return;
+			}
+		}
+		//if this health is of prisoner
+		if (GetComponent<Prisoner> () && !isDead) {
+			SetHealthBar ();
+			StartCoroutine ("PlayHitSpriteAndHitSound");
+		}
+	}
+
+	public void AddHealth(int heathToAdd, bool causedByPoison = false){
 		health += heathToAdd;
 		if(health>= maxHealth){
 			health = maxHealth; 
-		}else if(health <= 0){
+		}else if(health <= 0 && !causedByPoison){
 			health = 1;
 		}
-		SetHealthBar();
-        ChangeSpriteFollowHealth();
 
+		if(healthBar){
+			SetHealthBar();
+		}
+		CheckLife();
     }
+
 	//---------------------------------------------------------------
 }

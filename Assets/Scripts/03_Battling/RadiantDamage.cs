@@ -15,6 +15,7 @@ public class RadiantDamage : MonoBehaviour {
 	private float initRadius;
 	private bool bIsRangeDamage;
     private bool damageIsSet = false;
+
 	// Use this for initialization
 	void Start () {
 		if(GetComponent<ParticleSystem>()){
@@ -46,6 +47,6 @@ public class RadiantDamage : MonoBehaviour {
 	public void SetDamage(int damageToSet){
 		damage = damageToSet;
         damageIsSet = true;
-
     }
 }
+

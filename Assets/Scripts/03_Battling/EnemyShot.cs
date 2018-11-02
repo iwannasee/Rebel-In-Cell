@@ -5,13 +5,22 @@ using UnityEngine;
 public class EnemyShot : MonoBehaviour {
 	// Use this for initialization
 	public GameObject explodeParticlePref;
+	public bool bNotInterferedByStageShot;
 	private Enemy ShootingEnemy;
 
 
 	void OnCollisionEnter2D(Collision2D col){
-		if (col.gameObject.CompareTag ("Block")||
-			col.gameObject.CompareTag("Prisoner")||
-			col.gameObject.CompareTag("Prisoner Paddle")) {
+		if (col.gameObject.GetComponent<BlockOfStage>()||
+			col.gameObject.GetComponent<Prisoner>()||
+			col.gameObject.GetComponent<PlayerPaddle>()) {
+
+			Instantiate(explodeParticlePref, transform.position, Quaternion.identity);
+			Destroy (gameObject);
+		}
+
+		if(col.gameObject.GetComponent<ProjectileBall>()){
+			if(bNotInterferedByStageShot){return;}
+
 			Instantiate(explodeParticlePref, transform.position, Quaternion.identity);
 			Destroy (gameObject);
 		}

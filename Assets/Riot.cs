@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Riot : MonoBehaviour {
 	public int healPowerWhenComeBack ;
+
 	void OnCollisionEnter2D(Collision2D col){
 		if(col.gameObject.GetComponent<BlockOfStage>() || 
 			col.gameObject.GetComponent<Enemy>()){
