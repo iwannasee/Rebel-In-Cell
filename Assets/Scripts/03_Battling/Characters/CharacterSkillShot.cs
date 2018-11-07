@@ -11,6 +11,8 @@ public class CharacterSkillShot : MonoBehaviour {
 
 	public int shotPower;
 	public bool bNotInterferedByStageShot;
+	public bool bRotable;
+	public float rotateSpeed;
 	private Rigidbody2D rg2D;
 
     //---------------------------------------------------------------
@@ -29,6 +31,13 @@ public class CharacterSkillShot : MonoBehaviour {
 		rg2D = this.GetComponent<Rigidbody2D>() ;
 		rg2D.velocity = new Vector2 (shotSpeed * shotDerivingPosition.x,shotSpeed * shotDerivingPosition.y );
 	} 
+	//---------------------------------------------------------------
+	void Update () {
+		if(bRotable){
+			transform.Rotate(Vector3.forward, Time.deltaTime*rotateSpeed);
+		}
+
+	}
 	//---------------------------------------------------------------
 	void OnCollisionEnter2D(Collision2D col){
 		if(skillName == "Riot"){

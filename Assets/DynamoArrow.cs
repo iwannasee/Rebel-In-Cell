@@ -26,8 +26,8 @@ public class DynamoArrow : MonoBehaviour {
 			powerToSet = boost*originPower;
 			GetComponent<RadiantDamage>().SetDamage(powerToSet);
 			Destroy(gameObject);
-		}
-}
+		}	
 	}
+}
 
 

@@ -21,6 +21,7 @@ public class ProjectileBall : MonoBehaviour {
 		limitHit = maxLimitHit;
 		hitInterval = maxHitInterval;
 		limitTimeToHitWall = totalTimeToHitWallInARow;
+		rg2D = this.GetComponent<Rigidbody2D>() ;
 	}
 
 	//---------------------------------------------------------------
@@ -101,8 +102,6 @@ public class ProjectileBall : MonoBehaviour {
 
 	public void PushBall(){
         transform.Rotate(Vector3.forward, Random.Range(0, 360));
-
-		rg2D = this.GetComponent<Rigidbody2D>() ;
 		rg2D.velocity = new Vector2(transform.rotation.w*startForce, transform.rotation.z*startForce);
        
 	}

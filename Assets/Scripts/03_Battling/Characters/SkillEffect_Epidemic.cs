@@ -20,7 +20,8 @@ public class SkillEffect_Epidemic : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.GetComponent<EnemyShot>()){
 			Transform targetEnemy = collider.GetComponent<EnemyShot>().GetShootingEnemy().transform;
-			Instantiate(epidemicInvadePref, targetEnemy.position, Quaternion.identity);
+			GameObject actualDame = Instantiate(epidemicInvadePref, targetEnemy.position, Quaternion.identity);
+			actualDame.GetComponent<RadiantDamage>().SetDamage(GetComponent<SupportSkillShot>().GetShotPower());
 			Destroy(gameObject);
 		}
 	}
