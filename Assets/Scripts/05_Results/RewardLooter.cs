@@ -46,43 +46,44 @@ public class RewardLooter : MonoBehaviour {
 		//If has ever not been looted
 		acquiredGold = reward.GetRewardGold();
 		PlayerProgress.playerData.gold += reward.GetRewardGold();
-		print(reward);
-		print(reward.items);
-		if(reward.items != null){
-			for (int i = 0; i < reward.items.Count; i++){
-				switch (reward.items[i].itemType){
+
+		List<Item> itemsInRewardLoot = reward.GetItemsInReward();
+
+		if(itemsInRewardLoot != null){
+			for (int i = 0; i < itemsInRewardLoot.Count; i++){
+				switch (itemsInRewardLoot[i].itemType){
 					case Item.TYPE.CHARACTER:
-						if(PlayerProgress.playerData.availableCharacters.Contains(reward.items[i].itemName)){
+						if(PlayerProgress.playerData.availableCharacters.Contains(itemsInRewardLoot[i].itemName)){
 							Debug.Log("This character is already in your group. You will receive gold instead.");
-							reward.items[i].isAlreadyInStock = true;
-							PlayerProgress.playerData.gold += reward.items[i].itemValue;
-							alreadyExistItems.Add(reward.items[i]);
-							items.Add(reward.items[i]);
-						}else if(CommonData.charNameList.Contains(reward.items[i].itemName)) {
-							Debug.Log(reward.items[i].itemName + " is found in datatabase");
-							newItems.Add(reward.items[i]);
-							items.Add(reward.items[i]);
-							PlayerProgress.playerData.availableCharacters.Add(reward.items[i].itemName);
+							itemsInRewardLoot[i].isAlreadyInStock = true;
+							PlayerProgress.playerData.gold += itemsInRewardLoot[i].itemValue;
+							alreadyExistItems.Add(itemsInRewardLoot[i]);
+							items.Add(itemsInRewardLoot[i]);
+						}else if(CommonData.charNameList.Contains(itemsInRewardLoot[i].itemName)) {
+							Debug.Log(itemsInRewardLoot[i].itemName + " is found in datatabase");
+							newItems.Add(itemsInRewardLoot[i]);
+							items.Add(itemsInRewardLoot[i]);
+							PlayerProgress.playerData.availableCharacters.Add(itemsInRewardLoot[i].itemName);
 							//Do stuff here
 						}else{
-							Debug.Log("this prisoner name :" + reward.items[i].itemName + " is not existing in the database");
+							Debug.Log("this prisoner name :" + itemsInRewardLoot[i].itemName + " is not existing in the database");
 						}
 						break;
 					case Item.TYPE.VEHICLE:
-						if(PlayerProgress.playerData.availableVehicles.Contains(reward.items[i].itemName)){
+						if(PlayerProgress.playerData.availableVehicles.Contains(itemsInRewardLoot[i].itemName)){
 							Debug.Log("This vehicle is already in your group. You will receive gold instead.");
-							reward.items[i].isAlreadyInStock = true;
-							PlayerProgress.playerData.gold += reward.items[i].itemValue;
-							alreadyExistItems.Add(reward.items[i]);
-							items.Add(reward.items[i]);
-						}else if(CommonData.vehicleList.Contains(reward.items[i].itemName)) {
-							Debug.Log(reward.items[i].itemName + " is found in datatabase");
-							PlayerProgress.playerData.availableVehicles.Add(reward.items[i].itemName);
-							newItems.Add(reward.items[i]);
-							items.Add(reward.items[i]);
+							itemsInRewardLoot[i].isAlreadyInStock = true;
+							PlayerProgress.playerData.gold += itemsInRewardLoot[i].itemValue;
+							alreadyExistItems.Add(itemsInRewardLoot[i]);
+							items.Add(itemsInRewardLoot[i]);
+						}else if(CommonData.vehicleList.Contains(itemsInRewardLoot[i].itemName)) {
+							Debug.Log(itemsInRewardLoot[i].itemName + " is found in datatabase");
+							PlayerProgress.playerData.availableVehicles.Add(itemsInRewardLoot[i].itemName);
+							newItems.Add(itemsInRewardLoot[i]);
+							items.Add(itemsInRewardLoot[i]);
 							//Do stuff here
 						}else{
-							Debug.Log("this vehicle name :" + reward.items[i].itemName + " is not existing in the database");
+							Debug.Log("this vehicle name :" + itemsInRewardLoot[i].itemName + " is not existing in the database");
 						}
 						break;
 					case Item.TYPE.SHOT:
@@ -91,6 +92,8 @@ public class RewardLooter : MonoBehaviour {
 					case Item.TYPE.MAP:
 						break;
 					case Item.TYPE.GOLD:
+						PlayerProgress.playerData.gold += itemsInRewardLoot[i].itemValue;
+						items.Add(itemsInRewardLoot[i]);
 						break;
 					default: break;
 				}

@@ -40,7 +40,12 @@ public class Reward : MonoBehaviour {
 	}
 
 	public void AddToUltimateReward(Item rewardToAdd){
+		print("number of items = " + items.Count + ". " + rewardToAdd.itemName + " has been added to ulti reward.");
 		items.Add(rewardToAdd);
+	}
+
+	public List<Item> GetItemsInReward(){
+		return items;
 	}
 }
 
