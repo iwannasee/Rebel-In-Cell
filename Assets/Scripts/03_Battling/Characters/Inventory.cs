@@ -11,18 +11,16 @@ public class Inventory : MonoBehaviour {
 	public static GameObject[] prisonersToPlay;
 
 	// Update is called once per frame
-	void Update () {
+	void Start () {
 		goldText.text = "Golds: " + stageCollectedCoin;
 	}
 	
-	public void AddCoin(){
-		stageCollectedCoin += GoldCoin.coinValue;
+	public void AddCoin(int goldCoinToAdd){
+		stageCollectedCoin += goldCoinToAdd;
+		goldText.text = "Golds: " + stageCollectedCoin;
 	}
 
-	public int GetCollectedCoin(){
+	public int GetCollectedCoin(){ 
 		return stageCollectedCoin;
-	}
-
-	public static void AddToPrisonersToPlay(GameObject prisoner){
 	}
 }

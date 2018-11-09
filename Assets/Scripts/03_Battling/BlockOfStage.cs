@@ -17,8 +17,14 @@ public class BlockOfStage : MonoBehaviour {
 		//Destroy whole block container if this is the last block
 		Instantiate(DestroyEffectPrefab, transform.position, Quaternion.identity);
 		if(WaveBlockCount<=0){
+			if(GetComponent<ItemDropper>()){
+				GetComponent<ItemDropper>().DropItem();
+			}
 			Destroy(transform.parent.gameObject);
 		}
+		if(GetComponent<ItemDropper>()){
+				GetComponent<ItemDropper>().DropItem();
+			}
 		Destroy(gameObject);
 	}
 }

@@ -6,10 +6,12 @@ public class PlayerPaddle : MonoBehaviour {
 	public float moveSpeed;
 	public bool isPlayWithMouse;
 	public GameObject inventoryGameObj;
+	private Reward rewardToObtain;
 	private Inventory inventory;
 	
 	void Start(){
 		inventory = inventoryGameObj.GetComponent<Inventory>();
+		rewardToObtain = GameObject.FindGameObjectWithTag("Win Lose Condition").GetComponent<WinLoseCondition>().GetRewardWillBeObtained();
 	}
 	//---------------------------------------------------------------
 	void Update () {
@@ -40,8 +42,15 @@ public class PlayerPaddle : MonoBehaviour {
 	//---------------------------------------------------------------
 	void OnTriggerEnter2D(Collider2D col){
 		if (col.gameObject.GetComponent<GoldCoin>()) {
+			int goldCoinVal = col.GetComponent<GoldCoin>().GetGoldCoinValue();
+			inventory.AddCoin(goldCoinVal);
 			col.GetComponent<GoldCoin>().CoinDestroy();
-			inventory.AddCoin();
+		}
+		else if(col.GetComponent<ItemLoot>()){
+			ItemLoot droppedLoot = col.GetComponent<ItemLoot>();
+			Item itemInLoot = droppedLoot.GetDroppedItem();
+			rewardToObtain.AddToUltimateReward(itemInLoot);
+			droppedLoot.ItemLootDestroyed();
 		}
 	}
 }

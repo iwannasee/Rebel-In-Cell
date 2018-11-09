@@ -74,4 +74,8 @@ public class WinLoseCondition : MonoBehaviour {
 	public static bool GetIsGameOver(){
 		return isGameOver;
 	}
+
+	public Reward GetRewardWillBeObtained(){
+		return reward.GetComponent<Reward>();
+	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Reward : MonoBehaviour {
-	public Item[] items;
+	public List<Item> items;
 	public int rewardGold;
 	private bool looted = false;
 	/// <summary>
@@ -33,6 +33,14 @@ public class Reward : MonoBehaviour {
 
 	public void DestroyReward(){
 		DestroyImmediate(gameObject,true);
+	}
+
+	public int GetRewardGold(){
+		return rewardGold;
+	}
+
+	public void AddToUltimateReward(Item rewardToAdd){
+		items.Add(rewardToAdd);
 	}
 }
 

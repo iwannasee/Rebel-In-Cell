@@ -38,18 +38,18 @@ public class RewardLooter : MonoBehaviour {
 		//if you won, then check whether it has been looted or not
 		if(reward.GetHadLooted()){
 			Debug.LogError("You completed this map before. Only gold could be collected");
-			acquiredGold = reward.rewardGold;
+			acquiredGold = reward.GetRewardGold();
 			PlayerProgress.playerData.gold += acquiredGold;
 			return;
 		}
 
 		//If has ever not been looted
-		acquiredGold = reward.rewardGold;
-		PlayerProgress.playerData.gold += reward.rewardGold;
+		acquiredGold = reward.GetRewardGold();
+		PlayerProgress.playerData.gold += reward.GetRewardGold();
 		print(reward);
 		print(reward.items);
 		if(reward.items != null){
-			for (int i = 0; i < reward.items.Length; i++){
+			for (int i = 0; i < reward.items.Count; i++){
 				switch (reward.items[i].itemType){
 					case Item.TYPE.CHARACTER:
 						if(PlayerProgress.playerData.availableCharacters.Contains(reward.items[i].itemName)){
@@ -86,6 +86,7 @@ public class RewardLooter : MonoBehaviour {
 						}
 						break;
 					case Item.TYPE.SHOT:
+
 						break;
 					case Item.TYPE.MAP:
 						break;

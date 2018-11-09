@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GoldCoin : MonoBehaviour {
-	public const int coinValue = 5;
+	public int coinValue;
 	public float fallingSpeed;
 
 	void Update(){
@@ -12,5 +12,9 @@ public class GoldCoin : MonoBehaviour {
 
 	public void CoinDestroy(){
 		Destroy(gameObject);
+	}
+
+	public int GetGoldCoinValue(){
+		return coinValue;
 	}
 }

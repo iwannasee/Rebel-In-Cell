@@ -4,6 +4,7 @@ using UnityEngine;
  
 [System.Serializable]
 public class Item{
+	public int dropDate;
 	public string itemName;
 	public Sprite itemImg;
 	public int itemValue;
