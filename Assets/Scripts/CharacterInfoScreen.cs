@@ -9,8 +9,13 @@ public class CharacterInfoScreen : MonoBehaviour {
 	public Image skillImage;
 	public Image equipmentImage;
 	public Text charInfoText;
+	public Text goldText;
 
 	private string charName;
+
+	void Start(){
+		goldText.text = PlayerProgress.playerData.gold.ToString();
+	}
 
 	public void SetSelectedCharToInfoScrn(GameObject charPrefToSetInfo, Sprite charSprtToSet, string charInfoToShow){
 		if(!charPrefToSetInfo.GetComponent<Prisoner>()){

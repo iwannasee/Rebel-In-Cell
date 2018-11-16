@@ -36,12 +36,12 @@ public class RewardLooter : MonoBehaviour {
 			return;
 		}
 		//if you won, then check whether it has been looted or not
-		if(reward.GetHadLooted()){
+		/*if(reward.GetHadLooted()){
 			Debug.LogError("You completed this map before. Only gold could be collected");
 			acquiredGold = reward.GetRewardGold();
 			PlayerProgress.playerData.gold += acquiredGold;
 			return;
-		}
+		}*/
 
 		//If has ever not been looted
 		acquiredGold = reward.GetRewardGold();
@@ -50,7 +50,15 @@ public class RewardLooter : MonoBehaviour {
 		List<Item> itemsInRewardLoot = reward.GetItemsInReward();
 
 		if(itemsInRewardLoot != null){
+			
 			for (int i = 0; i < itemsInRewardLoot.Count; i++){
+				if(reward.GetHadLooted() && itemsInRewardLoot[i].isStageItem){
+					Debug.LogError("this item is stage item. As you completed this map before, Only gold could be collected");
+					acquiredGold = reward.GetRewardGold();
+					PlayerProgress.playerData.gold += acquiredGold;
+					continue;
+				}
+
 				switch (itemsInRewardLoot[i].itemType){
 					case Item.TYPE.CHARACTER:
 						if(PlayerProgress.playerData.availableCharacters.Contains(itemsInRewardLoot[i].itemName)){
@@ -92,8 +100,10 @@ public class RewardLooter : MonoBehaviour {
 					case Item.TYPE.MAP:
 						break;
 					case Item.TYPE.GOLD:
+						Debug.Log("this item is gold.");
 						PlayerProgress.playerData.gold += itemsInRewardLoot[i].itemValue;
 						items.Add(itemsInRewardLoot[i]);
+					Debug.Log("there are" + items.Count + "items in total");
 						break;
 					default: break;
 				}

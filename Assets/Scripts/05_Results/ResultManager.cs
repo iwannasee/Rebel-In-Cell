@@ -36,9 +36,6 @@ public class ResultManager : MonoBehaviour {
 
 
 		itemNumber =  collectedItems.Count;
-		print("there are " + itemNumber + " collected");
-
-
 	}
 	
 	// Update is called once per frame
@@ -54,7 +51,7 @@ public class ResultManager : MonoBehaviour {
 
 				//get the sprite part
 				Transform itemImgObj = displayingItem.GetChild(0);
-				if(!item.isAlreadyInStock){
+				if((item.itemType != Item.TYPE.GOLD) && !item.isAlreadyInStock){
 					itemImgObj.GetComponent<Image>().sprite = item.itemImg;
 				}else{
 					itemImgObj.GetComponent<Image>().sprite = goldSprtForReplace;

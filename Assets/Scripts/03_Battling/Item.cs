@@ -17,6 +17,7 @@ public class Item{
 	};
 	public TYPE itemType;
 	public bool isAlreadyInStock;
+	public bool isStageItem;
 }
 
 

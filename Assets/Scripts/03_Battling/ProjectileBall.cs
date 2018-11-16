@@ -102,8 +102,9 @@ public class ProjectileBall : MonoBehaviour {
 
 	public void PushBall(){
         transform.Rotate(Vector3.forward, Random.Range(0, 360));
-		rg2D.velocity = new Vector2(transform.rotation.w*startForce, transform.rotation.z*startForce);
-       
+		if(rg2D){
+			rg2D.velocity = new Vector2(transform.rotation.w*startForce, transform.rotation.z*startForce);
+       	}
 	}
 
 	private void ResetTimeHitWallInARow(){
