@@ -77,6 +77,9 @@ public class ShootingSkill : MonoBehaviour {
 		}
 
 		skillCoolDownTime = maxCoolDownTime;
+		//Hide shootable notification
+		ToggleShootableNotif(false);
+
 		needleAdjustTime = maxAdjustTime;
 
 		//Init no prisoner use skill
@@ -105,6 +108,9 @@ public class ShootingSkill : MonoBehaviour {
 			if(skillCoolDownTime <= 0){
 				if(bIsAutoSkill){
 					CastAutoPlaySkill();
+				}else{
+					//Display shootable notification
+					ToggleShootableNotif(true);
 				}
 			}
 		}
@@ -206,7 +212,11 @@ public class ShootingSkill : MonoBehaviour {
 
     }
 
-
+    private void ToggleShootableNotif(bool isEnabled){
+		//Get notif gameobject
+		Transform notif = transform.GetChild(1);
+		notif.gameObject.SetActive(isEnabled);
+    }
     //---------------------------------------------------------------
     private void DelayAfterOtherPrisonerShot ()
 	{
@@ -219,6 +229,8 @@ public class ShootingSkill : MonoBehaviour {
 
 		if(skillCoolDownTime > maxCoolDownTime){
 			skillCoolDownTime = maxCoolDownTime;
+			//Hide shootable notification
+			ToggleShootableNotif(false);
 		}
 	} 
 	//---------------------------------------------------------------
@@ -245,6 +257,8 @@ public class ShootingSkill : MonoBehaviour {
 		}
 		//reset cooldown for limitting use of skill
 		skillCoolDownTime = maxCoolDownTime;
+		//Hide shootable notification
+		ToggleShootableNotif(false);
 		bIsSkillUsedThisCharge = true;
 		Destroy (GameObject.FindObjectOfType<GaugeMeter> ().gameObject);
 	}
@@ -381,6 +395,8 @@ public class ShootingSkill : MonoBehaviour {
 		}
 
 		skillCoolDownTime = maxCoolDownTime;
+		//Hide shootable notification
+		ToggleShootableNotif(false);
 
 	}
 
@@ -637,5 +653,5 @@ public class ShootingSkill : MonoBehaviour {
         }
 	} 
 
- 
+ 	
 }
