@@ -8,6 +8,7 @@ public class CharacterSkillShot : MonoBehaviour {
 	public float shotSpeed;
 	public float coolDownSpeed;
 	public string skillName;
+	public string skillDetail;
 
 	public int shotPower;
 	public bool bNotInterferedByStageShot;
@@ -74,6 +75,10 @@ public class CharacterSkillShot : MonoBehaviour {
 	//---------------------------------------------------------------
 	public string GetShotSkillName(){
 		return skillName;
+	}
+
+	public string GetShotDetail(){
+		return skillDetail;
 	}
 	//---------------------------------------------------------------
 	public void ConvertPowerToDamage(int powerToConvert){

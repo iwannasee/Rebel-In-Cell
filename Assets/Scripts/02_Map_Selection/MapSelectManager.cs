@@ -15,8 +15,10 @@ public class MapSelectManager : MonoBehaviour {
 	public GameObject goBtn;
 	public GameObject charSelectGameObj;
 	public GameObject mapSelectGameObj;
+	public Button backToMapSelectButton;
 	private bool isFirstDisplay = true;
 	private string selectedMap;
+
 	void Start(){
 		HideInputPanel ();
 		HideSearchPanel ();
@@ -131,5 +133,11 @@ public class MapSelectManager : MonoBehaviour {
 
 	public string GetSelectedMap(){
 		return selectedMap;
+	}
+
+	public void ChangeToMapSelect(){
+		mapSelectGameObj.SetActive(true);
+		charSelectGameObj.SetActive(false);
+		HideGoButton();
 	}
 }

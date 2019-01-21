@@ -8,6 +8,7 @@ public class SupportSkillShot : MonoBehaviour {
 	public Sprite shotSprtIcon; 
 	public float coolDownSpeed;
 	public string skillName;
+	public string skillDetail;
 	public bool bIsAutoSkill;
 	 
 	public int shotPower;
@@ -19,6 +20,10 @@ public class SupportSkillShot : MonoBehaviour {
 
 	public string GetShotSkillName(){
 		return skillName;
+	}
+
+	public string GetShotDetail(){
+		return skillDetail;
 	}
 
 	public int GetShotPower(){

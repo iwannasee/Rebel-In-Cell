@@ -163,7 +163,8 @@ public class ShootingSkill : MonoBehaviour {
 		if(Prisoner.GetIsCastingSkill() || 
 		//Or the stage is clear
 			(UITextController.GetUITextStatusType()== UITextController.DISPLAY_TEXT.CLEAR)||
-			(UITextController.GetUITextStatusType()== UITextController.DISPLAY_TEXT.LOSE)){
+			(UITextController.GetUITextStatusType()== UITextController.DISPLAY_TEXT.LOSE) ||
+			UITextController.GetUITextStatusType() == UITextController.DISPLAY_TEXT.WAVE){
 			return;
 		}
 		if (skillCoolDownTime <= 0 && (Time.timeScale == 1)) {
