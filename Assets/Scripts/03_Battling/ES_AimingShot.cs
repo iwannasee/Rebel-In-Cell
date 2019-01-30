@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ES_AimingShot : MonoBehaviour {
+	public int numberOfShotsPerLaunch;
+	public float maxBulletInterval;
 	public float shotSpeed;
-    public float shotPower;
+	[Tooltip("this property is not implemented yet")]
+    public int shotPower; //TODO this property is not implemented yet
 	public float randomCoolDownTweak;
 	public float maxCoolDownTime;
+	public GameObject enemyShot;
+	public GameObject ShootSpawner;
+
+	private Vector3 shotTarget;
+	private float actualRandomCoolDown;
+	private float intervalPerBullets;
+	private int bulletCount;
 	private float shotCoolDownTime;
 	private GameObject enemyShotContainer;
 	private GameObject[] Prisoners;
-	public GameObject enemyShot;
-	public GameObject ShootSpawner;
-	private Vector3 shotTarget;
-	private float actualRandomCoolDown;
 
 
 	// Use this for initialization
@@ -24,7 +30,6 @@ public class ES_AimingShot : MonoBehaviour {
 		if(!GameObject.Find("Enemy Shot Container")){
 			enemyShotContainer = new GameObject("Enemy Shot Container");
 			enemyShotContainer.AddComponent<ClearUpChidren>();
-
 		}else{
 			enemyShotContainer = GameObject.Find("Enemy Shot Container");
 		}
@@ -37,9 +42,25 @@ public class ES_AimingShot : MonoBehaviour {
 		if(EnemyWaveController.GetWaveHasStarted()){
 			shotCoolDownTime -= Time.deltaTime;
 			if(shotCoolDownTime<= 0f && !Prisoner.GetAllPrisonerDead()){
-				Fire();
-				actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
-				shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
+				if(numberOfShotsPerLaunch <= 1){
+					Fire();
+					actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
+					shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
+				}else if(numberOfShotsPerLaunch >1){
+					if(bulletCount >= numberOfShotsPerLaunch){
+						actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
+						shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
+						bulletCount = 0;
+						return;
+					}
+
+					intervalPerBullets -= Time.deltaTime;
+					if(intervalPerBullets <= 0){
+						Fire();
+						bulletCount++;
+						intervalPerBullets = maxBulletInterval;
+					}
+				}
 			}	
 		}
 	}
@@ -53,8 +74,15 @@ public class ES_AimingShot : MonoBehaviour {
 			Debug.Log("prisoners are not found. now refind the prisoners");
 			Prisoners = GameObject.FindGameObjectsWithTag("Prisoner");
 		}
+
+
+
 		//Generate a Shot
 		GameObject shot = Instantiate (enemyShot, ShootSpawner.transform.position, Quaternion.identity) as GameObject;
+		if(shot.GetComponent<RadiantDamage>()){
+			shot.GetComponent<RadiantDamage>().SetDamage(shotPower);
+		}
+
 		shot.transform.parent = enemyShotContainer.transform;
 		shot.GetComponent<EnemyShot>().SetTheEnemyWhoShot(this.GetComponent<Enemy>());
 		//Get a random target for the shot

@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class DecreaseHealthOverTime : MonoBehaviour {
 
-	public int decreasingTimes;
 	public float maxTimeToDecrease;
-
 	private float timeToDecrease;
 	private int healthDecreasedPerTime;
 	private Health healthOfPoisonedObj;
-
+	private int decreasingTimes;
 	// Use this for initialization
 	void Start () {
 		healthOfPoisonedObj = transform.parent.GetComponent<Health>();
@@ -34,7 +32,7 @@ public class DecreaseHealthOverTime : MonoBehaviour {
 		healthDecreasedPerTime = decreaseRate;
 	}
 
-	public int GetHealthDecreasingTimes(){
-		return decreasingTimes;
+	public void SetHealthDecreaseTime(int timesToSet){
+		decreasingTimes = timesToSet;
 	}
 }

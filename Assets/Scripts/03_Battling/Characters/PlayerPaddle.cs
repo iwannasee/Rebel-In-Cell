@@ -8,14 +8,25 @@ public class PlayerPaddle : MonoBehaviour {
 	public GameObject inventoryGameObj;
 	private Reward rewardToObtain;
 	private Inventory inventory;
-	
+	private bool bIsConfused = false;
+	private float confusionTime;
+	private int paddleDirection = 1;
+
 	void Start(){
 		inventory = inventoryGameObj.GetComponent<Inventory>();
 		rewardToObtain = GameObject.FindGameObjectWithTag("Win Lose Condition").GetComponent<WinLoseCondition>().GetRewardWillBeObtained();
 	}
 	//---------------------------------------------------------------
 	void Update () {
-	
+		if(bIsConfused){
+			confusionTime -= Time.deltaTime;
+			paddleDirection = -1;
+			if(confusionTime <= 0){
+				GetComponent<SpriteRenderer>().color = Color.white;
+				paddleDirection = 1;
+				bIsConfused = false;
+			}
+		}
 	//Can control paddle if game is not paused by skill shooting
 		if (!Prisoner.GetIsCastingSkill()
 		&& (Time.timeScale == 1)) {
@@ -35,7 +46,7 @@ public class PlayerPaddle : MonoBehaviour {
 	//---------------------------------------------------------------
 	void PlayWithMouse(){
 		float MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
-		Vector3 paddleShieldPos = new Vector3 (Mathf.Clamp (MousePos, -2.65f, 2.65f), this.transform.position.y, 0f);
+		Vector3 paddleShieldPos = new Vector3 (Mathf.Clamp (paddleDirection*MousePos, -2.65f, 2.65f), this.transform.position.y, 0f);
 		this.transform.position = paddleShieldPos;
 	}
 
@@ -52,5 +63,11 @@ public class PlayerPaddle : MonoBehaviour {
 			rewardToObtain.AddToUltimateReward(itemInLoot);
 			droppedLoot.ItemLootDestroyed();
 		}
+	}
+
+	public void SetBeingConfused(float timeBeingConfused){
+		bIsConfused = true;
+		confusionTime = timeBeingConfused;
+		GetComponent<SpriteRenderer>().color = Color.blue;
 	}
 }
