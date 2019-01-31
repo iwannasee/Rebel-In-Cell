@@ -21,6 +21,9 @@ public class ES_AimingShot : MonoBehaviour {
 	private GameObject enemyShotContainer;
 	private GameObject[] Prisoners;
 
+	public bool bIsStraightShot = false;
+	public bool bCanGenerateOtherShot = false;
+	private float randomTimeShotExplode;
 
 	// Use this for initialization
 	void Start () {
@@ -35,13 +38,44 @@ public class ES_AimingShot : MonoBehaviour {
 		}
 
 		Prisoners = GameObject.FindGameObjectsWithTag("Prisoner");
+
+		if(GetComponent<EnemyShot>() && bCanGenerateOtherShot){
+			ShootSpawner = this.gameObject;
+			randomTimeShotExplode = Random.Range(0.8f,1.8f);
+		}
 	}
-	
+		
 	// Update is called once per frame
 	void Update () {
+		//If the aiming shot is launched from straight shot
+		if(GetComponent<EnemyShot>() && bCanGenerateOtherShot){
+			randomTimeShotExplode -= Time.deltaTime;
+			if(randomTimeShotExplode <= 0){
+				Fire();
+
+				//TODO add explosion effect
+				GameObject explodeEffect = GetComponent<EnemyShot>().explodeParticlePref;
+				Instantiate(explodeEffect, transform.position, Quaternion.identity);
+				Destroy(gameObject);
+			}
+			return;
+		}
+
+		//If the aiming shot is launched from enemy
 		if(EnemyWaveController.GetWaveHasStarted()){
 			shotCoolDownTime -= Time.deltaTime;
 			if(shotCoolDownTime<= 0f && !Prisoner.GetAllPrisonerDead()){
+				if(GetComponent<EnemyHealingSkill>() && (bulletCount <= 0)){
+					
+					float randomToss = Random.value;
+					if(randomToss >5){
+						GetComponent<EnemyHealingSkill>().Heal(shotPower);
+						actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
+						shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
+						return;
+					}
+				}
+				
 				if(numberOfShotsPerLaunch <= 1){
 					Fire();
 					actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
@@ -70,13 +104,6 @@ public class ES_AimingShot : MonoBehaviour {
 			return;
 		}
 
-		if(Prisoners.Length<=0){
-			Debug.Log("prisoners are not found. now refind the prisoners");
-			Prisoners = GameObject.FindGameObjectsWithTag("Prisoner");
-		}
-
-
-
 		//Generate a Shot
 		GameObject shot = Instantiate (enemyShot, ShootSpawner.transform.position, Quaternion.identity) as GameObject;
 		if(shot.GetComponent<RadiantDamage>()){
@@ -85,10 +112,22 @@ public class ES_AimingShot : MonoBehaviour {
 
 		shot.transform.parent = enemyShotContainer.transform;
 		shot.GetComponent<EnemyShot>().SetTheEnemyWhoShot(this.GetComponent<Enemy>());
-		//Get a random target for the shot
 
-		int rdNum = Random.Range (0, Prisoners.Length);
 		Rigidbody2D shotRgBody = shot.GetComponent<Rigidbody2D> ();
+
+		if(bIsStraightShot){
+			//Actual Shot
+			shotRgBody.velocity = Vector3.down * shotSpeed;
+			return;
+		}
+
+		if(Prisoners.Length<=0){
+			Debug.Log("prisoners are not found. now refind the prisoners");
+			Prisoners = GameObject.FindGameObjectsWithTag("Prisoner");
+		}
+
+		//Get a random target for the shot
+		int rdNum = Random.Range (0, Prisoners.Length);
 		//Set the direction to aim the shot
 		if(Prisoners.Length > 0){
 			Vector3 dir = (Prisoners [rdNum].transform.position - transform.position).normalized;

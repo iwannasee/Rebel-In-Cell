@@ -138,7 +138,11 @@ public class Health : MonoBehaviour {
             if(spriteIndex == heathStatusSprites.Length){
                 spriteIndex -= 1;
             }
-            spriteRenderer.sprite = heathStatusSprites[spriteIndex];
+            if(spriteIndex < heathStatusSprites.Length){
+           		spriteRenderer.sprite = heathStatusSprites[spriteIndex];
+            }else{
+            	Debug.Log("number of sprite of prisoner is not fit the divided health");
+            }
             
 		}else{
 			Debug.Log("Warning! the health point of " + this.gameObject.name + " is not set properly. Resulting in sprite reset after hit cannot be done");
