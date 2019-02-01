@@ -63,7 +63,6 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
 	public Transform mapList;
 
 	private bool maptileSetUpEnd = false;
-
     //------------------------------------------------------------------------
     void Start() {
 		_scrollRectComponent = GetComponent<ScrollRect>();
@@ -370,7 +369,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         }
         _dragging = false;
 
-
+      
         worldMapGameObject.GetComponent<WorldMap>().ShowCorrespondIndicator();
 		string locationName = _container.GetChild(_currentPage).GetComponent<MapTile>().GetMapName();
 		Debug.Log("current map is : " + locationName);		
@@ -385,6 +384,7 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
             _timeStamp = Time.unscaledTime;
             // save current position of cointainer
             _startPosition = _container.anchoredPosition;
+
         } else {
             if (_showPageSelection) {
                 SetPageSelection(GetNearestPage());
@@ -413,4 +413,5 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
 		return maptileSetUpEnd;
     }
 	//------------------------------------------------------------------------
+
 }

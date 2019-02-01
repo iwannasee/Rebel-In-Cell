@@ -14,7 +14,7 @@ public class Health : MonoBehaviour {
 
 	public AudioClip hitClip;
     public AudioClip dieClip;
-
+    public GameObject DieEffectPrefab;
 	public float maxHitImgInterval = 0.2f;
 
 	private float hitImgInterval;
@@ -61,6 +61,8 @@ public class Health : MonoBehaviour {
 				health = health - inflictedDamage;
 				print("health :" + health);
 				if(health <= 0){
+					Instantiate(DieEffectPrefab, transform.position, Quaternion.identity);
+
 					if(GetComponent<BlockOfStage>()){
 						GetComponent<BlockOfStage>().BlockDestroy();
 						return;
@@ -87,12 +89,7 @@ public class Health : MonoBehaviour {
 			RadiantDamage radiantDamage = collidingObject.GetComponent<RadiantDamage>();
 			int inflictedDamage = radiantDamage.GetDamage();
 			health = health - inflictedDamage;
-
-			
-
 			CheckLife ();
-
-
 		}
 	}
 	//---------------------------------------------------------------
@@ -171,11 +168,14 @@ public class Health : MonoBehaviour {
 			}
 			//if this health is of block
 			if (GetComponent<BlockOfStage> ()) {
+				Instantiate(DieEffectPrefab, transform.position, Quaternion.identity);
 				GetComponent<BlockOfStage> ().BlockDestroy ();
+
 				return;
 			}
 			//if this health is of enemy
 			if (GetComponent<Enemy> ()) {
+				Instantiate(DieEffectPrefab, transform.position, Quaternion.identity);
 				GetComponent<Enemy> ().EnemyDestroy ();
 				return;
 			}

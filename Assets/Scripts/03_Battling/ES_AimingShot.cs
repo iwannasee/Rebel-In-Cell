@@ -23,7 +23,17 @@ public class ES_AimingShot : MonoBehaviour {
 
 	public bool bIsStraightShot = false;
 	public bool bCanGenerateOtherShot = false;
+	public bool bCannotAttack = false;
+	public bool bLookAtTargetWhileShooting = false;
 	private float randomTimeShotExplode;
+	public float delayForGenerateOtherShot;
+
+	enum PLAYABLE_SKILL{
+		FIRE,
+		HEAL,
+		BOMBBARD,
+		NO_SKILL
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -41,7 +51,11 @@ public class ES_AimingShot : MonoBehaviour {
 
 		if(GetComponent<EnemyShot>() && bCanGenerateOtherShot){
 			ShootSpawner = this.gameObject;
-			randomTimeShotExplode = Random.Range(0.8f,1.8f);
+			if(delayForGenerateOtherShot <= 0){
+				randomTimeShotExplode = Random.Range(0.8f,1.8f);
+			}else{
+				randomTimeShotExplode = delayForGenerateOtherShot;
+			}
 		}
 	}
 		
@@ -65,43 +79,95 @@ public class ES_AimingShot : MonoBehaviour {
 		if(EnemyWaveController.GetWaveHasStarted()){
 			shotCoolDownTime -= Time.deltaTime;
 			if(shotCoolDownTime<= 0f && !Prisoner.GetAllPrisonerDead()){
-				if(GetComponent<EnemyHealingSkill>() && (bulletCount <= 0)){
-					
-					float randomToss = Random.value;
-					if(randomToss >5){
+				PLAYABLE_SKILL skillToPlayThisTurn;
+
+				if(bulletCount > 0){
+					skillToPlayThisTurn = PLAYABLE_SKILL.FIRE;
+				}else{
+					skillToPlayThisTurn = GetPlaySkills();
+				}
+
+				switch(skillToPlayThisTurn){
+
+					case PLAYABLE_SKILL.FIRE:
+						if(numberOfShotsPerLaunch <= 1){
+							Fire();
+
+							actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
+							shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
+						}else if(numberOfShotsPerLaunch >1){
+
+							if(bulletCount >= numberOfShotsPerLaunch){
+								actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
+								shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
+								bulletCount = 0;
+								break; //TODO check this 
+							}
+
+							intervalPerBullets -= Time.deltaTime;
+							if(intervalPerBullets <= 0){
+								Fire();
+								bulletCount++;
+								intervalPerBullets = maxBulletInterval;
+							}
+						}
+						break;
+
+					case PLAYABLE_SKILL.HEAL:
 						GetComponent<EnemyHealingSkill>().Heal(shotPower);
 						actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
 						shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
-						return;
-					}
-				}
-				
-				if(numberOfShotsPerLaunch <= 1){
-					Fire();
-					actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
-					shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
-				}else if(numberOfShotsPerLaunch >1){
-					if(bulletCount >= numberOfShotsPerLaunch){
-						actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
-						shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown;
-						bulletCount = 0;
-						return;
-					}
+						break;
 
-					intervalPerBullets -= Time.deltaTime;
-					if(intervalPerBullets <= 0){
-						Fire();
-						bulletCount++;
-						intervalPerBullets = maxBulletInterval;
+					case PLAYABLE_SKILL.BOMBBARD:
+						GetComponent<EnemyBombardSkill>().Bombbard();
+						actualRandomCoolDown = Random.Range(0f, randomCoolDownTweak);
+						shotCoolDownTime = maxCoolDownTime + actualRandomCoolDown + 5;
+						break;
+
+					default:
+						break;
 					}
-				}
 			}	
 		}
+	}
+
+	PLAYABLE_SKILL GetPlaySkills(){
+		List <PLAYABLE_SKILL> playableSkills = new List<PLAYABLE_SKILL>();
+
+		if(GetComponent<EnemyBombardSkill>() != null){
+			playableSkills.Add(PLAYABLE_SKILL.BOMBBARD);
+		}
+		if(GetComponent<EnemyHealingSkill>() != null){
+			playableSkills.Add(PLAYABLE_SKILL.HEAL);
+		}
+		if(!bCannotAttack){
+			playableSkills.Add(PLAYABLE_SKILL.FIRE);
+		}
+		if(playableSkills.Count <= 0){
+			return PLAYABLE_SKILL.NO_SKILL;
+		}
+		return playableSkills[Random.Range(0, playableSkills.Count)];
 	}
 
 	void Fire(){
 		if (!enemyShotContainer) {
 			return;
+		}
+		//Guard code
+		if(Prisoners.Length<=0){
+			Debug.Log("prisoners are not found. now refind the prisoners");
+			Prisoners = GameObject.FindGameObjectsWithTag("Prisoner");
+		}
+		//Get a random number to select a prisoner target
+		int rdNum = Random.Range (0, Prisoners.Length);
+
+		if(bLookAtTargetWhileShooting){
+			//If this enemy lock focus on prisoner while shooting
+			//transform.rotation = Quaternion.LookRotation(Vector3.zero,Vector3.zero);
+			Vector3 difference = Prisoners[rdNum].transform.position - transform.position;
+			float rotationZ = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90 + rotationZ);
 		}
 
 		//Generate a Shot
@@ -121,13 +187,6 @@ public class ES_AimingShot : MonoBehaviour {
 			return;
 		}
 
-		if(Prisoners.Length<=0){
-			Debug.Log("prisoners are not found. now refind the prisoners");
-			Prisoners = GameObject.FindGameObjectsWithTag("Prisoner");
-		}
-
-		//Get a random target for the shot
-		int rdNum = Random.Range (0, Prisoners.Length);
 		//Set the direction to aim the shot
 		if(Prisoners.Length > 0){
 			Vector3 dir = (Prisoners [rdNum].transform.position - transform.position).normalized;

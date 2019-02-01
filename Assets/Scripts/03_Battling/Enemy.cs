@@ -5,6 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
 	private int enemyCount;
 	private int lostHeathToChangeSprite;
+	private float stampScale = 1;
+	private bool isDead = false;
 	//---------------------------------------------------------------
 	public void EnemyDestroy(){
 		enemyCount = GameObject.FindGameObjectsWithTag ("Enemy").Length;
@@ -12,8 +14,6 @@ public class Enemy : MonoBehaviour {
 		//EXTENDABLE if this wave have Enemy regen, check the isRegen bool of Enemy container 
 		//Destroy whole Enemy container if this is the last Enemy
 		if(enemyCount<=0){
-			GameObject waveController = GameObject.FindGameObjectWithTag("Wave Controller");
-			waveController.GetComponent<EnemyWaveController>().ClearPresentWave();
 			if(GetComponent<ItemDropper>()){
 				GetComponent<ItemDropper>().DropItem();
 			}
@@ -22,9 +22,21 @@ public class Enemy : MonoBehaviour {
 		if(GetComponent<ItemDropper>()){
 			GetComponent<ItemDropper>().DropItem();
 		}
-		Destroy(gameObject);
+		isDead = true;
+
 	}
 	//---------------------------------------------------------------
 
+	void Update(){
+		if(isDead){
+			stampScale -= Time.deltaTime;
+			transform.localScale = new Vector3(stampScale,1,1);
+			if(stampScale <= 0){
+				Destroy(gameObject);
+				GameObject waveController = GameObject.FindGameObjectWithTag("Wave Controller");
+				waveController.GetComponent<EnemyWaveController>().ClearPresentWave();
+			}
+		}
+	}
 
 }

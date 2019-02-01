@@ -11,7 +11,7 @@ public class WorldMap : MonoBehaviour {
 
 	private ScrollSnapRect scrollSnapRect;
 	private Quaternion originRotation = Quaternion.Euler(0,0,0);
-
+	private bool bIsOnTarget = false;
 	public string[] dotLocationNames;
 	//---------------------------------------------------------------
 	// Use this for initialization
@@ -31,21 +31,33 @@ public class WorldMap : MonoBehaviour {
 		}
 
 		originRotation = transform.rotation;
-		ShowCorrespondIndicator();
+		//ShowCorrespondIndicator();
 		mapPanel.SetActive(false);
 
 	}
 	//---------------------------------------------------------------
 	// Update is called once per frame 
 	void Update () {
-		//rotate map when no panel displayed
+		//Stop rotate map when map panel display and rotation is different from original rot
 		if ((mapPanel.activeInHierarchy == true) && (transform.rotation != originRotation)) {
+			if(!bIsOnTarget){
+					ShowCorrespondIndicator ();
+			}
+			//If the rotation of the map back nearly to the original rotation( within a threshold)
+			if(transform.rotation.eulerAngles.z <= 0.3f){
+				bIsOnTarget = true; // state that the indicator now is indicating
+				return;
+			}
+			//If not, continue rotate map back to the original rot
 			transform.rotation = Quaternion.Slerp (transform.rotation, originRotation, Time.deltaTime*mapRotateBackSpeed);
-			ShowCorrespondIndicator ();
 			return;
-		} else if (!mapPanel.activeInHierarchy && targetIndicatorPref) {
+
+		// rotate map when no panel displayed 
+		} else if ((mapPanel.activeInHierarchy == false) && targetIndicatorPref) {
+			bIsOnTarget = false;
 			targetIndicatorPref.SetActive (false);
 		}
+
 		RotateOverTime();
 	}
 	
@@ -58,7 +70,7 @@ public class WorldMap : MonoBehaviour {
 	public void ShowCorrespondIndicator(){
 		if(scrollSnapRect.GetMapSetUpEnd() ){
 			targetIndicatorPref.SetActive(false);
-			//TODO add condition to prevent this for loop run in update()
+
 			string currentMapName = scrollSnapRect.GetCurrentMapName();
 			for(int dotNameIndex = 0; dotNameIndex < dotLocationNames.Length; dotNameIndex++){
 				if(dotLocationNames[dotNameIndex] == currentMapName){

@@ -6,7 +6,6 @@ public class BlockOfStage : MonoBehaviour {
 
 	private int WaveBlockCount;
 	private GameObject ItemContainer;
-	public GameObject DestroyEffectPrefab;
 
 	//---------------------------------------------------------------
 	public void BlockDestroy(){
@@ -15,7 +14,7 @@ public class BlockOfStage : MonoBehaviour {
 		WaveBlockCount--;
 		//EXTENDABLE if this wave have block regen, check the isRegen bool of block container 
 		//Destroy whole block container if this is the last block
-		Instantiate(DestroyEffectPrefab, transform.position, Quaternion.identity);
+
 		if(WaveBlockCount<=0){
 			if(GetComponent<ItemDropper>()){
 				GetComponent<ItemDropper>().DropItem();
