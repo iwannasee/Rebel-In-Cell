@@ -11,6 +11,8 @@ public class PlayerPaddle : MonoBehaviour {
 	private bool bIsConfused = false;
 	private float confusionTime;
 	private int paddleDirection = 1;
+	private bool bCanMove = true;
+	private float freezedTime;
 
 	void Start(){
 		inventory = inventoryGameObj.GetComponent<Inventory>();
@@ -18,6 +20,16 @@ public class PlayerPaddle : MonoBehaviour {
 	}
 	//---------------------------------------------------------------
 	void Update () {
+		if(!bCanMove){
+			print("freezed now");
+			freezedTime -= Time.deltaTime;
+			if(freezedTime <= 0){
+				GetComponent<SpriteRenderer>().color = Color.white;
+				bCanMove = true;
+			}
+			return;
+		}
+
 		if(bIsConfused){
 			confusionTime -= Time.deltaTime;
 			paddleDirection = -1;
@@ -28,8 +40,8 @@ public class PlayerPaddle : MonoBehaviour {
 			}
 		}
 	//Can control paddle if game is not paused by skill shooting
-		if (!Prisoner.GetIsCastingSkill()
-		&& (Time.timeScale == 1)) {
+		if (!Prisoner.GetIsCastingSkill() &&
+			 (Time.timeScale == 1)) {
 			if(isPlayWithMouse){
 				PlayWithMouse ();
 			}else{
@@ -68,6 +80,13 @@ public class PlayerPaddle : MonoBehaviour {
 	public void SetBeingConfused(float timeBeingConfused){
 		bIsConfused = true;
 		confusionTime = timeBeingConfused;
+		GetComponent<SpriteRenderer>().color = Color.black;
+	}
+
+	public void SetCannotMove(float timeBeingFreezed){
+		print("freezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+		bCanMove = false;
+		freezedTime = timeBeingFreezed;
 		GetComponent<SpriteRenderer>().color = Color.blue;
 	}
 }

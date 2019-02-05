@@ -29,7 +29,7 @@ public class SaveLoadSystem : MonoBehaviour  {
 			loadedData.presentWorld = 0;
 			loadedData.maxReachableWorld = 1;
 			loadedData.availableMaps = new List<string>();
-			loadedData.availableMaps.Add("Bat Cave");
+			loadedData.availableMaps.Add(MapDictionary.mapOfWorld_0[0]);
 			loadedData.completedMaps = new List<string>();
 
 			loadedData.availableCharacters = new List<string>();

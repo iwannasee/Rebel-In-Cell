@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour {
 	private bool isDead = false;
 	//---------------------------------------------------------------
 	public void EnemyDestroy(){
-		enemyCount = GameObject.FindGameObjectsWithTag ("Enemy").Length;
+		enemyCount = transform.parent.GetComponentsInChildren<Enemy>().Length;
 		enemyCount--;
 		//EXTENDABLE if this wave have Enemy regen, check the isRegen bool of Enemy container 
 		//Destroy whole Enemy container if this is the last Enemy
@@ -17,13 +17,37 @@ public class Enemy : MonoBehaviour {
 			if(GetComponent<ItemDropper>()){
 				GetComponent<ItemDropper>().DropItem();
 			}
-			Destroy(transform.parent.gameObject);
+			//Destroy all blocks
+			Transform BlockContainer = transform.parent.parent.GetChild(0);
+			BlockContainer.SetParent(null);
+
+			for(int i = 0; i < BlockContainer.childCount; i++){
+				BlockOfStage block = BlockContainer.GetChild(i).GetComponent<BlockOfStage>();
+				if(block){
+					block.DestroyBlockToEnterNextWave();
+				}
+			}
+			//Detach the parent
+			transform.SetParent(null);
+
+			GameObject waveController = GameObject.FindGameObjectWithTag("Wave Controller");
+			waveController.GetComponent<EnemyWaveController>().ClearPresentWave();
+
+			//Destroy(transform.parent.gameObject);
 		}
+
 		if(GetComponent<ItemDropper>()){
 			GetComponent<ItemDropper>().DropItem();
 		}
-		isDead = true;
 
+		isDead = true;
+		if(GetComponent<BoxCollider2D>()){
+			GetComponent<BoxCollider2D>().enabled = false;
+		}else if(GetComponent<BoxCollider2D>()){
+			GetComponent<BoxCollider2D>().enabled = false;
+		}else if(GetComponent<CapsuleCollider2D>()){
+			GetComponent<CapsuleCollider2D>().enabled = false;
+		}
 	}
 	//---------------------------------------------------------------
 
@@ -33,8 +57,6 @@ public class Enemy : MonoBehaviour {
 			transform.localScale = new Vector3(stampScale,1,1);
 			if(stampScale <= 0){
 				Destroy(gameObject);
-				GameObject waveController = GameObject.FindGameObjectWithTag("Wave Controller");
-				waveController.GetComponent<EnemyWaveController>().ClearPresentWave();
 			}
 		}
 	}

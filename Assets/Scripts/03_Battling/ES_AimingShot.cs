@@ -10,7 +10,7 @@ public class ES_AimingShot : MonoBehaviour {
     public int shotPower; //TODO this property is not implemented yet
 	public float randomCoolDownTweak;
 	public float maxCoolDownTime;
-	public GameObject enemyShot;
+	public GameObject[] enemyShots;
 	public GameObject ShootSpawner;
 
 	private Vector3 shotTarget;
@@ -171,7 +171,7 @@ public class ES_AimingShot : MonoBehaviour {
 		}
 
 		//Generate a Shot
-		GameObject shot = Instantiate (enemyShot, ShootSpawner.transform.position, Quaternion.identity) as GameObject;
+		GameObject shot = Instantiate (enemyShots[Random.Range(0, enemyShots.Length)], ShootSpawner.transform.position, Quaternion.identity) as GameObject;
 		if(shot.GetComponent<RadiantDamage>()){
 			shot.GetComponent<RadiantDamage>().SetDamage(shotPower);
 		}

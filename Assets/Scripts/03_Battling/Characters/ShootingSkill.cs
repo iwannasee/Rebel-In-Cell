@@ -45,6 +45,9 @@ public class ShootingSkill : MonoBehaviour {
     private bool mouseIsDown = false;
     private bool bIsAutoSkill = false;
     private bool bIsBoosted = false;
+
+	private bool bBeingSilenced = false;
+	private float silencedTime;
 	//---------------------------------------------------------------
 	void Start(){ 
 		skillShotToPlay = GetSkillShotToPlay();
@@ -99,6 +102,16 @@ public class ShootingSkill : MonoBehaviour {
 		}
 
 		if(EnemyWaveController.GetWaveHasStarted()){
+			if(bBeingSilenced){
+				silencedTime -= Time.deltaTime;
+				if(silencedTime <= 0){
+					SpriteRenderer renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+					renderer.color = Color.white;
+					bBeingSilenced = false;
+				}
+				return;
+			}
+
 			//cooldown skill over time
 			skillCoolDownTime = skillCoolDownTime - Time.deltaTime;
 
@@ -337,6 +350,14 @@ public class ShootingSkill : MonoBehaviour {
 		}
 
 		return null;
+	}
+
+	public void SetSilence(float timeBeingSilenced){
+		bBeingSilenced = true;
+		silencedTime = timeBeingSilenced;
+		skillCoolDownTime = 0;
+		SpriteRenderer renderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+		renderer.color = Color.blue;
 	}
 
 	//Play manual skill

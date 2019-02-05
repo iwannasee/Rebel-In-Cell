@@ -9,13 +9,31 @@ public class EnemyShot : MonoBehaviour {
 	private Enemy ShootingEnemy;
 
 
+	public bool bCanFreezePaddle;
+	public bool bCanFreezePrisoner;
+	public float freezingTime;
+
+
 	void OnCollisionEnter2D(Collision2D col){
 		if (col.gameObject.GetComponent<BlockOfStage>()||
 			col.gameObject.GetComponent<Prisoner>()||
 			col.gameObject.GetComponent<PlayerPaddle>()) {
+	
+			if(col.gameObject.GetComponent<Prisoner>() && bCanFreezePrisoner){
+				col.gameObject.GetComponent<ShootingSkill>().SetSilence(freezingTime);
+				GameObject fx = Instantiate(GetComponent<EnemyShot>().explodeParticlePref, col.transform.position, Quaternion.identity);
+				fx.GetComponent<DetroyAfterSecond>().lastingTime = freezingTime;
+			}else if(col.gameObject.GetComponent<PlayerPaddle>() && bCanFreezePaddle){
+				col.gameObject.GetComponent<PlayerPaddle>().SetCannotMove(freezingTime);
+				GameObject fx = Instantiate(GetComponent<EnemyShot>().explodeParticlePref, col.transform.position, Quaternion.identity);
+				fx.GetComponent<DetroyAfterSecond>().lastingTime = freezingTime;
 
-			Instantiate(explodeParticlePref, transform.position, Quaternion.identity);
+			}else{
+				Instantiate(explodeParticlePref, transform.position, Quaternion.identity);
+			}
+
 			Destroy (gameObject);
+
 		}
 
 		if(col.gameObject.GetComponent<ProjectileBall>()){

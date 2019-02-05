@@ -133,6 +133,7 @@ public class EnemyWaveController : MonoBehaviour {
 	public void ClearPresentWave(){
 		for (int i = 0; i< currentWaveChild.childCount; i++){
 			Destroy(currentWaveChild.GetChild(i).gameObject);
+			print("destroying current wave " + currentWaveChild.name);
 		}
 	}
 	//---------------------------------------------------------------

@@ -8,11 +8,11 @@ public class MapDictionary : MonoBehaviour {
 	/*==============================================================================*/
 	//										MAP NAMES
 	/*==============================================================================*/
-	public const string w1_map_bCave = "Bat Cave";
-	public const string w1_map_wBay = "Windless Bay";
-	public const string w1_map_hRant = "Humbling Taurant";
-	public const string w1_SC_map_vHole = "Volcanic Hole";
-	public const string w1_SC_map_sSho = "Sangosho";
+	public const string w1_map_bCave = "Mossy Road";
+	public const string w1_map_wBay = "Village Backyard";
+	public const string w1_map_hRant = "Mushroom Farm";
+	public const string w1_SC_map_vHole = "Grasshopper Field";
+	public const string w1_SC_map_sSho = "Chivalry's Spririt";
 
 	public const string w2_map_dCafe = "Dungeon Cafe";
 	public const string w2_map_sRock = "Sliding Rock";

@@ -16,6 +16,7 @@ public class EnemyBombardSkill : MonoBehaviour {
 	private bool bReachedStartPoint = false;
 	private bool bFinishedBombing = false;
 	private GameObject enemyShotContainer;
+	private float randomTweak;
 	// Use this for initialization
 	void Start () {
 		if(!GameObject.Find("Enemy Shot Container")){
@@ -27,7 +28,7 @@ public class EnemyBombardSkill : MonoBehaviour {
 
 		originalPos = transform.position;
 		bombingRate = ((Vector3.Distance(startPos,endPos))/releaseBombTimes);
-
+		randomTweak = Random.Range(0, ((Vector3.Distance(startPos,endPos))/releaseBombTimes));
 	}
 
 	void Update(){
@@ -46,11 +47,12 @@ public class EnemyBombardSkill : MonoBehaviour {
 				//move to the end point
 				transform.position = Vector3.MoveTowards(transform.position, endPos, Time.deltaTime*moveSpeed);
 
-				if(Vector3.Distance(transform.position, startPos) >= bombingRate){
+				if(Vector3.Distance(transform.position, startPos) >= (bombingRate + randomTweak)){
 					FireFromBomBing();
 					bombingRate += bombingRate;
+					randomTweak = Random.Range(0, ((Vector3.Distance(startPos,endPos))/releaseBombTimes));
 				}
-				print("bombingRate " + bombingRate);
+
 				// If reach the end point, come back to 
 				if(Vector3.Distance(transform.position, endPos) <= acceptDistance){
 					bombingRate = ((Vector3.Distance(startPos,endPos))/releaseBombTimes);
