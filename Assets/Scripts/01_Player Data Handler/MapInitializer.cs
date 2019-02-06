@@ -17,11 +17,11 @@ public class MapInitializer : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		if(!isActivated){
-			SecretMapDict_0.Add ("11111", MapDictionary.w1_SC_map_vHole);
-			SecretMapDict_0.Add ("22222", MapDictionary.w1_SC_map_sSho);
+			SecretMapDict_0.Add ("11111", MapDictionary.w1_SC_gField);
+			SecretMapDict_0.Add ("22222", MapDictionary.w1_SC_cSpirit);
 
-			SecretMapDict_1.Add ("33333", MapDictionary.w2_SC_map_cGrv);
-			SecretMapDict_1.Add ("44444", MapDictionary.w2_SC_map_nReamth);
+			SecretMapDict_1.Add ("33333", MapDictionary.w2_SC_map_rAncient);
+			SecretMapDict_1.Add ("44444", MapDictionary.w2_SC_map_eCielo);
 
 			isActivated = true;
 		}

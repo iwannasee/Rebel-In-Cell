@@ -8,19 +8,19 @@ public class MapDictionary : MonoBehaviour {
 	/*==============================================================================*/
 	//										MAP NAMES
 	/*==============================================================================*/
-	public const string w1_map_bCave = "Mossy Road";
-	public const string w1_map_wBay = "Village Backyard";
-	public const string w1_map_hRant = "Mushroom Farm";
-	public const string w1_SC_map_vHole = "Grasshopper Field";
-	public const string w1_SC_map_sSho = "Chivalry's Spririt";
+	public const string w1_map_mRoad = "Mossy Road";
+	public const string w1_map_vBackyard = "Village Backyard";
+	public const string w1_map_mFarm = "Mushroom Farm";
+	public const string w1_SC_gField = "Grasshopper Field";
+	public const string w1_SC_cSpirit = "Chivalry's Spririt";
 
-	public const string w2_map_dCafe = "Dungeon Cafe";
-	public const string w2_map_sRock = "Sliding Rock";
+	public const string w2_map_mTribe = "The Mountanous Tribe";
+	public const string w2_map_mPass = "Montana Pass";
 	public const string w2_map_mAbs = "Magma Abyss";
-	public const string w2_SC_map_cGrv = "Crimson Grave";
-	public const string w2_SC_map_nReamth = "Nethereamth";
-	public const string worldName_0 = "THE DESERT";
-	public const string worldName_1 = "THE HIGHLAND";
+	public const string w2_SC_map_rAncient = "Remains Of Ancients";
+	public const string w2_SC_map_eCielo = "El Cielo";
+	public const string worldName_0 = "THE MEADOW";
+	public const string worldName_1 = "THE MOUNTAIN";
 	//dictionary of secret maps
 	private static Dictionary<string,string> CurrentSecretMapDict;
 
@@ -31,21 +31,21 @@ public class MapDictionary : MonoBehaviour {
 	/*==============================================================================*/
 	//WORLD 1
 	public static readonly string[] mapOfWorld_0 = {
-		w1_map_bCave,
-		w1_map_wBay,
-		w1_map_hRant,
-		w1_SC_map_vHole,
-		w1_SC_map_sSho
+		w1_map_mRoad,
+		w1_map_vBackyard,
+		w1_map_mFarm,
+		w1_SC_gField,
+		w1_SC_cSpirit
 	};
 	private static bool secret_world_1_reveal = false;
 	/*==============================================================================*/
 	//WORLD 2
 	public static readonly string[] mapOfWorld_1 = {
-		w2_map_dCafe,
-		w2_map_sRock,
+		w2_map_mTribe,
+		w2_map_mPass,
 		w2_map_mAbs,
-		w2_SC_map_cGrv,
-		w2_SC_map_nReamth
+		w2_SC_map_rAncient,
+		w2_SC_map_eCielo
 	};
 	private static bool secret_world_2_reveal = false;
 	/*==============================================================================*/
@@ -54,8 +54,8 @@ public class MapDictionary : MonoBehaviour {
 		mapOfWorld_1
 	};
 	public static readonly string[][] SecretMaps = new string[WORLD_SUM_NUMBER][]{
-		new string[]{w1_SC_map_vHole,w1_SC_map_sSho}, 	//of World 0
-		new string[]{w2_SC_map_cGrv,w2_SC_map_nReamth}	//of World 1
+		new string[]{w1_SC_gField,w1_SC_cSpirit}, 	//of World 0
+		new string[]{w2_SC_map_rAncient,w2_SC_map_eCielo}	//of World 1
 	};
 
 	public static readonly string[] worldList = new string[]{
