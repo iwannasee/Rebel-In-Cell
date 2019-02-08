@@ -25,6 +25,8 @@ public class BlockOfStage : MonoBehaviour {
 			GetComponent<BoxCollider2D>().enabled = false;
 		}else if(GetComponent<CapsuleCollider2D>()){
 			GetComponent<CapsuleCollider2D>().enabled = false;
+		}else if(GetComponent<PolygonCollider2D>()){
+			GetComponent<PolygonCollider2D>().enabled = false;
 		}
 		isDead = true;
 		/*

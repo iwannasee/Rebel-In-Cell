@@ -1,9 +1,13 @@
 fileFormatVersion: 2
-guid: 15879339618caab40a5054d09a3f23b3
-timeCreated: 1549005447
+guid: 7302f5e3e62fa8648a93a93aacbeec7f
+timeCreated: 1549614897
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: blk_Statue_0
+    21300002: blk_Statue_1
+    21300004: blk_Statue_2
+    21300006: blk_Statue_3
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -34,7 +38,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -51,7 +55,7 @@ TextureImporter:
   textureFormatSet: 0
   platformSettings:
   - buildTarget: DefaultTexturePlatform
-    maxTextureSize: 128
+    maxTextureSize: 512
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
@@ -59,7 +63,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
   - buildTarget: Standalone
-    maxTextureSize: 128
+    maxTextureSize: 512
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
@@ -67,7 +71,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
   - buildTarget: Android
-    maxTextureSize: 128
+    maxTextureSize: 512
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
@@ -76,7 +80,59 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: blk_Statue_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 30
+        width: 285
+        height: 399
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: blk_Statue_1
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 21
+        width: 342
+        height: 428
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: blk_Statue_2
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 4
+        width: 311
+        height: 460
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: blk_Statue_3
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 2
+        width: 262
+        height: 451
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 
