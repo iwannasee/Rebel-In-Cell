@@ -21,7 +21,7 @@ public class WinLoseCondition : MonoBehaviour {
 
 		musicMng = MusicManagerObj.GetComponent<MusicManager>();
 
-		Vehicle playerBase = GameObject.FindGameObjectWithTag("Vehicle").GetComponent<Vehicle>();
+		//Vehicle playerBase = GameObject.FindGameObjectWithTag("Vehicle").GetComponent<Vehicle>();
 
 	}
 

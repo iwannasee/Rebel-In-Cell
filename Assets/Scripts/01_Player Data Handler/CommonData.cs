@@ -26,10 +26,14 @@ public class CommonData : MonoBehaviour {
 	//---------------------------------------------------------------
 	public const string veh_oven = "Oven";
 	public const string veh_test = "Test";
+	public const string veh_truck = "Truck";
+	public const string veh_bus = "Bus";
 
 	public static List <string> vehicleList = new List<string>(new string[]{
 		veh_oven,
-		veh_test
+		veh_test,
+		veh_truck,
+		veh_bus
 	});
 
 
