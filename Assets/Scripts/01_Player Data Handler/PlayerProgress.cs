@@ -9,7 +9,7 @@ public class PlayerProgress : MonoBehaviour {
 	private static bool playerDataLoaded = false; 
 
 	public static int presentWorldIndex;
-	void Start(){
+	void Awake(){
 		 
 		if(!playerDataLoaded){
 			playerData = SaveLoadSystem.LoadGame();

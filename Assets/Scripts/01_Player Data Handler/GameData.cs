@@ -36,4 +36,6 @@ public class GameData {
 
     public List<string> lynu_availableskills;
     public string latestUsedSkill_Lynu;
+
+	public List<string> allAvailableskills;
 }
