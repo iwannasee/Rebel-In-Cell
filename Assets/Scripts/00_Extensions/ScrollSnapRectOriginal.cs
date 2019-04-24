@@ -253,11 +253,15 @@ public class ScrollSnapRectOriginal : MonoBehaviour, IBeginDragHandler, IEndDrag
     //------------------------------------------------------------------------
     private void NextScreen() {
         LerpToPage(_currentPage + 1);
+        GetComponent<SelectBaseAvarList>().ShowAvailableSlotsInBase();
+        GetComponent<SelectBaseAvarList>().HideCharSlotImg();
     }
 
     //------------------------------------------------------------------------
     private void PreviousScreen() {
         LerpToPage(_currentPage - 1);
+        GetComponent<SelectBaseAvarList>().ShowAvailableSlotsInBase();
+        GetComponent<SelectBaseAvarList>().HideCharSlotImg();
     }
 
     //------------------------------------------------------------------------

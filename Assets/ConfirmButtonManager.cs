@@ -10,13 +10,17 @@ public class ConfirmButtonManager : MonoBehaviour {
 	public Transform subBox;
 	public Button subBoxOkBtn;
 	public Text purchaseNotif;
+    public Transform GoldObject;
 	private Item.TYPE itemTypeToConfirm;
 	private int price;
 	private ItemForSale selectedItem;
 	private string itemNameToConfirm;
 	// Use this for initialization
 	void Start () {
-		subBox.gameObject.SetActive(false);
+        GoldObject.GetComponentInChildren<Text>().text = PlayerProgress.playerData.gold.ToString();
+
+
+        subBox.gameObject.SetActive(false);
 		CancelPurchase();
 
 		okBtn.onClick.AddListener(() => { AcceptPurchase();});
@@ -41,7 +45,9 @@ public class ConfirmButtonManager : MonoBehaviour {
 		}
 
 		PlayerProgress.playerData.gold -= price;
-		switch(itemTypeToConfirm){
+        GoldObject.GetComponentInChildren<Text>().text = PlayerProgress.playerData.gold.ToString();
+
+        switch (itemTypeToConfirm){
 			case Item.TYPE.CHARACTER:
 				PlayerProgress.playerData.availableCharacters.Add(itemNameToConfirm);
 				break;

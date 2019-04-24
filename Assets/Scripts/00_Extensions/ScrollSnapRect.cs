@@ -311,11 +311,13 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     //------------------------------------------------------------------------
     private void NextScreen() {
         LerpToPage(_currentPage + 1);
+        worldMapGameObject.GetComponent<WorldMap>().ShowCorrespondIndicator();
     }
 
     //------------------------------------------------------------------------
     private void PreviousScreen() {
         LerpToPage(_currentPage - 1);
+        worldMapGameObject.GetComponent<WorldMap>().ShowCorrespondIndicator();
     }
 
     //------------------------------------------------------------------------

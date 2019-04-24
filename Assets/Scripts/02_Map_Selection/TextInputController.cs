@@ -17,7 +17,7 @@ public class TextInputController : MonoBehaviour {
 	private InputField inputField;
 	private string inputPassword;
 	private string acquireMapName;
-	private string introText = "Input Code to explore more Secret Places";
+	private string introText = "Input Code to explore Secrets";
 	private string wrongPassText = "Incorrect Password";
 	private string correctPassText = "Correct! A destination found!";
 	//EXTENDABLE #1 optionally disable input or just keep player able to input

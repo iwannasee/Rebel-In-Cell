@@ -9,7 +9,7 @@ public class ShopManagement : MonoBehaviour {
 	public Button shellBtn;
 	public Button skillBtn;
 	public Button itemBtn;
-
+    public Button backToPreviousSceneBtn;
 	public GameObject charShop;
 	public GameObject shellShop;
 	public GameObject skillShop;
@@ -17,17 +17,30 @@ public class ShopManagement : MonoBehaviour {
 
 	public GameObject purchaseConfirmBox;
 	public GameObject saleItemPref;
+
+    static private string previousSceneName;
 	// Use this for initialization
 	void Start () {
 		charBtn.GetComponent<Button>().onClick.AddListener(() => { charBtnClicked();});
 		shellBtn.GetComponent<Button>().onClick.AddListener(() => { shellBtnClicked();});
 		skillBtn.GetComponent<Button>().onClick.AddListener(() => { skillBtnClicked();});
 		itemBtn.GetComponent<Button>().onClick.AddListener(() => { itemBtnClicked();});
-
-		charBtnClicked();
+        backToPreviousSceneBtn.onClick.AddListener(() => { backBtnClicked(); });
+        
+        charBtnClicked();
 	}
 
-	private void charBtnClicked(){
+    private void backBtnClicked()
+    {
+        if (previousSceneName == null || previousSceneName == "")
+        {
+            Debug.Log("previous scene is unknown");
+            return;
+        }
+        LevelManager.SLoadLevel(previousSceneName);
+    }
+
+    private void charBtnClicked(){
 		charBtn.image.color = new Color(1,1,1,1);
 		shellBtn.image.color  = new Color(1,1,1,0.3f);
 		skillBtn.image.color = new Color(1,1,1,0.3f);
@@ -74,4 +87,11 @@ public class ShopManagement : MonoBehaviour {
 		skillShop.SetActive(false);
 		itemShop.SetActive(true);
 	}
+
+    public static void SetPreviousSceneName(string prevScene)
+    {
+        previousSceneName = prevScene;
+    }
+
+    
 }

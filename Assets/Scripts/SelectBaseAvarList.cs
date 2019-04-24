@@ -11,13 +11,14 @@ public class SelectBaseAvarList : MonoBehaviour {
 
 
 	public GameObject BaseInfo;
-
 	//the list of actual playable bases
 	private GameObject[] baseAvar;
 
 
     private static GameObject baseGameObjectToPlay = null;
     private static GameObject[] charactersToPlay;
+
+    CharacterSlot[] availableSlots;
     // Use this for initialization
     void Start () {
 		FilterAvailableBases();
@@ -26,9 +27,13 @@ public class SelectBaseAvarList : MonoBehaviour {
 			GameObject thisAvar = Instantiate(baseAvar[i]) as GameObject; 
 			thisAvar.transform.SetParent(basesListFrame.transform, false) ;
 		}
-		UpdateBaseInfo();
+
+        UpdateBaseInfo();
         //renew this array every time the selection scene start. the number [1] is just a random number
         charactersToPlay = new GameObject[1];
+
+        //Get position(s) of available slots 
+        availableSlots = GetCharSlotOfCurrentBase();
     }
 	 
 	private void FilterAvailableBases(){
@@ -46,23 +51,28 @@ public class SelectBaseAvarList : MonoBehaviour {
 	}
 
 	//Used By button /event trigger
-	public void ShowAvailableSlotsInBase(){ 
-
-		//Get position(s) of available slots 
-		CharacterSlot[] availableSlots = GetCharSlotOfCurrentBase();
-
-		//Show arrows to click to get character on seat
-		foreach (CharacterSlot thisSlot in availableSlots){
+	public void ShowAvailableSlotsInBase(){
+        //Show arrows to click to get character on seat
+        availableSlots = GetCharSlotOfCurrentBase();
+        foreach (CharacterSlot thisSlot in availableSlots){
 			thisSlot.ShowArrow();
 		}
 	}
 
     public void HideAllPoppingArrows()
     {
-        CharacterSlot[] slots = GetCharSlotOfCurrentBase();
-        foreach(CharacterSlot slot in slots)
+
+        foreach(CharacterSlot thisSlot in availableSlots)
         {
-            slot.HideArrow();
+            thisSlot.HideArrow();
+        }
+    }
+
+    public void HideCharSlotImg()
+    {
+        foreach (CharacterSlot thisSlot in availableSlots)
+        {
+            thisSlot.GetComponent<Image>().color = new Color(1, 1, 1, 0);
         }
     }
 
@@ -102,7 +112,6 @@ public class SelectBaseAvarList : MonoBehaviour {
     {
         int currentBaseIndex = GetComponent<ScrollSnapRectOriginal>().GetCurrentPage();
         Transform baseListTransform = transform.GetChild(0);
-	
         return baseListTransform.GetChild(currentBaseIndex);
     }
 

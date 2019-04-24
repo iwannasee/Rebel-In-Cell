@@ -18,6 +18,7 @@ public class CharacterSlot : MonoBehaviour {
 	}
 
 	public void ShowArrow(){
+        print("go this");
 		arrow.gameObject.SetActive(true);
 	}
 
@@ -70,7 +71,9 @@ public class CharacterSlot : MonoBehaviour {
         prefabOfSelectedCharacter = selectingCharacter.GetCharPrefabOfThisAvar();
         //set that to the image sprite in the slot
         GetComponent<Image>().sprite = selectingCharSprite;
-		GetComponent<Button>().interactable = true;
+        GetComponent<Image>().color = new Color(1, 1, 1, 1);
+
+        GetComponent<Button>().interactable = true;
 		
 		HideAllArrows();
 	}
@@ -88,9 +91,9 @@ public class CharacterSlot : MonoBehaviour {
 
 		prefabOfSelectedCharacter = null;
 		GetComponent<Image>().sprite = null;
-
-		//if any slot contains the character selected on Screen, dont show arrow
-		string nameOfAvarOnSelecting = charAvarList.GetIsOnInfoScrnCharacter().GetPrisonerPrefabName();
+        GetComponent<Image>().color = new Color(1, 1, 1, 0);
+        //if any slot contains the character selected on Screen, dont show arrow
+        string nameOfAvarOnSelecting = charAvarList.GetIsOnInfoScrnCharacter().GetPrisonerPrefabName();
 		CharacterSlot[] slots = transform.parent.GetComponentsInChildren<CharacterSlot>();
 		for(int i = 0; i < slots.Length; i++){
 			if(slots[i].GetCharPrefNameInThisSlot() == nameOfAvarOnSelecting){

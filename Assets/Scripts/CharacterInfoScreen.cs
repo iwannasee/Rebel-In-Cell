@@ -18,7 +18,8 @@ public class CharacterInfoScreen : MonoBehaviour {
 	}
 
 	public void SetSelectedCharToInfoScrn(GameObject charPrefToSetInfo, Sprite charSprtToSet, string charInfoToShow){
-		if(!charPrefToSetInfo.GetComponent<Prisoner>()){
+
+        if (!charPrefToSetInfo.GetComponent<Prisoner>()){
 			print("cannot set to info screen with non-character obj");
 			return;
 		}
@@ -49,11 +50,14 @@ public class CharacterInfoScreen : MonoBehaviour {
 
 	public void SetOnScrnCharSprt(Sprite spriteToUpdate){
 		displayCharImage.sprite = spriteToUpdate;
-	}
+        displayCharImage.color = new Color(1, 1, 1, 1);
+
+    }
 
 	public void SetSkillSprtOfSelectedChar(Sprite spriteToUpdate){
 		skillImage.sprite = spriteToUpdate;
-	}
+        skillImage.color = new Color(1, 1, 1, 1);
+    }
 
 
 	public void SetEquipmentSprtOfSelectedChar(Sprite spriteToUpdate){
@@ -61,7 +65,9 @@ public class CharacterInfoScreen : MonoBehaviour {
 	}
 
 	public void SetInfoTextOfSelectedChar(string infoTextToUpdate){
-		charInfoText.text = infoTextToUpdate;
+        charInfoText.fontSize = 16;
+
+        charInfoText.text = infoTextToUpdate;
 	}
 
 	public void ClickTest(){

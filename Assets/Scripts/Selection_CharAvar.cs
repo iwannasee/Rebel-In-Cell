@@ -38,6 +38,7 @@ public class Selection_CharAvar : MonoBehaviour {
 	public void CharacterIsSelecting(){
         
 		if(bIslocked){return;}
+
 		charInfo.SetSelectedCharToInfoScrn(prisonerPref, GetThisCharAvarSprt(), charInfoText);
 
         GameObject baseAvarList = GameObject.FindGameObjectWithTag("Base Avar List");

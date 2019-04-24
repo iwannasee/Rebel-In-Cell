@@ -5,9 +5,10 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MapSelectManager : MonoBehaviour {
-	//public Button selectLocationBtn;
-	//public Button inputBtn;
-	//public Button searchBtn;
+    //public Button selectLocationBtn;
+    //public Button inputBtn;
+    //public Button searchBtn;
+    public GameObject mapSelectBtns;
 	public GameObject mapPanel;
 	public GameObject inputPanel;
 	public GameObject searchPanel;
@@ -22,15 +23,19 @@ public class MapSelectManager : MonoBehaviour {
 	void Start(){
 		HideInputPanel ();
 		HideSearchPanel ();
-		//HideMapSelectPanel ();
-	}
+        mapSelectBtns.SetActive(false);
+        //HideMapSelectPanel ();
+    }
 
 	//---------------------------------------------------------------
 	public void DisplaySearchPanel(){
-		HideInputPanel ();
+        /*HideInputPanel ();
 		HideMapSelectPanel ();
-		searchPanel.SetActive(true);
-	}
+		searchPanel.SetActive(true);*/
+        string nameOfThisScene = SceneManager.GetActiveScene().name;
+        ShopManagement.SetPreviousSceneName(nameOfThisScene);
+        LevelManager.SLoadLevel("02 Shop");
+    }
 	//---------------------------------------------------------------
 	private void HideSearchPanel(){
 		searchPanel.SetActive(false);
@@ -43,6 +48,8 @@ public class MapSelectManager : MonoBehaviour {
 		HideInputPanel ();
 		HideSearchPanel ();
 		mapPanel.SetActive(true);
+        mapSelectBtns.SetActive(true);
+        
 	}
 
 	//---------------------------------------------------------------
@@ -76,6 +83,7 @@ public class MapSelectManager : MonoBehaviour {
 	//---------------------------------------------------------------
 	private void HideMapSelectPanel(){
 		mapPanel.SetActive(false);
+        mapSelectBtns.SetActive(false);
 	}
 	//---------------------------------------------------------------
 

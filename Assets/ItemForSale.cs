@@ -8,13 +8,14 @@ public class ItemForSale : MonoBehaviour {
 	public Item.TYPE type;
 	public Text priceText;
 	public int price;
-
+    public GameObject ownedText;
 	ConfirmButtonManager confirmPurchaseMng;
 
 	private GameObject purchaseConfirmBox;
 	// Use this for initialization
 	void Start () {
-		print(PlayerProgress.playerData.playerName);
+        ownedText.SetActive(false);
+        print(PlayerProgress.playerData.playerName);
 		if(CheckIfPurchased() == true){
 			HasBeenPurchasedEffect();
 			return;
@@ -26,7 +27,9 @@ public class ItemForSale : MonoBehaviour {
 		confirmPurchaseMng = purchaseConfirmBox.GetComponent<ConfirmButtonManager>();
 
 		priceText.text = price.ToString();
-		GetComponent<Button>().onClick.AddListener(() => { ItemSelected();});
+        priceText.color = new Color(0, 0, 0, 1);
+
+        GetComponent<Button>().onClick.AddListener(() => { ItemSelected();});
 
 	}
 	
@@ -75,11 +78,16 @@ public class ItemForSale : MonoBehaviour {
 	}
 
 	void HasBeenPurchasedEffect(){
-		GetComponent<RawImage>().color = new Color(1,0.5f,1,0.5f);
+        ownedText.SetActive(true);
+        GetComponent<RawImage>().color = new Color(1,0.5f,1,0.5f);
 	}
 
 	public void SetIsPurchased(){
 		GetComponent<Button>().interactable = false;
-		HasBeenPurchasedEffect();
+        priceText.color = new Color(1, 0, 0.35f, 1);
+        priceText.text = "SOLD";
+        HasBeenPurchasedEffect();
 	}
+
+
 }
