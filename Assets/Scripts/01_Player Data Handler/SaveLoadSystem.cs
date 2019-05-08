@@ -21,7 +21,7 @@ public class SaveLoadSystem : MonoBehaviour  {
 	//---------------------------------------------------------------
 	public static GameData LoadGame(){
 		if (!File.Exists (fileName)) {
-			Debug.Log("No save data to load");
+			Debug.LogError("No save data to load");
 			GameData loadedData= new GameData();
 			loadedData.playerName = "ViEt";
 			loadedData.gold =100000;
@@ -34,6 +34,7 @@ public class SaveLoadSystem : MonoBehaviour  {
 
 			loadedData.availableCharacters = new List<string>();
 			loadedData.availableCharacters.Add(CommonData.char_pippo);
+            /*
 			loadedData.availableCharacters.Add(CommonData.char_johnny);
 			loadedData.availableCharacters.Add(CommonData.char_mathial);
             loadedData.availableCharacters.Add(CommonData.char_kolav);
@@ -41,6 +42,7 @@ public class SaveLoadSystem : MonoBehaviour  {
             loadedData.availableCharacters.Add(CommonData.char_bape);
             loadedData.availableCharacters.Add(CommonData.char_vie);
             loadedData.availableCharacters.Add(CommonData.char_lynu);
+            */
 
 			loadedData.allAvailableskills = new List<string>();
             loadedData.pippo_availableskills = new List<string>();
@@ -116,15 +118,16 @@ public class SaveLoadSystem : MonoBehaviour  {
 			}
 
             loadedData.availableVehicles = new List<string>();
-			loadedData.availableVehicles.Add(CommonData.veh_oven);
-			loadedData.availableVehicles.Add(CommonData.veh_test);
+			loadedData.availableVehicles.Add(CommonData.base_1Slot);
+			loadedData.availableVehicles.Add(CommonData.base_2Slot);
+            loadedData.availableVehicles.Add(CommonData.base_3slot);
 
-			SaveGame(loadedData);
+            SaveGame(loadedData);
 			return loadedData;
 		}else{
 			string jsonFromSaveFile = File.ReadAllText (fileName);
 			GameData loadedData = JsonUtility.FromJson<GameData> (jsonFromSaveFile);
-			Debug.Log("Load successed from " + fileName);
+			Debug.LogError("Load successed from " + fileName);
 			return loadedData;
 		}
 	}

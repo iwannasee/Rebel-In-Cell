@@ -24,16 +24,14 @@ public class CommonData : MonoBehaviour {
 		char_lynu
 	});
 	//---------------------------------------------------------------
-	public const string veh_oven = "Oven";
-	public const string veh_test = "Test";
-	public const string veh_truck = "Truck";
-	public const string veh_bus = "Bus";
+	public const string base_1Slot = "One Slot";
+	public const string base_2Slot = "Two Slots";
+	public const string base_3slot = "Three Slots";
 
 	public static List <string> vehicleList = new List<string>(new string[]{
-		veh_oven,
-		veh_test,
-		veh_truck,
-		veh_bus
+        base_1Slot,
+        base_2Slot,
+        base_3slot
 	});
 
 

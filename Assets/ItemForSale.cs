@@ -21,7 +21,7 @@ public class ItemForSale : MonoBehaviour {
 			return;
 		}
 		
-		Transform canvasTrans = transform.parent.parent.parent;
+		Transform canvasTrans = transform.parent.parent;
 		print(canvasTrans.name);
 		purchaseConfirmBox = canvasTrans.GetComponent<ShopManagement>().purchaseConfirmBox;
 		confirmPurchaseMng = purchaseConfirmBox.GetComponent<ConfirmButtonManager>();

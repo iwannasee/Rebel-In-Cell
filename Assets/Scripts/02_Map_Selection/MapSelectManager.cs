@@ -21,7 +21,7 @@ public class MapSelectManager : MonoBehaviour {
 	private string selectedMap;
 
 	void Start(){
-		HideInputPanel ();
+        HideInputPanel ();
 		HideSearchPanel ();
         mapSelectBtns.SetActive(false);
         //HideMapSelectPanel ();
