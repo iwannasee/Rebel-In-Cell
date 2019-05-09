@@ -21,7 +21,6 @@ public class SaveLoadSystem : MonoBehaviour  {
 	//---------------------------------------------------------------
 	public static GameData LoadGame(){
 		if (!File.Exists (fileName)) {
-			Debug.LogError("No save data to load");
 			GameData loadedData= new GameData();
 			loadedData.playerName = "ViEt";
 			loadedData.gold =100000;
@@ -34,15 +33,15 @@ public class SaveLoadSystem : MonoBehaviour  {
 
 			loadedData.availableCharacters = new List<string>();
 			loadedData.availableCharacters.Add(CommonData.char_pippo);
-            /*
+            
 			loadedData.availableCharacters.Add(CommonData.char_johnny);
-			loadedData.availableCharacters.Add(CommonData.char_mathial);
+			//loadedData.availableCharacters.Add(CommonData.char_mathial);
             loadedData.availableCharacters.Add(CommonData.char_kolav);
             loadedData.availableCharacters.Add(CommonData.char_maja);
             loadedData.availableCharacters.Add(CommonData.char_bape);
-            loadedData.availableCharacters.Add(CommonData.char_vie);
-            loadedData.availableCharacters.Add(CommonData.char_lynu);
-            */
+            //loadedData.availableCharacters.Add(CommonData.char_vie);
+            //loadedData.availableCharacters.Add(CommonData.char_lynu);
+            
 
 			loadedData.allAvailableskills = new List<string>();
             loadedData.pippo_availableskills = new List<string>();
